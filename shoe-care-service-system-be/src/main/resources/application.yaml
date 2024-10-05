@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  datasource:
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/shoe_care_services}
+    username: ${DBMS_USERNAME:root}
+    password: ${DBMS_PASSWORD:1905}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+app:
+  userDefault:
+    username: "admin"
+    password: "admin"
+
+jwt:
+  signerKey: "8c1Gl/AxoQidiUTcJRpTXLdGhup4KS68yoSKI2cpCZzUtfoc09n1tRoEOHZNIx7B"
+  valid-duration: 36000 #in seconds
+  refreshable-duration: 360000 #in seconds
