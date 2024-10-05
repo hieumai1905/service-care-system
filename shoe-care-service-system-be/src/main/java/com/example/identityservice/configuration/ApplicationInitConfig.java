@@ -1,21 +1,23 @@
 package com.example.identityservice.configuration;
 
-import com.example.identityservice.constant.PredefinedRole;
-import com.example.identityservice.entity.Role;
-import com.example.identityservice.entity.User;
-import com.example.identityservice.repository.RoleRepository;
-import com.example.identityservice.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.HashSet;
+import com.example.identityservice.constant.PredefinedRole;
+import com.example.identityservice.entity.Role;
+import com.example.identityservice.entity.User;
+import com.example.identityservice.repository.RoleRepository;
+import com.example.identityservice.repository.UserRepository;
+
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
