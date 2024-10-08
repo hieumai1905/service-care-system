@@ -1,18 +1,5 @@
 package com.example.identityservice.service;
 
-import java.text.ParseException;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.StringJoiner;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
 import com.example.identityservice.dto.request.AuthenticationRequest;
 import com.example.identityservice.dto.request.IntrospectRequest;
 import com.example.identityservice.dto.request.LogoutRequest;
@@ -20,6 +7,7 @@ import com.example.identityservice.dto.request.RefreshRequest;
 import com.example.identityservice.dto.response.AuthenticationResponse;
 import com.example.identityservice.dto.response.IntrospectResponse;
 import com.example.identityservice.entity.InvalidatedToken;
+import com.example.identityservice.entity.Role;
 import com.example.identityservice.entity.User;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
@@ -30,11 +18,23 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+
+import java.text.ParseException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.Objects;
+import java.util.StringJoiner;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -110,12 +110,12 @@ public class AuthenticationService {
 
     private String buildScope(User user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!CollectionUtils.isEmpty(user.getRoles())) {
-            user.getRoles().forEach(role -> {
-                stringJoiner.add("ROLE_" + role.getName());
-                if (!CollectionUtils.isEmpty(role.getPermissions()))
-                    role.getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
-            });
+        Role role = user.getRole();
+        if (Objects.isNull(role)) return stringJoiner.toString();
+        else {
+            stringJoiner.add("ROLE_" + role.getName());
+            if (!CollectionUtils.isEmpty(role.getPermissions()))
+                role.getPermissions().forEach(permission -> stringJoiner.add(permission.getName()));
         }
         return stringJoiner.toString();
     }

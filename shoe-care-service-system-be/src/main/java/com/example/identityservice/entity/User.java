@@ -1,7 +1,6 @@
 package com.example.identityservice.entity;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import jakarta.persistence.*;
 
@@ -25,12 +24,26 @@ public class User {
 
     String password;
 
-    String firstName;
+    String fullName;
 
-    String lastName;
+    String email;
 
     LocalDate dob;
 
-    @ManyToMany
-    Set<Role> roles;
+    String phone;
+
+    @Column(name = "created_at")
+    LocalDate createdAt;
+
+    @Column(name = "is_active", nullable = false)
+    Boolean isActive;
+
+    @ManyToOne
+    Role role;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = LocalDate.now();
+        this.isActive = true;
+    }
 }

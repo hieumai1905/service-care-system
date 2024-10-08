@@ -1,7 +1,6 @@
 package com.example.identityservice.dto.response;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,11 +18,15 @@ public class UserResponse {
 
     String username;
 
-    String firstName;
+    String fullName;
 
-    String lastName;
+    String email;
 
     LocalDate dob;
 
-    Set<RoleResponse> roles;
+    String phone;
+
+    Boolean isActive;
+
+    RoleResponse role;
 }

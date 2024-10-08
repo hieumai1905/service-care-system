@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.identityservice.dto.request.RoleRequest;
 import com.example.identityservice.dto.response.RoleResponse;
+import com.example.identityservice.entity.Role;
 import com.example.identityservice.mapper.RoleMapper;
 import com.example.identityservice.repository.PermissionRepository;
 import com.example.identityservice.repository.RoleRepository;
@@ -33,6 +34,10 @@ public class RoleService {
 
         role = roleRepository.save(role);
         return roleMapper.toRoleResponse(role);
+    }
+
+    public Role findByName(String name) {
+        return roleRepository.findById(name).orElse(null);
     }
 
     public List<RoleResponse> getAll() {

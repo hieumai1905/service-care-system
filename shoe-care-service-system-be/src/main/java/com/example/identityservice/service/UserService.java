@@ -1,11 +1,8 @@
 package com.example.identityservice.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -41,14 +38,16 @@ public class UserService {
     RoleRepository roleRepository;
 
     public UserResponse createUser(UserCreationRequest request) {
-        Role role = Role.builder()
-                .name("USER")
-                .description("User role with basic permission")
-                .build();
-
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Set.of(role));
+        user.setIsActive(true);
+
+        if (request.getRole() != null) {
+            Role role = roleRepository
+                    .findByName(request.getRole())
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+            user.setRole(role);
+        }
 
         try {
             user = userRepository.save(user);
@@ -64,7 +63,6 @@ public class UserService {
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String id) {
         return userMapper.toUserResponse(
                 userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED)));
@@ -81,16 +79,26 @@ public class UserService {
 
     public UserResponse updateUser(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-
         userMapper.userUpdateRequestToUser(request, user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        List<Role> roles = roleRepository.findAllById(request.getRoles());
-        user.setRoles(new HashSet<>(roles));
+        if (request.getRole() != null) {
+            Role role = roleRepository
+                    .findByName(request.getRole())
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED));
+            user.setRole(role);
+        }
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 
     public void deleteUser(String id) {
         userRepository.deleteById(id);
+    }
+
+    public List<UserResponse> searchUsers(String query) {
+        return userRepository.searchUsers(query).stream()
+                .map(userMapper::toUserResponse)
+                .toList();
     }
 }

@@ -1,7 +1,5 @@
 package com.example.identityservice.configuration;
 
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
@@ -50,13 +48,10 @@ public class ApplicationInitConfig {
                         .description("Admin role")
                         .build());
 
-                var roles = new HashSet<Role>();
-                roles.add(adminRole);
-
                 User user = User.builder()
                         .username(defaultUserName)
                         .password(passwordEncoder.encode(defaultPassword))
-                        .roles(roles)
+                        .role(adminRole)
                         .build();
 
                 userRepository.save(user);

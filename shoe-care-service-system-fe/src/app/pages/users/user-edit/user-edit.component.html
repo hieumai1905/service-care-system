@@ -1,0 +1,81 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Cập Nhật Người Dùng</h4>
+          <p class="card-description">Điền thông tin người dùng</p>
+          <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label for="username">Tên đăng nhập</label>
+              <input type="text" class="form-control" id="username" formControlName="username" readonly>
+            </div>
+            <div class="form-group">
+              <label for="password">Mật khẩu</label>
+              <input type="password" formControlName="password" class="form-control" id="password">
+              <div *ngIf="userForm.get('password')?.touched && userForm.get('password')?.invalid" class="text-danger">
+                <small *ngIf="userForm.get('password')?.errors?.['required']">Mật khẩu là bắt buộc.</small>
+                <small *ngIf="userForm.get('password')?.errors?.['minlength']">Mật khẩu phải có ít nhất 8 ký tự.</small>
+                <small *ngIf="userForm.get('password')?.errors?.['pattern']">Mật khẩu phải chứa ít nhất 1 số và 1 ký tự
+                  đặc biệt.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fullName">Họ và tên</label>
+              <input type="text" class="form-control" id="fullName" formControlName="fullName">
+              <div *ngIf="userForm.get('fullName')?.touched && userForm.get('fullName')?.invalid" class="text-danger">
+                <small *ngIf="userForm.get('fullName')?.errors?.['required']">Họ tên là bắt buộc.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" class="form-control" id="email" formControlName="email">
+              <div *ngIf="userForm.get('email')?.touched && userForm.get('email')?.invalid" class="text-danger">
+                <small *ngIf="userForm.get('email')?.errors?.['required']">Email là bắt buộc.</small>
+                <small *ngIf="userForm.get('email')?.errors?.['email']">Vui lòng nhập một email hợp lệ.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="dob">Ngày sinh</label>
+              <input type="date" class="form-control" id="dob" formControlName="dob">
+              <div *ngIf="userForm.get('dob')?.touched && userForm.get('dob')?.invalid" class="text-danger">
+                <small *ngIf="userForm.get('dob')?.errors?.['required']">Ngày sinh là bắt buộc.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="phone">Số điện thoại</label>
+              <input type="text" class="form-control" id="phone" formControlName="phone">
+              <div *ngIf="userForm.get('phone')?.touched && userForm.get('phone')?.invalid" class="text-danger">
+                <small *ngIf="userForm.get('phone')?.errors?.['required']">Số điện thoại là bắt buộc.</small>
+                <small *ngIf="userForm.get('phone')?.errors?.['minlength']">Số điện thoại phải có ít nhất 10 ký tự.</small>
+                <small *ngIf="userForm.get('phone')?.errors?.['pattern']">Số điện thoại không hợp lệ.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="isActive">Active</label>
+              <select class="form-control text-dark" id="isActive" formControlName="isActive">
+                <option [value]="true">Hoạt động</option>
+                <option [value]="false">Không hoạt động</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="role">Vai trò</label>
+              <select class="form-control text-dark" id="role" formControlName="role">
+                <option value="">Chọn vai trò</option>
+                <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+              </select>
+              <div *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid" class="text-danger">
+                <small *ngIf="userForm.get('role')?.errors?.['required']">Vai trò là bắt buộc.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="userForm.invalid">Cập nhật</button>
+            <button class="btn btn-light" routerLink="/users">Hủy</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
