@@ -6,7 +6,10 @@ import jakarta.validation.constraints.Size;
 
 import com.example.identityservice.validator.DobConstraint;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
 @Data
@@ -21,11 +24,12 @@ public class UserCreationRequest {
     @Size(min = 8, message = "INVALID_PASSWORD")
     String password;
 
-    String firstName;
-    String lastName;
+    String fullName;
+    String email;
+    String phone;
 
     @DobConstraint(min = 16, message = "INVALID_DOB")
     LocalDate dob;
 
-    final String role = "USER";
+    String role;
 }

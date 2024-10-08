@@ -62,7 +62,7 @@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
         <span class="menu-title">Quản lý đơn hàng</span>
-        <i class="mdi mdi-contacts menu-icon"></i>
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
       </a>
       <div class="collapse" id="icons">
         <ul class="nav flex-column sub-menu">
@@ -78,15 +78,15 @@
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
         <span class="menu-title">Quản lý người dùng</span>
-        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+        <i class="mdi mdi-contacts menu-icon"></i>
       </a>
       <div class="collapse" id="forms">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="pages/forms/basic_elements.html">Tất cả người dùng</a>
+            <a class="nav-link" [routerLink]="['/users']">Tất cả người dùng</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/forms/basic_elements.html">Thêm người dùng</a>
+            <a class="nav-link" [routerLink]="['/users/add']">Thêm người dùng</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="pages/forms/basic_elements.html">Vai trò</a>
