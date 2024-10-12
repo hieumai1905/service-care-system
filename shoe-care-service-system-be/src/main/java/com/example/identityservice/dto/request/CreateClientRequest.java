@@ -17,20 +17,20 @@ import java.util.Date;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class CreateClientRequest {
     @NotNull(message = "NAME_IS_REQUIRED")
-    @NotBlank(message = "TYPE_NAME_IS_REQUIRED")
+    @NotBlank(message = "NAME_IS_REQUIRED")
     @Size(min = 1, max = 255, message = "INVALID_LENGTH_OF_NAME")
     String name;
     @NotNull(message = "TEL_IS_REQUIRED")
-    @NotBlank(message = "TYPE_NAME_IS_REQUIRED")
+    @NotBlank(message = "NAME_IS_REQUIRED")
     @Size(min = 10, max = 11, message = "INVALID_LENGTH_OF_TEL")
     String tel;
     Date createAt = new Date();
     @NotNull(message = "EMAIL_IS_REQUIRED")
-    @NotBlank(message = "TYPE_NAME_IS_REQUIRED")
+    @NotBlank(message = "EMAIL_IS_REQUIRED")
     @Size(min = 1, max = 255, message = "INVALID_LENGTH_OF_EMAIL")
     String email;
     @NotNull(message = "ADDRESS_IS_REQUIRED")
-    @NotBlank(message = "TYPE_NAME_IS_REQUIRED")
+    @NotBlank(message = "EMAIL_IS_REQUIRED")
     @Size(min = 1, max = 255, message = "INVALID_LENGTH_OF_ADDRESS")
     String address;
 
