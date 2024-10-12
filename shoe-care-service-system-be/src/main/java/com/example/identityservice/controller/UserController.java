@@ -38,6 +38,13 @@ public class UserController {
                 .build();
     }
 
+    @GetMapping("/search")
+    ApiResponse<List<UserResponse>> searchUsers(@RequestParam("q") String query) {
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.searchUsers(query))
+                .build();
+    }
+
     @GetMapping("{id}")
     ApiResponse<UserResponse> getUser(@PathVariable("id") String id) {
         return ApiResponse.<UserResponse>builder()

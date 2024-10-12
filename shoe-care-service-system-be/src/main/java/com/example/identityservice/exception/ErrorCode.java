@@ -64,6 +64,8 @@ public enum ErrorCode {
     NUMBER_OF_ITEMS_MUST_BE_POSITIVE(1043, "Number of items must be positive!", HttpStatus.BAD_REQUEST),
     TITLE_IS_ALREADY_EXIST(1043, "Title is already existed!", HttpStatus.BAD_REQUEST),
     QUANTITY_IS_NOT_ENOUGH(1043, "Quantity is not enough!", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_EXISTED(1009, "Role not existed", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_FOUND(1010, "Role not found", HttpStatus.NOT_FOUND),
     ;
 
     int code;

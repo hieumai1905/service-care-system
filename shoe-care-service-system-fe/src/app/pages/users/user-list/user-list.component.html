@@ -1,0 +1,70 @@
+<div class="content-wrapper">
+  <div class="row mt-3">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh sách người dùng</h4>
+          <small class="text-gray">Thêm, sửa, xóa người dùng</small>
+          <div class="add-items d-flex mt-3">
+            <div class="col-3 d-flex">
+              <input type="text" class="form-control todo-list-input" placeholder="Từ khóa?" [(ngModel)]="searchKey">
+              <button class="btn btn-gradient-primary" (click)="searchUser()">Lọc</button>
+            </div>
+            <div class="col-5"></div>
+            <div class="col-4 text-end">
+              <a class="btn btn-gradient-primary" [routerLink]="['/users/add']">Thêm người dùng</a>
+              <button class="btn btn-gradient-primary" id="export-excel">Export Excel</button>
+            </div>
+          </div>
+          <table class="table table-striped mt-5">
+            <thead>
+            <tr>
+              <th> ID</th>
+              <th> TÊN ĐĂNG NHẬP</th>
+              <th> HỌ TÊN</th>
+              <th> QUYỀN</th>
+              <th> EMAIL</th>
+              <th> ĐIỆN THOẠI</th>
+              <th> NGÀY TẠO</th>
+              <th> KÍCH HOẠT</th>
+              <th> CHỨC NĂNG</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let user of users | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+
+              <td class="py-1">{{ user.id }}</td>
+              <td>{{ user.username }}</td>
+              <td>{{ user.fullName || 'N/A' }}</td>
+              <td>{{ user.role?.name || 'N/A' }}</td>
+              <td>{{ user.email || 'N/A' }}</td>
+              <td>{{ user.phone || 'N/A' }}</td>
+              <td>{{ user.dob ? (user.dob | date: 'MMM d, y') : 'N/A' }}</td>
+              <td>
+                <span *ngIf="user.isActive; else inactive" class="badge badge-success">Kích hoạt</span>
+                <ng-template #inactive>
+                  <span class="badge badge-danger">Chưa kích hoạt</span>
+                </ng-template>
+              </td>
+              <td>
+                <a class="text-center btn btn-sm" *ngIf="user.username !== currentUser"
+                   [routerLink]="['/users/edit', user.id]">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a class="text-center btn btn-sm" *ngIf="user.username !== currentUser" (click)="deleteUser(user.id)">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+            <mat-paginator [length]="users.length"
+                           [pageSize]="pageSize"
+                           [pageSizeOptions]="[5, 10, 25, 100]"
+                           (page)="onPageChange($event)">
+            </mat-paginator>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
