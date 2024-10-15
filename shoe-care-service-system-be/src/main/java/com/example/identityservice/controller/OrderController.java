@@ -41,5 +41,10 @@ public class OrderController {
                 .result(orderService.searchOrder(request))
                 .build();
     }
-
+    @GetMapping("/{id}")
+    public ApiResponse<?> getById(@PathVariable Long id) {
+        return ApiResponse.<UpdateOrderRequest>builder()
+                .result(orderService.getById(id))
+                .build();
+    }
 }

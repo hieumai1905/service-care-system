@@ -12,7 +12,7 @@ import java.util.Date;
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
    @Query("select o from Order o where (:keyWord is null or lower(o.client.name) like %:keyWord% " +
-           "    or lower(concat(o.user.firstName, o.user.lastName)) like %:keyWord% ) " +
+           "    or lower(o.user.fullName) like %:keyWord% ) " +
            "and (:orderDate is null or o.createdAt >= :orderDate)")
    Page<Order> search(String keyWord, Date orderDate, Pageable pageable);
 }
