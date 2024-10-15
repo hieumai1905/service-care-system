@@ -9,6 +9,7 @@ import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.entity.Order;
 import com.example.identityservice.entity.OrderDetail;
 import com.example.identityservice.entity.Product;
+import com.example.identityservice.entity.Schedule;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
 import com.example.identityservice.repository.OrderDetailRepository;
@@ -160,5 +161,10 @@ public class OrderService {
         return productRepository.findById(productId).orElseThrow(
                 () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
         );
+    }
+
+    public UpdateOrderRequest getById(Long id) {
+        Order order = getExistingOrder(id);
+        return ConvertUtils.convert(order, UpdateOrderRequest.class);
     }
 }

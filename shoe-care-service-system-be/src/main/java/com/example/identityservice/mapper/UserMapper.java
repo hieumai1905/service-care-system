@@ -12,6 +12,7 @@ import com.example.identityservice.entity.User;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Mapping(target = "role", ignore = true)
     User toEntity(UserCreationRequest request);
 
     UserResponse toUserResponse(User user);
