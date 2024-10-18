@@ -25,7 +25,6 @@ export class MaterialListComponent implements OnInit {
 
   constructor(
     private materialService: MaterialService,
-    private router: Router,
     private dialogService: DialogService
   ) {
   }

@@ -1,0 +1,28 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Danh Mục Dịch Vụ Mới</h4>
+          <p class="card-description">Điền thông tin danh mục dịch vụ</p>
+          <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+            <div class="form-group">
+              <label for="name">Tên Danh Mục Dịch Vụ</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="categoryForm.get('name')?.touched && categoryForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="categoryForm.get('name')?.errors?.['required']">Tên danh mục dịch vụ là bắt buộc.</small>
+                <small *ngIf="categoryForm.get('name')?.errors?.['minlength']">Tên danh mục dịch vụ phải có ít nhất 5 ký
+                  tự.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="categoryForm.invalid">Thêm Danh
+              Mục Dịch Vụ
+            </button>
+            <button class="btn btn-light" routerLink="/category-services">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">{{ message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
