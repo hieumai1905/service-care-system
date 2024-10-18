@@ -1,0 +1,28 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chỉnh Sửa Vật Liệu</h4>
+          <p class="card-description">Chỉnh sửa thông tin vật liệu</p>
+          <form [formGroup]="materialForm" (ngSubmit)="updateMaterial()">
+            <div class="form-group">
+              <label for="name">Tên Chất Liệu</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="materialForm.get('name')?.touched && materialForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="materialForm.get('name')?.errors?.['required']">Tên vật liệu là bắt buộc.</small>
+                <small *ngIf="materialForm.get('name')?.errors?.['minlength']">Tên vật liệu phải có ít nhất 3 ký
+                  tự.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="materialForm.invalid">Cập Nhật Vật
+              Liệu
+            </button>
+            <button class="btn btn-light" routerLink="/materials">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">{{ message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

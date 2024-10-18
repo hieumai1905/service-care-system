@@ -1,13 +1,21 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserService} from '../../../services/user.service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import {RoleService} from '../../../services/role.service';
 import {DialogService} from "../../../services/dialog.service";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgIf,
+    NgForOf
+  ],
   styleUrls: ['./user-edit.component.css']
 })
 export class UserEditComponent implements OnInit {

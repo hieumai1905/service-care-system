@@ -1,0 +1,28 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chỉnh Sửa Thương Hiệu</h4>
+          <p class="card-description">Chỉnh sửa thông tin thương hiệu</p>
+          <form [formGroup]="brandForm" (ngSubmit)="updateBrand()">
+            <div class="form-group">
+              <label for="name">Tên Thương Hiệu</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="brandForm.get('name')?.touched && brandForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="brandForm.get('name')?.errors?.['required']">Tên thương hiệu là bắt buộc.</small>
+                <small *ngIf="brandForm.get('name')?.errors?.['minlength']">Tên thương hiệu phải có ít nhất 2 ký
+                  tự.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="brandForm.invalid">Cập Nhật Thương
+              Hiệu
+            </button>
+            <button class="btn btn-light" routerLink="/brands">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">{{ message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

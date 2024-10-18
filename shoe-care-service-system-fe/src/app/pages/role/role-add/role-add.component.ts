@@ -1,12 +1,21 @@
 import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {RoleService} from '../../../services/role.service';
 import {PermissionService} from '../../../services/permission.service';
 import {DialogService} from "../../../services/dialog.service";
+import {RouterLink} from "@angular/router";
+import {NgForOf, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-role-add',
   templateUrl: './role-add.component.html',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    NgIf,
+    NgForOf
+  ],
   styleUrls: ['./role-add.component.css']
 })
 export class RoleAddComponent implements OnInit {
