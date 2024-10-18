@@ -52,5 +52,14 @@ export const AdminLayoutRoutes: Routes = [
           .then(m => m.CategoryProductModule)
       },
     ]
+  },
+  {
+    path: 'colors',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/color/Color.module').then(m => m.ColorModule)
+      },
+    ]
   }
 ];
