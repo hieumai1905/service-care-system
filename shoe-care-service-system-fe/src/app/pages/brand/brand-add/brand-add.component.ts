@@ -26,7 +26,7 @@ export class BrandAddComponent {
     private dialogService: DialogService
   ) {
     this.brandForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(3)]]
+      name: ['', [Validators.required, Validators.minLength(5)]]
     });
   }
 
