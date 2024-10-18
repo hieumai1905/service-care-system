@@ -1,11 +1,10 @@
 package com.example.identityservice.exception;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 
 @Getter
 @AllArgsConstructor
@@ -64,8 +63,12 @@ public enum ErrorCode {
     NUMBER_OF_ITEMS_MUST_BE_POSITIVE(1043, "Số lượng vật phẩm phải là số dương", HttpStatus.BAD_REQUEST),
     TITLE_IS_ALREADY_EXIST(1043, "Tiêu đề đã tồn tại", HttpStatus.BAD_REQUEST),
     QUANTITY_IS_NOT_ENOUGH(1043, "Số lượng không đủ", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_EXISTED(1009, "Vai trò không tồn tại", HttpStatus.BAD_REQUEST),
-    ROLE_NOT_FOUND(1010, "Không tìm thấy vai trò", HttpStatus.NOT_FOUND);
+    ROLE_NOT_EXISTED(1044, "Vai trò không tồn tại", HttpStatus.BAD_REQUEST),
+    ROLE_NOT_FOUND(1045, "Không tìm thấy vai trò", HttpStatus.NOT_FOUND),
+    ROLE_EXISTED(1046, "Vai trò đã tồn tại", HttpStatus.BAD_REQUEST),
+    PERMISSION_EXISTED(1047, "Quyền đã tồn tại", HttpStatus.BAD_REQUEST),
+    PERMISSION_IN_USE(1048, "Không thể xóa do quyền đang được sử dụng", HttpStatus.BAD_REQUEST),
+    PERMISSION_NOT_EXISTED(1049, "Quyền không tồn tại", HttpStatus.BAD_REQUEST);
 
     int code;
     String message;

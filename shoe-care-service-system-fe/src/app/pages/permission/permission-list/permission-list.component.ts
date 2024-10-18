@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
-import {RoleService} from "../../../services/role.service";
+import {PermissionService} from "../../../services/permission.service";
 import {Router, RouterLink} from "@angular/router";
 import {AuthService} from "../../../services/auth.service";
-import {Role} from "../../../model/Role";
+import {Permission} from "../../../model/Permission";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {DatePipe, NgForOf, NgIf, SlicePipe} from "@angular/common";
 import {DialogService} from "../../../services/dialog.service";
 
 @Component({
-  selector: 'app-role-list',
-  templateUrl: './role-list.component.html',
+  selector: 'app-permission-list',
+  templateUrl: './permission-list.component.html',
+  styleUrls: ['./permission-list.component.css'],
   standalone: true,
-  styleUrls: ['./role-list.component.css'],
   imports: [
     DatePipe,
     NgForOf,
@@ -21,14 +21,14 @@ import {DialogService} from "../../../services/dialog.service";
     NgIf
   ]
 })
-export class RoleListComponent implements OnInit {
-  roles: Array<Role> = [];
+export class PermissionListComponent implements OnInit {
+  permissions: Array<Permission> = [];
   pageIndex: number = 0;
   pageSize: number = 5;
   currentUser: string | null = null;
 
   constructor(
-    private roleService: RoleService,
+    private permissionService: PermissionService,
     private router: Router,
     private dialogService: DialogService,
     private authService: AuthService
@@ -38,50 +38,44 @@ export class RoleListComponent implements OnInit {
   ngOnInit() {
     this.currentUser = this.authService.getCurrentUser();
     if (this.currentUser) {
-      this.loadRoles();
+      this.loadPermissions();
     } else {
       this.router.navigate(['/login']);
     }
   }
 
-  loadRoles() {
-    this.roleService.getRoles().subscribe({
+  loadPermissions() {
+    this.permissionService.getPermissions().subscribe({
       next: (data) => {
-        this.roles = data.result;
-        console.log('Loaded roles:', data);
+        this.permissions = data.result;
+        console.log('Loaded permissions:', data);
       },
       error: (err) => {
-        console.error('Error when load roles:', err);
+        console.error('Error when loading permissions:', err);
       }
     });
   }
 
-  onPageChange(event
-                 :
-                 PageEvent
-  ) {
+  onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }
 
-  deleteRole(name
-               :
-               string
-  ) {
+  deletePermission(name: string) {
     this.dialogService
       .open(
-        'Xác nhận xóa vai trò',
-        `Bạn có chắc chắn muốn xóa vai trò này?`,
+        'Xác nhận xóa quyền',
+        `Bạn có chắc chắn muốn xóa quyền này?`,
         'Xóa',
         'Không xóa'
       )
       .subscribe(result => {
         if (result) {
-          this.roleService.deleteRole(name).subscribe({
+          this.permissionService.deletePermission(name).subscribe({
             next: () => {
-              console.log('Role deleted:', name);
-              this.loadRoles();
-              this.dialogService.notificationOpen('Thông báo', 'Xóa vai trò thành công!', 'OK');
+              console.log('Permission deleted:', name);
+              this.loadPermissions();
+              this.dialogService.notificationOpen('Thông báo', 'Xóa quyền thành công!', 'OK');
             },
             error: (err) => {
               this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');

@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../services/user.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute} from '@angular/router';
 import {RoleService} from '../../../services/role.service';
 import {DialogService} from "../../../services/dialog.service";
 
@@ -17,12 +17,11 @@ export class UserEditComponent implements OnInit {
   roles: Array<{ name: string, description: string }> = [];
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly userService: UserService,
-    private readonly route: ActivatedRoute,
-    private readonly roleService: RoleService,
-    private readonly router: Router,
-    private readonly dialogService: DialogService
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private route: ActivatedRoute,
+    private roleService: RoleService,
+    private dialogService: DialogService
   ) {
     this.userForm = this.formBuilder.group({
       username: [
