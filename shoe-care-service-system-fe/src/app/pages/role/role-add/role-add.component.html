@@ -1,0 +1,47 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Vai Trò Mới</h4>
+          <p class="card-description">Điền thông tin vai trò</p>
+          <form [formGroup]="roleForm" (ngSubmit)="addRole()">
+            <div class="form-group">
+              <label for="name">Tên Vai Trò</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="roleForm.get('name')?.touched && roleForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="roleForm.get('name')?.errors?.['required']">Tên vai trò là bắt buộc.</small>
+                <small *ngIf="roleForm.get('name')?.errors?.['minlength']">Tên vai trò phải có ít nhất 3 ký tự.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Mô Tả</label>
+              <input type="text" formControlName="description" class="form-control" id="description">
+              <div *ngIf="roleForm.get('description')?.touched && roleForm.get('description')?.invalid"
+                   class="text-danger">
+                <small *ngIf="roleForm.get('description')?.errors?.['required']">Mô tả là bắt buộc.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Quyền Hạn</label>
+              <div formGroupName="permissions">
+                <div *ngFor="let permission of permissions">
+                  <input type="checkbox"
+                         [formControlName]="permission"
+                         (change)="onPermissionChange(permission, $event)">
+                  {{ permission }}
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="roleForm.invalid">Thêm Vai Trò
+            </button>
+            <button class="btn btn-light" routerLink="/roles">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

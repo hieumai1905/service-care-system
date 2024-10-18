@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {UserService} from '../../../services/user.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {RoleService} from '../../../services/role.service';
+import {DialogService} from "../../../services/dialog.service";
 
 @Component({
   selector: 'app-user-edit',
@@ -16,11 +17,12 @@ export class UserEditComponent implements OnInit {
   roles: Array<{ name: string, description: string }> = [];
 
   constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private route: ActivatedRoute,
-    private roleService: RoleService,
-    private router: Router
+    private readonly formBuilder: FormBuilder,
+    private readonly userService: UserService,
+    private readonly route: ActivatedRoute,
+    private readonly roleService: RoleService,
+    private readonly router: Router,
+    private readonly dialogService: DialogService
   ) {
     this.userForm = this.formBuilder.group({
       username: [
@@ -116,20 +118,14 @@ export class UserEditComponent implements OnInit {
       const updatedUser = this.userForm.getRawValue();
       this.userService.updateUser(this.userId, updatedUser).subscribe({
         next: () => {
-          this.message = 'Cập nhật người dùng thành công!';
-          this.router.navigate(['/users']);
+          this.dialogService.notificationOpen('Thông báo', 'Cập nhật người dùng thành công!', 'OK');
         },
         error: (err) => {
-          if (err.error && err.error.message) {
-            this.message = `${err.error.message}`;
-          } else {
-            this.message = 'Đã có lỗi xảy ra, vui lòng thử lại sau!';
-          }
+          this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
         }
       });
     } else {
       this.message = 'Vui lòng điền đúng thông tin trong form.';
     }
   }
-
 }

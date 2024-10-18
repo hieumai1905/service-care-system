@@ -5,7 +5,7 @@ import {UserService} from "../../../services/user.service";
 import {DatePipe, NgForOf, NgIf, SlicePipe} from "@angular/common";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {FormsModule} from "@angular/forms";
-import {ConfirmDialogService} from "../../../services/confirm-dialog.service";
+import {DialogService} from "../../../services/dialog.service";
 import {AuthService} from "../../../services/auth.service";
 
 @Component({
@@ -30,7 +30,11 @@ export class UserListComponent implements OnInit {
   searchKey: string = '';
   currentUser: string | null = null;
 
-  constructor(private userService: UserService, private confirmDialog: ConfirmDialogService, private authService: AuthService, private router: Router) {
+  constructor(
+    private readonly userService: UserService,
+    private readonly dialogService: DialogService,
+    private readonly authService: AuthService,
+    private readonly router: Router) {
   }
 
   ngOnInit() {
@@ -78,7 +82,7 @@ export class UserListComponent implements OnInit {
   }
 
   deleteUser(id: string) {
-    this.confirmDialog
+    this.dialogService
       .open(
         'Xác nhận xóa người dùng',
         `Bạn có chắc chắn muốn xóa người dùng này?`,
@@ -88,12 +92,17 @@ export class UserListComponent implements OnInit {
       .subscribe(result => {
         if (result) {
           this.userService.deleteUser(id).subscribe({
-            next: () => {
-              this.users = this.users.filter(u => u.id !== id);
-              console.log('User deleted:', id);
+            next: (data) => {
+              if (data.code === 0) {
+                this.users = this.users.filter(u => u.id !== id);
+                this.dialogService.notificationOpen('Thông báo', 'Xóa người dùng thành công!', 'OK');
+                console.log('User deleted:', id);
+              } else {
+                this.dialogService.notificationOpen('Thông báo', data.message || 'Đã có lỗi xảy ra!', 'OK');
+              }
             },
             error: (err) => {
-              console.error('Error when delete user:', err);
+              this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
             }
           });
         }

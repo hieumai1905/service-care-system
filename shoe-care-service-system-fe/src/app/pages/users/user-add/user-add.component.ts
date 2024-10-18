@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RoleService} from '../../../services/role.service';
 import {UserService} from '../../../services/user.service';
+import {Role} from "../../../model/Role";
+import {DialogService} from "../../../services/dialog.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-add',
@@ -10,13 +13,15 @@ import {UserService} from '../../../services/user.service';
 })
 export class UserAddComponent implements OnInit {
   userForm: FormGroup;
-  roles: Array<{ name: string, description: string }> = [];
+  roles: Array<Role> = [];
   message: string = '';
 
   constructor(
-    private formBuilder: FormBuilder,
-    private userService: UserService,
-    private roleService: RoleService
+    private readonly formBuilder: FormBuilder,
+    private readonly userService: UserService,
+    private readonly roleService: RoleService,
+    private readonly dialogService: DialogService,
+    private readonly router: Router
   ) {
     this.userForm = this.formBuilder.group({
       username: [
@@ -80,15 +85,11 @@ export class UserAddComponent implements OnInit {
     if (this.userForm.valid) {
       this.userService.addUser(this.userForm.value).subscribe({
         next: () => {
-          this.message = 'Thêm người dùng thành công!';
+          this.dialogService.notificationOpen('Thông báo', 'Thêm người dùng thành công!', 'OK');
           this.userForm.reset();
         },
         error: (err) => {
-          if (err.error && err.error.message) {
-            this.message = `${err.error.message}`;
-          } else {
-            this.message = 'Đã có lỗi xảy ra, vui lòng thử lại sau!';
-          }
+          this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
         }
       });
     } else {

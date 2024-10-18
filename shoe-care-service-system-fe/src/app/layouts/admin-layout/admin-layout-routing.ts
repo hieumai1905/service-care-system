@@ -10,5 +10,11 @@ export const AdminLayoutRoutes: Routes = [
     children: [
       {path: '', loadChildren: () => import('../../pages/users/users.module').then(m => m.UsersModule)},
     ]
+  },
+  {
+    path: 'roles',
+    children: [
+      {path: '', loadChildren: () => import('../../pages/role/role.module').then(m => m.RoleModule)},
+    ]
   }
 ];
