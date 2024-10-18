@@ -14,14 +14,16 @@ import {UserListComponent} from "./pages/users/user-list/user-list.component";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {UserEditComponent} from './pages/users/user-edit/user-edit.component';
-import {ConfirmDialogService} from "./services/confirm-dialog.service";
+import {DialogService} from "./services/dialog.service";
 import {MatDialogModule} from "@angular/material/dialog";
+import { RoleAddComponent } from './pages/role/role-add/role-add.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NotFoundComponent,
     UserEditComponent,
+    RoleAddComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,7 +40,7 @@ import {MatDialogModule} from "@angular/material/dialog";
   providers: [
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     AuthGuard,
-    ConfirmDialogService
+    DialogService
   ],
   bootstrap: [AppComponent]
 })

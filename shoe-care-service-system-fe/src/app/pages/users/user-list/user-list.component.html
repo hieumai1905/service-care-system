@@ -10,10 +10,8 @@
               <input type="text" class="form-control todo-list-input" placeholder="Từ khóa?" [(ngModel)]="searchKey">
               <button class="btn btn-gradient-primary" (click)="searchUser()">Lọc</button>
             </div>
-            <div class="col-5"></div>
-            <div class="col-4 text-end">
+            <div class="col-9 text-end">
               <a class="btn btn-gradient-primary" [routerLink]="['/users/add']">Thêm người dùng</a>
-              <button class="btn btn-gradient-primary" id="export-excel">Export Excel</button>
             </div>
           </div>
           <table class="table table-striped mt-5">

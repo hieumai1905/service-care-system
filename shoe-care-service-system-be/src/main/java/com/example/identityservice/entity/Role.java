@@ -1,11 +1,13 @@
 package com.example.identityservice.entity;
 
-import java.util.Set;
-
-import jakarta.persistence.*;
-
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.util.Set;
 
 @Entity(name = "roles")
 @Getter
@@ -16,6 +18,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class Role {
     @Id
+    @Column(unique = true)
     String name;
 
     String description;
