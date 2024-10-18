@@ -42,5 +42,15 @@ export const AdminLayoutRoutes: Routes = [
           .then(m => m.CategoryServiceModule)
       },
     ]
+  },
+  {
+    path: 'category-products',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/category-product/category-product.module')
+          .then(m => m.CategoryProductModule)
+      },
+    ]
   }
 ];

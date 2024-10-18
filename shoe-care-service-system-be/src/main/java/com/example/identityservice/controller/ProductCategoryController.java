@@ -2,11 +2,8 @@ package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
 import com.example.identityservice.dto.ProductCategoryDTO;
-import com.example.identityservice.dto.SizeDTO;
 import com.example.identityservice.entity.ProductCategory;
-import com.example.identityservice.entity.Size;
 import com.example.identityservice.service.ProductCategoryService;
-import com.example.identityservice.service.SizeService;
 import com.example.identityservice.utils.ConvertUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +15,11 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/product-categories")
+@RequestMapping("/category-products")
 @RequiredArgsConstructor
 @FieldDefaults(makeFinal = true, level = lombok.AccessLevel.PRIVATE)
 public class ProductCategoryController {
-    private ProductCategoryService productCategoryService;
+    ProductCategoryService productCategoryService;
 
     @GetMapping
     public ApiResponse<?> getAllProductCategories() {
