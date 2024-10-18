@@ -1,0 +1,45 @@
+<div class="content-wrapper">
+  <div class="row mt-3">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh sách danh mục sản phẩm</h4>
+          <small class="text-gray">Thêm, sửa, xóa danh mục sản phẩm</small>
+          <div class="add-items d-flex mt-3">
+            <div class="col-8"></div>
+            <div class="col-4 text-end">
+              <a class="btn btn-gradient-primary" [routerLink]="['/category-products/add']">Thêm danh mục sản phẩm</a>
+            </div>
+          </div>
+          <table class="table table-striped mt-5">
+            <thead>
+            <tr>
+              <th>TÊN DANH MỤC SẢN PHẨM</th>
+              <th>CHỨC NĂNG</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let category of categories | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+              <td class="py-1">{{ category.name }}</td>
+              <td>
+                <a class="text-center btn btn-sm" [routerLink]="['/category-products/edit', category.id]">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a class="text-center btn btn-sm" (click)="deleteCategory(category.id)">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <mat-paginator
+            [length]="categories.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="onPageChange($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
