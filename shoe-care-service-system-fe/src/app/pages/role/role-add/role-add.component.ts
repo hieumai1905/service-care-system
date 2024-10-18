@@ -15,10 +15,10 @@ export class RoleAddComponent implements OnInit {
   permissions: string[] = [];
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly roleService: RoleService,
-    private readonly permissionService: PermissionService,
-    private readonly dialogService: DialogService
+    private formBuilder: FormBuilder,
+    private roleService: RoleService,
+    private permissionService: PermissionService,
+    private dialogService: DialogService
   ) {
     this.roleForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
@@ -69,10 +69,6 @@ export class RoleAddComponent implements OnInit {
           this.roleForm.reset();
         },
         error: (err) => {
-          if (err.error.code == 1009) {
-            this.dialogService.notificationOpen('Thông báo', 'Vai trò đã tồn tại!', 'OK');
-            return;
-          }
           this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
         }
       });

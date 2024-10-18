@@ -3,8 +3,8 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {RoleService} from '../../../services/role.service';
 import {UserService} from '../../../services/user.service';
 import {Role} from "../../../model/Role";
-import {DialogService} from "../../../services/dialog.service";
 import {Router} from "@angular/router";
+import {DialogService} from "../../../services/dialog.service";
 
 @Component({
   selector: 'app-user-add',
@@ -17,11 +17,10 @@ export class UserAddComponent implements OnInit {
   message: string = '';
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly userService: UserService,
-    private readonly roleService: RoleService,
-    private readonly dialogService: DialogService,
-    private readonly router: Router
+    private formBuilder: FormBuilder,
+    private userService: UserService,
+    private roleService: RoleService,
+    private dialogService: DialogService,
   ) {
     this.userForm = this.formBuilder.group({
       username: [

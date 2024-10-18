@@ -5,7 +5,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule} from "@angular/router";
 import {RolesRoutes} from "./role-routing";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import { RoleEditComponent } from './role-edit/role-edit.component';
+import {RoleEditComponent} from './role-edit/role-edit.component';
 
 @NgModule({
   declarations: [

@@ -1,0 +1,38 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Quyền Mới</h4>
+          <p class="card-description">Điền thông tin quyền</p>
+          <form [formGroup]="permissionForm" (ngSubmit)="addPermission()">
+            <div class="form-group">
+              <label for="name">Tên Quyền</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="permissionForm.get('name')?.touched && permissionForm.get('name')?.invalid"
+                   class="text-danger">
+                <small *ngIf="permissionForm.get('name')?.errors?.['required']">Tên quyền là bắt buộc.</small>
+                <small *ngIf="permissionForm.get('name')?.errors?.['minlength']">Tên quyền phải có ít nhất 3 ký
+                  tự.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Mô Tả</label>
+              <input type="text" formControlName="description" class="form-control" id="description">
+              <div *ngIf="permissionForm.get('description')?.touched && permissionForm.get('description')?.invalid"
+                   class="text-danger">
+                <small *ngIf="permissionForm.get('description')?.errors?.['required']">Mô tả là bắt buộc.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="permissionForm.invalid">Thêm Quyền
+            </button>
+            <button class="btn btn-light" routerLink="/permissions">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

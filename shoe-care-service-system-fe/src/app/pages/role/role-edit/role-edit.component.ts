@@ -17,11 +17,11 @@ export class RoleEditComponent implements OnInit {
   roleName: string | undefined;
 
   constructor(
-    private readonly formBuilder: FormBuilder,
-    private readonly roleService: RoleService,
-    private readonly permissionService: PermissionService,
-    private readonly dialogService: DialogService,
-    private readonly route: ActivatedRoute
+    private formBuilder: FormBuilder,
+    private roleService: RoleService,
+    private permissionService: PermissionService,
+    private dialogService: DialogService,
+    private route: ActivatedRoute
   ) {
     this.roleForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3)]],

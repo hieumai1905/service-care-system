@@ -5,8 +5,8 @@ import {UserService} from "../../../services/user.service";
 import {DatePipe, NgForOf, NgIf, SlicePipe} from "@angular/common";
 import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
 import {FormsModule} from "@angular/forms";
-import {DialogService} from "../../../services/dialog.service";
 import {AuthService} from "../../../services/auth.service";
+import {DialogService} from "../../../services/dialog.service";
 
 @Component({
   selector: 'app-user-list',
@@ -31,10 +31,10 @@ export class UserListComponent implements OnInit {
   currentUser: string | null = null;
 
   constructor(
-    private readonly userService: UserService,
-    private readonly dialogService: DialogService,
-    private readonly authService: AuthService,
-    private readonly router: Router) {
+    private userService: UserService,
+    private dialogService: DialogService,
+    private authService: AuthService,
+    private router: Router) {
   }
 
   ngOnInit() {
@@ -93,13 +93,9 @@ export class UserListComponent implements OnInit {
         if (result) {
           this.userService.deleteUser(id).subscribe({
             next: (data) => {
-              if (data.code === 0) {
                 this.users = this.users.filter(u => u.id !== id);
                 this.dialogService.notificationOpen('Thông báo', 'Xóa người dùng thành công!', 'OK');
                 console.log('User deleted:', id);
-              } else {
-                this.dialogService.notificationOpen('Thông báo', data.message || 'Đã có lỗi xảy ra!', 'OK');
-              }
             },
             error: (err) => {
               this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
