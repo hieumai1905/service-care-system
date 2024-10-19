@@ -1,11 +1,12 @@
 package com.example.identityservice.service;
 
 import com.example.identityservice.dto.CouponItemDTO;
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateCouponRequest;
+import com.example.identityservice.dto.request.SearchCouponRequest;
+import com.example.identityservice.dto.request.UpdateCouponRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.entity.Coupon;
 import com.example.identityservice.entity.CouponItem;
-import com.example.identityservice.entity.Product;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
 import com.example.identityservice.repository.CouponItemRepository;
@@ -16,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @Slf4j
 @Service
@@ -31,9 +32,9 @@ public class CouponService {
     CouponRepository couponRepository;
     CouponItemRepository couponItemRepository;
 
-    public UpdateCouponRequest createCoupon(CreateCouponRequest request){
+    public UpdateCouponRequest createCoupon(CreateCouponRequest request) {
         Coupon existByTitle = couponRepository.findByIdAndTitle(null, request.getTitle());
-        if(existByTitle != null){
+        if (existByTitle != null) {
             throw new AppException(ErrorCode.TITLE_IS_ALREADY_EXIST);
         }
         Coupon coupon = ConvertUtils.convert(request, Coupon.class);
@@ -44,17 +45,33 @@ public class CouponService {
         return ConvertUtils.convert(coupon, UpdateCouponRequest.class);
     }
 
-    public UpdateCouponRequest updateCoupon(UpdateCouponRequest request){
+    void generateCouponItem(Integer numberOfItems, Coupon coupon) {
+        List<CouponItem> couponItems = new ArrayList<>();
+        while (numberOfItems > 0) {
+            couponItems.add(CouponItem.builder()
+                    .isActive(true)
+                    .coupon(coupon)
+                    .code(generateCouponItemCode())
+                    .build());
+            numberOfItems--;
+        }
+        coupon.setCouponItems(couponItems);
+    }
+
+    private String generateCouponItemCode() {
+        return java.util.UUID.randomUUID().toString().substring(0, 8).toUpperCase();
+    }
+
+    public UpdateCouponRequest updateCoupon(UpdateCouponRequest request) {
         Coupon coupon = getCouponById(request.getId());
         Coupon existByTitle = couponRepository.findByIdAndTitle(request.getId(), request.getTitle());
-        if(existByTitle != null){
+        if (existByTitle != null) {
             throw new AppException(ErrorCode.TITLE_IS_ALREADY_EXIST);
         }
 
         coupon.setTitle(request.getTitle());
         coupon.setDiscount(request.getDiscount());
-        coupon.setActive(request.getIsActive());
-        coupon.setDiscount(request.getDiscount());
+        coupon.setIsActive(request.getIsActive());
         coupon.setExpireAt(request.getExpireAt());
         coupon.setIsPercent(request.getIsPercent());
 
@@ -62,12 +79,12 @@ public class CouponService {
         return ConvertUtils.convert(coupon, UpdateCouponRequest.class);
     }
 
-    public void deleteCoupon(Long id){
+    public void deleteCoupon(Long id) {
         getCouponById(id);
         couponRepository.deleteById(id);
     }
 
-    public SearchResponse<UpdateCouponRequest> searchCoupons(SearchCouponRequest request){
+    public SearchResponse<UpdateCouponRequest> searchCoupons(SearchCouponRequest request) {
         request.validateInput();
 
         Page<Coupon> coupons = couponRepository.search(
@@ -90,7 +107,7 @@ public class CouponService {
         return ConvertUtils.convertList(couponItems, CouponItemDTO.class);
     }
 
-    public void deleteCouponItems(List<Long> ids){
+    public void deleteCouponItems(List<Long> ids) {
         couponItemRepository.deleteByIds(ids);
     }
 
@@ -100,30 +117,16 @@ public class CouponService {
         );
     }
 
-    void generateCouponItem(Integer numberOfItems, Coupon coupon) {
-        List<CouponItem> couponItems = new ArrayList<>();
-        while (numberOfItems > 0){
-            CouponItem couponItem = new CouponItem();
-            couponItem.setActive(true);
-            couponItem.setCoupon(coupon);
-            couponItem.setCode(generateCouponItemCode());
-            couponItems.add(couponItem);
-            numberOfItems--;
-        }
-        coupon.setCouponItems(couponItems);
+    public UpdateCouponRequest findById(Long id) {
+        Coupon coupon = getCouponById(id);
+        var quantity = couponItemRepository.findAllByCouponId(id).size();
+        UpdateCouponRequest updateCouponRequest = ConvertUtils.convert(coupon, UpdateCouponRequest.class);
+        updateCouponRequest.setNumberOfItems(quantity);
+        return updateCouponRequest;
     }
 
-    static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    static final int CODE_LENGTH = 10;
-    Random random = new Random();
-
-    String generateCouponItemCode() {
-        StringBuilder code = new StringBuilder(CODE_LENGTH);
-        for (int i = 0; i < CODE_LENGTH; i++) {
-            int index = random.nextInt(CHARACTERS.length());
-            code.append(CHARACTERS.charAt(index));
-        }
-        return code.toString();
+    public List<UpdateCouponRequest> getAllCoupons() {
+        List<Coupon> coupons = couponRepository.findAll(Sort.by(Sort.Direction.DESC, "expireAt"));
+        return ConvertUtils.convertList(coupons, UpdateCouponRequest.class);
     }
-
 }

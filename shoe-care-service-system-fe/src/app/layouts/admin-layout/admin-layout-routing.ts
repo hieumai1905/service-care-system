@@ -71,4 +71,14 @@ export const AdminLayoutRoutes: Routes = [
       },
     ]
   }
+  ,
+  {
+    path: 'coupons',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/coupon/Coupon.module').then(m => m.CouponModule)
+      },
+    ]
+  }
 ];
