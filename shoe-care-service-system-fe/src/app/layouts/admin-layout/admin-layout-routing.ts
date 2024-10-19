@@ -61,5 +61,14 @@ export const AdminLayoutRoutes: Routes = [
         loadChildren: () => import('../../pages/color/Color.module').then(m => m.ColorModule)
       },
     ]
+  },
+  {
+    path: 'sizes',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/size/Size.module').then(m => m.SizeModule)
+      },
+    ]
   }
 ];

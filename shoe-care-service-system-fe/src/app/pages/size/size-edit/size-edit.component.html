@@ -1,0 +1,28 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chỉnh Sửa Kích Cỡ</h4>
+          <p class="card-description">Chỉnh sửa thông tin kích cỡ</p>
+          <form [formGroup]="sizeForm" (ngSubmit)="updateSize()">
+            <div class="form-group">
+              <label for="name">Kích Cỡ</label>
+              <input type="text" formControlName="name" class="form-control" id="name"
+                     placeholder="Nhập size (VD: 30, 30.5)">
+              <div *ngIf="sizeForm.get('name')?.touched && sizeForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="sizeForm.get('name')?.errors?.['required']">Kích cỡ là bắt buộc.</small>
+                <small *ngIf="sizeForm.get('name')?.errors?.['pattern']">Vui lòng nhập số hợp lệ từ 1 đến 80, có thể bao
+                  gồm .5.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="sizeForm.invalid">Cập Nhật Kích Cỡ
+            </button>
+            <button class="btn btn-light" routerLink="/sizes">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">{{ message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
