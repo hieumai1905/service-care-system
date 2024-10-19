@@ -31,12 +31,20 @@ public class CouponController {
                 .build();
     }
 
-    @GetMapping("/search-coupon-items")
-    public ApiResponse<?> searchCouponItems(@RequestParam(required = false) Long id) {
+    @GetMapping("/search-coupon-items/{q}")
+    public ApiResponse<?> searchCouponItems(@PathVariable("q") String q) {
         return ApiResponse.<List<CouponItemDTO>>builder()
-                .result(couponService.getCouponItems(id))
+                .result(couponService.searchCouponItems(q))
                 .build();
     }
+
+    @GetMapping("/search-coupon/{q}")
+    public ApiResponse<?> searchCoupon(@PathVariable("q") String q) {
+        return ApiResponse.<List<UpdateCouponRequest>>builder()
+                .result(couponService.searchCoupon(q))
+                .build();
+    }
+
 
     @PostMapping
     public ApiResponse<?> create(@Valid @RequestBody CreateCouponRequest request) {
@@ -71,6 +79,13 @@ public class CouponController {
         couponService.deleteCoupon(id);
         return ApiResponse.<String>builder()
                 .result("Delete coupon successfully!")
+                .build();
+    }
+
+    @GetMapping("/coupon-items")
+    public ApiResponse<?> getCouponItems() {
+        return ApiResponse.<List<CouponItemDTO>>builder()
+                .result(couponService.getAllCouponItems())
                 .build();
     }
 

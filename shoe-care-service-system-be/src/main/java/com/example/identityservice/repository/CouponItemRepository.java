@@ -13,4 +13,7 @@ public interface CouponItemRepository extends JpaRepository<CouponItem, Long> {
     List<CouponItem> findAllByCouponId(Long couponId);
     @Query("delete from CouponItem c where c.isActive = true and c.id in (:ids)")
     void deleteByIds(List<Long> ids);
+
+    @Query("select c from CouponItem c where lower(c.code) like %:q% or lower(c.coupon.title) like %:q%")
+    List<CouponItem> searchCouponItem(String q);
 }

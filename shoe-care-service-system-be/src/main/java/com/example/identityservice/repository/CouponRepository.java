@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("select c from Coupon c where lower(c.title) = :title " +
@@ -15,4 +17,7 @@ public interface CouponRepository extends JpaRepository<Coupon, Long> {
     @Query("select c from Coupon c where (:keyWord is null or lower(c.title) like %:keyWord%) " +
             "and (:isActive is null or c.isActive = :isActive)")
     Page<Coupon> search(String keyWord, Boolean isActive, Pageable pageable);
+
+    @Query("select c from Coupon c where lower(c.title) like %:q%")
+    List<Coupon> searchCoupon(String q);
 }

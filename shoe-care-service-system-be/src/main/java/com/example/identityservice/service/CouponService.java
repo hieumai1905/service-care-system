@@ -133,4 +133,19 @@ public class CouponService {
         List<Coupon> coupons = couponRepository.findAll(Sort.by(Sort.Direction.DESC, "expireAt"));
         return ConvertUtils.convertList(coupons, UpdateCouponRequest.class);
     }
+
+    public List<CouponItemDTO> getAllCouponItems() {
+        List<CouponItem> couponItems = couponItemRepository.findAll();
+        return ConvertUtils.convertList(couponItems, CouponItemDTO.class);
+    }
+
+    public List<CouponItemDTO> searchCouponItems(String q) {
+        List<CouponItem> couponItems = couponItemRepository.searchCouponItem(q.toLowerCase());
+        return ConvertUtils.convertList(couponItems, CouponItemDTO.class);
+    }
+
+    public List<UpdateCouponRequest> searchCoupon(String q) {
+        List<Coupon> coupons = couponRepository.searchCoupon(q.toLowerCase());
+        return ConvertUtils.convertList(coupons, UpdateCouponRequest.class);
+    }
 }
