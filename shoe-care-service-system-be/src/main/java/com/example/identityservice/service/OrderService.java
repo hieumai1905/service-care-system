@@ -88,7 +88,7 @@ public class OrderService {
             Product product;
             if (dto.getId() != null) { //update
                 od = oldOrderDetails.stream().filter(item -> item.getId().equals(dto.getId()))
-                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
                 product = od.getProduct();
                 int quantity = product.getQuantity() + od.getQuantity() - dto.getQuantity();
                 if(quantity < 0)
@@ -130,7 +130,7 @@ public class OrderService {
 
     Order getExistingOrder(Long id) {
         return orderRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.ORDER_NOT_FOUND)
         );
     }
 
@@ -159,7 +159,7 @@ public class OrderService {
 
     private Product getExistProduct(Long productId) {
         return productRepository.findById(productId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)
         );
     }
 

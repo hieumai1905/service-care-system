@@ -1,20 +1,16 @@
 package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
-import com.example.identityservice.dto.ColorDTO;
 import com.example.identityservice.dto.CouponItemDTO;
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateCouponRequest;
+import com.example.identityservice.dto.request.SearchCouponRequest;
+import com.example.identityservice.dto.request.UpdateCouponRequest;
 import com.example.identityservice.dto.response.SearchResponse;
-import com.example.identityservice.entity.Color;
-import com.example.identityservice.entity.Coupon;
 import com.example.identityservice.service.CouponService;
-import com.example.identityservice.utils.ConvertUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -46,6 +42,20 @@ public class CouponController {
     public ApiResponse<?> create(@Valid @RequestBody CreateCouponRequest request) {
         return ApiResponse.<UpdateCouponRequest>builder()
                 .result(couponService.createCoupon(request))
+                .build();
+    }
+
+    @GetMapping
+    public ApiResponse<?> getCoupons() {
+        return ApiResponse.<List<UpdateCouponRequest>>builder()
+                .result(couponService.getAllCoupons())
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<?> getCoupon(@PathVariable Long id) {
+        return ApiResponse.<UpdateCouponRequest>builder()
+                .result(couponService.findById(id))
                 .build();
     }
 

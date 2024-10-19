@@ -26,7 +26,7 @@ public class BrandService {
     }
 
     public Brand getBrandById(Long id) {
-        return brandRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return brandRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BRAND_NOT_FOUND));
     }
 
     public BrandDTO createBrand(BrandDTO request) {
@@ -56,6 +56,10 @@ public class BrandService {
 
     public void deleteBrand(Long id) {
         Brand brand = getBrandById(id);
-        brandRepository.deleteById(id);
+        try {
+            brandRepository.deleteById(id);
+        }catch (Exception ex){
+            throw new AppException(ErrorCode.BRAND_IN_USE);
+        }
     }
 }

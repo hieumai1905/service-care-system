@@ -29,7 +29,7 @@ public class MaterialService {
     }
 
     public Material getMaterialById(Long id) {
-        return materialRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return materialRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.MATERIAL_NOT_FOUND));
     }
 
     public MaterialDTO createMaterial(MaterialDTO request) {
@@ -59,6 +59,10 @@ public class MaterialService {
 
     public void deleteMaterial(Long id) {
         getMaterialById(id);
-        materialRepository.deleteById(id);
+        try{
+            materialRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.MATERIAL_IN_USE);
+        }
     }
 }

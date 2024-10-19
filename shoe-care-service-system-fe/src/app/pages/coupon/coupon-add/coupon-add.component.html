@@ -1,0 +1,91 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Chương Trình Giảm Giá Mới</h4>
+          <p class="card-description">Điền thông tin chương trình giảm giá</p>
+          <form [formGroup]="couponForm" (ngSubmit)="addCoupon()">
+
+            <div class="form-group">
+              <label for="title">Tên Chương Trình</label>
+              <input type="text" formControlName="title" class="form-control" id="title"/>
+              <div *ngIf="couponForm.get('title')?.touched && couponForm.get('title')?.invalid" class="text-danger">
+                <small *ngIf="couponForm.get('title')?.errors?.['required']">Tên chương trình là bắt buộc.</small>
+                <small *ngIf="couponForm.get('title')?.errors?.['minlength']">Tên chương trình phải có ít nhất 2 ký
+                  tự.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="discount">Giảm Giá</label>
+              <input type="number" formControlName="discount" class="form-control" id="discount"/>
+              <div *ngIf="couponForm.get('discount')?.touched && couponForm.get('discount')?.invalid"
+                   class="text-danger">
+                <small *ngIf="couponForm.get('discount')?.errors?.['required']">Giảm giá là bắt buộc.</small>
+                <small *ngIf="couponForm.get('discount')?.errors?.['min'] && !couponForm.get('isPercent')?.value">Giảm
+                  giá phải lớn hơn 1000.</small>
+                <small
+                  *ngIf="(couponForm.get('discount')?.errors?.['min'] || couponForm.get('discount')?.errors?.['max'])
+                  && couponForm.get('isPercent')?.value">Phần
+                  trăm giảm giá phải từ 1-100.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="requireValue">Giá Trị Yêu Cầu</label>
+              <input type="number" formControlName="requireValue" class="form-control" id="requireValue"/>
+              <div *ngIf="couponForm.get('requireValue')?.touched && couponForm.get('requireValue')?.invalid"
+                   class="text-danger">
+                <small *ngIf="couponForm.get('requireValue')?.errors?.['required']">Giá trị yêu cầu là bắt buộc.</small>
+                <small *ngIf="couponForm.get('requireValue')?.errors?.['min']">Giá trị yêu cầu phải lớn hơn 1.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="numberOfItems">Số Lượng Mã Giảm Giá</label>
+              <input type="number" formControlName="numberOfItems" class="form-control" id="numberOfItems"/>
+              <div *ngIf="couponForm.get('numberOfItems')?.touched && couponForm.get('numberOfItems')?.invalid"
+                   class="text-danger">
+                <small *ngIf="couponForm.get('numberOfItems')?.errors?.['required']">Số lượng là bắt buộc.</small>
+                <small *ngIf="couponForm.get('numberOfItems')?.errors?.['min']">Số lượng phải lớn hơn 0.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="expireAt">Ngày Hết Hạn</label>
+              <input type="text" formControlName="expireAt" class="form-control" id="expireAt"
+                     placeholder="dd/mm/yyyy"/>
+              <div *ngIf="couponForm.get('expireAt')?.touched && couponForm.get('expireAt')?.invalid"
+                   class="text-danger">
+                <small *ngIf="couponForm.get('expireAt')?.errors?.['required']">Ngày hết hạn là bắt buộc.</small>
+                <small *ngIf="couponForm.get('expireAt')?.errors?.['pastDate']">Ngày hết hạn phải sau ngày hiện
+                  tại.</small>
+                <small *ngIf="couponForm.get('expireAt')?.errors?.['invalidFormat']">Định dạng ngày không hợp lệ. Sử
+                  dụng dd/mm/yyyy.</small>
+              </div>
+            </div>
+
+            <div class="form-group form-check">
+              <input type="checkbox" formControlName="isPercent" class="form-check-input" id="isPercent"/>
+              <label class="form-check-label" for="isPercent">Giảm giá theo phần trăm</label>
+            </div>
+
+            <div class="form-group form-check">
+              <input type="checkbox" formControlName="isActive" class="form-check-input" id="isActive"
+                     [checked]="true"/>
+              <label class="form-check-label" for="isActive">Kích hoạt</label>
+            </div>
+
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="couponForm.invalid">Thêm Chương
+              Trình Giảm
+              Giá
+            </button>
+            <button class="btn btn-light" routerLink="/coupons">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">{{ message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

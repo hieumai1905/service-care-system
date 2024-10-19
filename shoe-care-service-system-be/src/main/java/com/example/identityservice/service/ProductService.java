@@ -47,19 +47,19 @@ public class ProductService {
 
     private Size getExistSize(Long sizeId) {
         return sizeRepository.findById(sizeId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.SIZE_NOT_FOUND)
         );
     }
 
     private Color getExistColor(Long colorId) {
         return colorRepository.findById(colorId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.COLOR_NOT_FOUND)
         );
     }
 
     private ProductCategory getExistProductCategory(Long productCategoryId) {
         return productCategoryRepository.findById(productCategoryId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND)
         );
     }
 
@@ -92,13 +92,17 @@ public class ProductService {
 
     private Product getExistProduct(Long id) {
         return productRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)
         );
     }
 
     public void deleteProduct(Long id){
         Product existingProduct = getExistProduct(id);
-        productRepository.delete(existingProduct);
+        try{
+            productRepository.delete(existingProduct);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.PRODUCT_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateProductRequest> searchProduct(SearchProductRequest request){
