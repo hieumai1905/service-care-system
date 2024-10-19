@@ -29,7 +29,7 @@ public class BranchService {
     }
 
     public Branch getBranchById(Long id) {
-        return branchRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return branchRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.BRANCH_NOT_FOUND));
     }
 
     public BranchDTO createBranch(BranchDTO request) {
@@ -59,6 +59,10 @@ public class BranchService {
 
     public void deleteBranch(Long id) {
         Branch branch = getBranchById(id);
-        branchRepository.deleteById(id);
+        try{
+            branchRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.BRANCH_IN_USE);
+        }
     }
 }

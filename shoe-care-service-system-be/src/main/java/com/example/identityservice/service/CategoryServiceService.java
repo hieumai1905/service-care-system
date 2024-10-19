@@ -27,7 +27,7 @@ public class CategoryServiceService {
 
     public CategoryService getCategoryServiceById(Long id) {
         return categoryServiceRepository.findById(id)
-                .orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_SERVICE_NOT_FOUND));
     }
 
     public CategoryServiceDTO createCategoryService(CategoryServiceDTO request) {
@@ -57,6 +57,10 @@ public class CategoryServiceService {
 
     public void deleteCategoryService(Long id) {
         CategoryService existingCategoryService = getCategoryServiceById(id);
-        categoryServiceRepository.deleteById(id);
+        try {
+            categoryServiceRepository.deleteById(id);
+        }catch (Exception ex){
+            throw new AppException(ErrorCode.CATEGORY_SERVICE_IN_USE);
+        }
     }
 }

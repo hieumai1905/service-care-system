@@ -81,7 +81,11 @@ public class CouponService {
 
     public void deleteCoupon(Long id) {
         getCouponById(id);
-        couponRepository.deleteById(id);
+        try{
+            couponRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.COUPON_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateCouponRequest> searchCoupons(SearchCouponRequest request) {
@@ -113,7 +117,7 @@ public class CouponService {
 
     public Coupon getCouponById(Long id) {
         return couponRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.COUPON_NOT_FOUND)
         );
     }
 

@@ -54,7 +54,11 @@ public class ClientService {
 
     public void deleteClient(Long id){
         Client existingClient = getExistClient(id);
-        clientRepository.delete(existingClient);
+        try{
+            clientRepository.delete(existingClient);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.CLIENT_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateClientRequest> searchClient(SearchClientRequest request){
@@ -77,13 +81,13 @@ public class ClientService {
 
     private Client getExistClient(Long id) {
         return clientRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CLIENT_NOT_FOUND)
         );
     }
 
     private ClientCategory getExistClientCategory(Long clientCategoryId) {
         return clientCategoryRepository.findById(clientCategoryId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CLIENT_CATEGORY_NOT_FOUND)
         );
     }
 }

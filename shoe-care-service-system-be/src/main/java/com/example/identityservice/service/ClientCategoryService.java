@@ -47,7 +47,11 @@ public class ClientCategoryService {
 
     public void deleteClientCategory(Long id){
         ClientCategory clientCategory = getExistClientCategory(id);
-        clientCategoryRepository.delete(clientCategory);
+        try{
+            clientCategoryRepository.delete(clientCategory);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.CLIENT_CATEGORY_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateClientCategoryRequest> searchClientCategory(SearchClientCategoryRequest request){
@@ -71,7 +75,7 @@ public class ClientCategoryService {
 
     private ClientCategory getExistClientCategory(Long clientCategoryId) {
         return clientCategoryRepository.findById(clientCategoryId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CLIENT_CATEGORY_NOT_FOUND)
         );
     }
 }
