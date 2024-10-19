@@ -4,7 +4,6 @@ import {RouterModule} from "@angular/router";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {CouponsRoutes} from "./coupon-routing";
-import {F} from "@angular/cdk/keycodes";
 
 
 @NgModule({
