@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -27,15 +25,16 @@ public class Coupon {
     Date expireAt;
 
     @Column(nullable = false)
-    boolean isActive;
+    Boolean isActive;
 
-   String title;
+    String title;
 
     Double discount;
 
     Double requireValue;
 
     Boolean isPercent;
+
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<CouponItem> couponItems;
 }
