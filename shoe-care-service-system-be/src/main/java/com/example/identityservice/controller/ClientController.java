@@ -12,6 +12,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/clients")
@@ -21,9 +23,23 @@ public class ClientController {
 
     ClientService clientService;
 
+    @GetMapping("/{id}")
+    public ApiResponse<?> getClient(@PathVariable Long id) {
+        return ApiResponse.<UpdateClientRequest>builder()
+                .result(clientService.findById(id))
+                .build();
+    }
+
+    @GetMapping
+    public ApiResponse<?> getClients() {
+        return ApiResponse.<List<UpdateClientRequest>>builder()
+                .result(clientService.findAll())
+                .build();
+    }
+
     @PostMapping
     public ApiResponse<?> create(@Valid @RequestBody CreateClientRequest request) {
-        return ApiResponse.<Long>builder()
+        return ApiResponse.<UpdateClientRequest>builder()
                 .result(clientService.createClient(request))
                 .build();
     }
@@ -50,4 +66,10 @@ public class ClientController {
                 .build();
     }
 
+    @GetMapping("search")
+    public ApiResponse<List<UpdateClientRequest>> searchClients(@RequestParam String q) {
+        return ApiResponse.<List<UpdateClientRequest>>builder()
+                .result(clientService.searchClients(q))
+                .build();
+    }
 }

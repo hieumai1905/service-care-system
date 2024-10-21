@@ -1,0 +1,75 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Khách Hàng Mới</h4>
+          <p class="card-description">Điền thông tin khách hàng</p>
+          <form [formGroup]="clientForm" (ngSubmit)="addClient()">
+            <div class="form-group">
+              <label for="name">Tên Khách Hàng</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="clientForm.get('name')?.touched && clientForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="clientForm.get('name')?.errors?.['required']">Tên khách hàng là bắt buộc.</small>
+                <small *ngIf="clientForm.get('name')?.errors?.['minlength']">Tên khách hàng phải có ít nhất 3 ký
+                  tự.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tel">Số Điện Thoại</label>
+              <input type="text" formControlName="tel" class="form-control" id="tel">
+            </div>
+
+            <div class="form-group">
+              <label for="address">Địa Chỉ</label>
+              <input type="text" formControlName="address" class="form-control" id="address">
+              <div *ngIf="clientForm.get('address')?.touched && clientForm.get('address')?.invalid" class="text-danger">
+                <small *ngIf="clientForm.get('address')?.errors?.['required']">Địa chỉ là bắt buộc.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" formControlName="email" class="form-control" id="email">
+            </div>
+
+            <div class="form-group">
+              <label for="birthday">Ngày Sinh</label>
+              <input type="date" formControlName="birthday" class="form-control" id="birthday">
+              <div *ngIf="clientForm.get('birthday')?.touched && clientForm.get('birthday')?.invalid"
+                   class="text-danger">
+                <small *ngIf="clientForm.get('birthday')?.errors?.['required']">Ngày sinh là bắt buộc.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="note">Ghi Chú</label>
+              <textarea formControlName="note" class="form-control" id="note"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="clientCategoryId">Loại Khách Hàng</label>
+              <select formControlName="clientCategoryId" class="form-control text-dark" id="clientCategoryId">
+                <option value="0">Chọn loại khách hàng</option>
+                <option *ngFor="let category of clientCategories" [value]="category.id">{{ category.typeName }}</option>
+              </select>
+              <div
+                *ngIf="(clientForm.get('clientCategoryId')?.touched && clientForm.get('clientCategoryId')?.value === 0) && clientForm.get('clientCategoryId')?.invalid"
+                class="text-danger">
+                <small>Loại khách hàng là bắt buộc.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="clientForm.invalid">Thêm Khách
+              Hàng
+            </button>
+            <button class="btn btn-light" routerLink="/clients">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
