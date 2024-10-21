@@ -1,15 +1,18 @@
 package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateClientCategoryRequest;
+import com.example.identityservice.dto.request.SearchClientCategoryRequest;
+import com.example.identityservice.dto.request.UpdateClientCategoryRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.service.ClientCategoryService;
-import com.example.identityservice.service.ClientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -19,6 +22,20 @@ import org.springframework.web.bind.annotation.*;
 public class ClientCategoryController {
 
     ClientCategoryService clientCategoryService;
+
+    @GetMapping
+    public ApiResponse<?> getClientCategories() {
+        return ApiResponse.<List<UpdateClientCategoryRequest>>builder()
+                .result(clientCategoryService.getClientCategories())
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<?> getClientCategory(@PathVariable Long id) {
+        return ApiResponse.<UpdateClientCategoryRequest>builder()
+                .result(clientCategoryService.getClientCategoryById(id))
+                .build();
+    }
 
     @PostMapping
     public ApiResponse<?> create(@Valid @RequestBody CreateClientCategoryRequest request) {
