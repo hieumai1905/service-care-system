@@ -20,7 +20,7 @@ public class ClientCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "type_name", nullable = false)
+    @Column(name = "type_name", nullable = false, unique = true, columnDefinition = "varchar(50) COLLATE utf8_unicode_ci")
     private String typeName;
 
     @Column(name = "is_active", nullable = false)

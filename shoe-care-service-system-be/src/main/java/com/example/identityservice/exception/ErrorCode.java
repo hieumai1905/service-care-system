@@ -97,7 +97,8 @@ public enum ErrorCode {
     PRODUCT_CATEGORY_IN_USE(1084, "Không thể xóa do danh mục sản phẩm đang được sử dụng", HttpStatus.BAD_REQUEST),
     PRODUCT_IN_USE(1085, "Không thể xóa do sản phẩm đang được sử dụng", HttpStatus.BAD_REQUEST),
     SERVICE_IN_USE(1086, "Không thể xóa do dịch vụ đang được sử dụng", HttpStatus.BAD_REQUEST),
-    SIZE_IN_USE(1087, "Không thể xóa do kích thước đang được sử dụng", HttpStatus.BAD_REQUEST);
+    SIZE_IN_USE(1087, "Không thể xóa do kích thước đang được sử dụng", HttpStatus.BAD_REQUEST),
+    CLIENT_CATEGORY_EXISTED(1088, "Danh mục khách hàng đã tồn tại", HttpStatus.BAD_REQUEST);
 
     int code;
     String message;

@@ -70,14 +70,22 @@ export const AdminLayoutRoutes: Routes = [
         loadChildren: () => import('../../pages/size/Size.module').then(m => m.SizeModule)
       },
     ]
-  }
-  ,
+  },
   {
     path: 'coupons',
     children: [
       {
         path: '',
         loadChildren: () => import('../../pages/coupon/Coupon.module').then(m => m.CouponModule)
+      },
+    ]
+  },
+  {
+    path: 'client-categories',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/client-category/client-category.module').then(m => m.ClientCategoryModule)
       },
     ]
   }
