@@ -89,4 +89,14 @@ export const AdminLayoutRoutes: Routes = [
       },
     ]
   }
+  ,
+  {
+    path: 'clients',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/client/client.module').then(m => m.ClientModule)
+      },
+    ]
+  }
 ];

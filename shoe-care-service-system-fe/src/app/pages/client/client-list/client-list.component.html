@@ -1,0 +1,58 @@
+<div class="content-wrapper">
+  <div class="row mt-3">
+    <div class="col-lg-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh sách khách hàng</h4>
+          <small class="text-gray">Xem thông tin khách hàng</small>
+          <div class="add-items d-flex mt-3">
+            <div class="col-3 d-flex">
+              <input type="text" class="form-control todo-list-input" placeholder="Từ khóa?" [(ngModel)]="searchKey">
+              <button class="btn btn-gradient-primary" (click)="searchClient()">Lọc</button>
+            </div>
+            <div class="col-9 text-end">
+              <a class="btn btn-gradient-primary" [routerLink]="['/clients/add']">Thêm khách hàng</a>
+            </div>
+          </div>
+          <table class="table table-striped mt-5">
+            <thead>
+            <tr>
+              <th>ID</th>
+              <th>TÊN KHÁCH HÀNG</th>
+              <th>EMAIL</th>
+              <th>SỐ ĐIỆN THOẠI</th>
+              <th>ĐỊA CHỈ</th>
+              <th>LOẠI KHÁCH HÀNG</th>
+              <th>CHỨC NĂNG</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let client of clients | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+              <td>{{ client.id }}</td>
+              <td class="py-1">{{ client.name }}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.tel }}</td>
+              <td>{{ client.address }}</td>
+              <td>{{ client.clientCategoryTypeName }}</td>
+              <td>
+                <a class="text-center btn btn-sm" [routerLink]="['/clients/edit', client.id]">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a class="text-center btn btn-sm" (click)="deleteClient(client.id)">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <mat-paginator
+            [length]="clients.length"
+            [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 100]"
+            (page)="onPageChange($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
