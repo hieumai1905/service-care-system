@@ -68,7 +68,9 @@ public enum ErrorCode {
     ROLE_EXISTED(1046, "Vai trò đã tồn tại", HttpStatus.BAD_REQUEST),
     PERMISSION_EXISTED(1047, "Quyền đã tồn tại", HttpStatus.BAD_REQUEST),
     PERMISSION_IN_USE(1048, "Không thể xóa do quyền đang được sử dụng", HttpStatus.BAD_REQUEST),
-    PERMISSION_NOT_EXISTED(1049, "Quyền không tồn tại", HttpStatus.BAD_REQUEST);
+    PERMISSION_NOT_EXISTED(1049, "Quyền không tồn tại", HttpStatus.BAD_REQUEST),
+    FEE_MUST_BE_POSITIVE(1050, "Phí phải là số dương", HttpStatus.BAD_REQUEST),
+    SHIPPING_PROVINCE_NOT_FOUND(1051, "Tỉnh vận chuyển không tồn tại", HttpStatus.NOT_FOUND);
 
     int code;
     String message;
