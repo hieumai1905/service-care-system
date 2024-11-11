@@ -84,7 +84,7 @@ public class ScheduleService {
             ScheduleDetail scheduleDetail;
             if(dto.getId() != null){
                 scheduleDetail = oldScheduleDetails.stream().filter(item -> item.getId().equals(dto.getId()))
-                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.SCHEDULE_DETAIL_NOT_FOUND));
                 if(scheduleDetail.getColor() != null && !dto.getColorId().equals(scheduleDetail.getColor().getId())){
                     scheduleDetail.setColor(getExistColor(dto.getColorId()));
                 }
@@ -120,7 +120,7 @@ public class ScheduleService {
 
     private Schedule getExistSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.SCHEDULE_NOT_FOUND)
         );
     }
 
@@ -141,24 +141,24 @@ public class ScheduleService {
 
     private ShoeService getExistShoeService(Long shoeServiceId) {
         return shoeServiceRepository.findById(shoeServiceId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.SERVICE_NOT_FOUND)
         );
     }
 
     private Material getExistMaterial(Long materialId) {
         return materialRepository.findById(materialId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.MATERIAL_NOT_FOUND)
         );
     }
 
     private Color getExistColor(Long colorId) {
         return colorRepository.findById(colorId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.COLOR_NOT_FOUND)
         );
     }
     private Size getExistSize(Long sizeId) {
         return sizeRepository.findById(sizeId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.SIZE_NOT_FOUND)
         );
     }
 

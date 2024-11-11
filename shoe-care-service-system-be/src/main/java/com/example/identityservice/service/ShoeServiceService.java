@@ -54,7 +54,7 @@ public class ShoeServiceService {
     }
 
     public ShoeService getServiceById(Long id) {
-        return serviceRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return serviceRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SERVICE_NOT_FOUND));
     }
 
     public UpdateShoeServiceRequest createService(CreateShoeServiceRequest request) {
@@ -98,19 +98,23 @@ public class ShoeServiceService {
 
     private CategoryService checkExistCategory(Long categoryServiceId) {
         return categoryServiceRepository.findById(categoryServiceId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CATEGORY_SERVICE_NOT_FOUND)
         );
     }
 
     private Brand checkExistBrand(Long brandId) {
         return brandRepository.findById(brandId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.BRAND_NOT_FOUND)
         );
     }
 
     public void deleteService(Long id) {
         ShoeService shoeService = getServiceById(id);
-        serviceRepository.deleteById(id);
+        try{
+            serviceRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.SERVICE_IN_USE);
+        }
     }
 }
 

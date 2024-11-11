@@ -81,7 +81,11 @@ public class CouponService {
 
     public void deleteCoupon(Long id) {
         getCouponById(id);
-        couponRepository.deleteById(id);
+        try{
+            couponRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.COUPON_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateCouponRequest> searchCoupons(SearchCouponRequest request) {
@@ -113,7 +117,7 @@ public class CouponService {
 
     public Coupon getCouponById(Long id) {
         return couponRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.COUPON_NOT_FOUND)
         );
     }
 
@@ -127,6 +131,21 @@ public class CouponService {
 
     public List<UpdateCouponRequest> getAllCoupons() {
         List<Coupon> coupons = couponRepository.findAll(Sort.by(Sort.Direction.DESC, "expireAt"));
+        return ConvertUtils.convertList(coupons, UpdateCouponRequest.class);
+    }
+
+    public List<CouponItemDTO> getAllCouponItems() {
+        List<CouponItem> couponItems = couponItemRepository.findAll();
+        return ConvertUtils.convertList(couponItems, CouponItemDTO.class);
+    }
+
+    public List<CouponItemDTO> searchCouponItems(String q) {
+        List<CouponItem> couponItems = couponItemRepository.searchCouponItem(q.toLowerCase());
+        return ConvertUtils.convertList(couponItems, CouponItemDTO.class);
+    }
+
+    public List<UpdateCouponRequest> searchCoupon(String q) {
+        List<Coupon> coupons = couponRepository.searchCoupon(q.toLowerCase());
         return ConvertUtils.convertList(coupons, UpdateCouponRequest.class);
     }
 }

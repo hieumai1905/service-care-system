@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -20,16 +21,19 @@ public class ProductController {
     ProductService productService;
 
     @PostMapping
-    public ApiResponse<?> create(@Valid @RequestBody CreateProductRequest request) {
+    public ApiResponse<?> create(
+            @ModelAttribute @Valid CreateProductRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
         return ApiResponse.<Long>builder()
-                .result(productService.createProduct(request))
+                .result(productService.createProduct(request, file))
                 .build();
     }
 
     @PutMapping
-    public ApiResponse<?> update(@Valid @RequestBody UpdateProductRequest request) {
+    public ApiResponse<?> update(@ModelAttribute @Valid UpdateProductRequest request,
+                                 @RequestPart(value = "file", required = false) MultipartFile file) {
         return ApiResponse.<Long>builder()
-                .result(productService.updateProduct(request))
+                .result(productService.updateProduct(request, file))
                 .build();
     }
 

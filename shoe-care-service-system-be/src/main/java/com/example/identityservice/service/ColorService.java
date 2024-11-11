@@ -26,7 +26,7 @@ public class ColorService {
     }
 
     public Color getColorById(Long id) {
-        return colorRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return colorRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.COLOR_NOT_FOUND));
     }
 
     public ColorDTO createColor(ColorDTO request) {
@@ -57,6 +57,10 @@ public class ColorService {
 
     public void deleteColor(Long id) {
         Color color = getColorById(id);
-        colorRepository.deleteById(id);
+        try{
+            colorRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.COLOR_IN_USE);
+        }
     }
 }

@@ -26,7 +26,7 @@ public class SizeService {
     }
 
     public Size getSizeById(Long id) {
-        return sizeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return sizeRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.SIZE_NOT_FOUND));
     }
 
     public SizeDTO createSize(SizeDTO request) {
@@ -56,6 +56,10 @@ public class SizeService {
 
     public void deleteSize(Long id) {
         Size size = getSizeById(id);
-        sizeRepository.deleteById(id);
+        try{
+            sizeRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.SIZE_IN_USE);
+        }
     }
 }

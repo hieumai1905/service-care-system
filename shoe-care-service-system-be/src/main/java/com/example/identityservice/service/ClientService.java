@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,13 +28,14 @@ public class ClientService {
     private ClientRepository clientRepository;
     private ClientCategoryRepository clientCategoryRepository;
 
-    public Long createClient(CreateClientRequest request){
+    public UpdateClientRequest createClient(CreateClientRequest request){
 //        request.validateInput();
-        getExistClientCategory(request.getClientCategoryId());
+        ClientCategory clientCategory = getExistClientCategory(request.getClientCategoryId());
         Client client = ConvertUtils.convert(request, Client.class);
+        client.setClientCategory(clientCategory);
         client.setId(null);
         clientRepository.save(client);
-        return client.getId();
+        return ConvertUtils.convert(client, UpdateClientRequest.class);
     }
 
     public Long updateClient(UpdateClientRequest request){
@@ -54,7 +57,11 @@ public class ClientService {
 
     public void deleteClient(Long id){
         Client existingClient = getExistClient(id);
-        clientRepository.delete(existingClient);
+        try{
+            clientRepository.delete(existingClient);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.CLIENT_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateClientRequest> searchClient(SearchClientRequest request){
@@ -77,13 +84,27 @@ public class ClientService {
 
     private Client getExistClient(Long id) {
         return clientRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CLIENT_NOT_FOUND)
         );
     }
 
     private ClientCategory getExistClientCategory(Long clientCategoryId) {
         return clientCategoryRepository.findById(clientCategoryId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CLIENT_CATEGORY_NOT_FOUND)
         );
+    }
+
+    public List<UpdateClientRequest> findAll() {
+        return ConvertUtils.convertList(clientRepository.findAll(), UpdateClientRequest.class);
+    }
+
+    public List<UpdateClientRequest> searchClients(String keyword) {
+        Long id = ConvertUtils.parseIdFromKeyword(keyword);
+        List<Client> clients = clientRepository.searchClientsByKeyword(keyword, id);
+        return ConvertUtils.convertList(clients, UpdateClientRequest.class);
+    }
+
+    public UpdateClientRequest findById(Long id) {
+        return ConvertUtils.convert(getExistClient(id), UpdateClientRequest.class);
     }
 }

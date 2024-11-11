@@ -1,0 +1,69 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Loại Khách Hàng Mới</h4>
+          <p class="card-description">Điền thông tin loại khách hàng</p>
+          <form [formGroup]="clientCategoryForm" (ngSubmit)="addClientCategory()">
+
+            <div class="form-group">
+              <label for="typeName">Tên Loại Khách Hàng</label>
+              <input type="text" formControlName="typeName" class="form-control" id="typeName"/>
+              <div *ngIf="clientCategoryForm.get('typeName')?.touched && clientCategoryForm.get('typeName')?.invalid"
+                   class="text-danger">
+                <small *ngIf="clientCategoryForm.get('typeName')?.errors?.['required']">Tên loại khách hàng là bắt
+                  buộc.</small>
+                <small *ngIf="clientCategoryForm.get('typeName')?.errors?.['minlength']">Tên loại khách hàng phải có ít
+                  nhất 2 ký tự.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="discount">Giảm Giá</label>
+              <input type="number" formControlName="discount" class="form-control" id="discount"/>
+              <div *ngIf="clientCategoryForm.get('discount')?.touched && clientCategoryForm.get('discount')?.invalid"
+                   class="text-danger">
+                <small *ngIf="clientCategoryForm.get('discount')?.errors?.['required']">Giảm giá là bắt buộc.</small>
+                <small
+                  *ngIf="clientCategoryForm.get('discount')?.errors?.['min'] && !clientCategoryForm.get('isPercent')?.value">Giảm
+                  giá phải lớn hơn 1000.</small>
+                <small
+                  *ngIf="(clientCategoryForm.get('discount')?.errors?.['min'] || clientCategoryForm.get('discount')?.errors?.['max']) && clientCategoryForm.get('isPercent')?.value">Phần
+                  trăm giảm giá phải từ 1-100.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="totalRequire">Số Tiền Tiêu Dùng Tối Thiểu</label>
+              <input type="number" formControlName="totalRequire" class="form-control" id="totalRequire"/>
+              <div
+                *ngIf="clientCategoryForm.get('totalRequire')?.touched && clientCategoryForm.get('totalRequire')?.invalid"
+                class="text-danger">
+                <small *ngIf="clientCategoryForm.get('totalRequire')?.errors?.['required']">Số tiền tiêu dùng yêu cầu là
+                  bắt buộc.</small>
+                <small *ngIf="clientCategoryForm.get('totalRequire')?.errors?.['min']">Số tiền tiêu dùng yêu cầu phải
+                  lớn hơn 1000.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="note">Ghi Chú</label>
+              <textarea formControlName="note" class="form-control" id="note" rows="3"></textarea>
+            </div>
+
+            <div class="form-group form-check">
+              <input type="checkbox" formControlName="isPercent" class="form-check-input" id="isPercent"/>
+              <label class="form-check-label" for="isPercent">Giảm giá theo phần trăm</label>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="clientCategoryForm.invalid">Thêm
+              Loại Khách Hàng
+            </button>
+            <button class="btn btn-light" routerLink="/client-categories">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">{{ message }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

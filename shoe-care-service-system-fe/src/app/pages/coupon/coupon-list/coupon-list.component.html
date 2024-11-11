@@ -6,8 +6,12 @@
           <h4 class="card-title text-uppercase">Danh sách chương trình giảm giá</h4>
           <small class="text-gray">Thêm, sửa, xóa chương trình giảm giá</small>
           <div class="add-items d-flex mt-3">
-            <div class="col-8"></div>
-            <div class="col-4 text-end">
+            <div class="col-3 d-flex">
+              <input type="text" class="form-control todo-list-input" placeholder="Từ khóa?"
+                     [(ngModel)]="searchKey">
+              <button class="btn btn-gradient-primary" (click)="searchCoupon()">Lọc</button>
+            </div>
+            <div class="col-9 text-end">
               <a class="btn btn-gradient-primary" [routerLink]="['/coupons/add']">Thêm chương trình giảm giá</a>
             </div>
           </div>

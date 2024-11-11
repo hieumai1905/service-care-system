@@ -12,6 +12,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 10MB
+      file-size-threshold: 2MB  # Các tệp lớn hơn sẽ được ghi vào đĩa thay vì bộ nhớ
 
 app:
   userDefault:

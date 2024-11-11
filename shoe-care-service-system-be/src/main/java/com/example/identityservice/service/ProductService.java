@@ -13,6 +13,9 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
 
 @Slf4j
 @Service
@@ -23,12 +26,16 @@ public class ProductService {
     ProductCategoryRepository productCategoryRepository;
     SizeRepository sizeRepository;
     ColorRepository colorRepository;
+    private String uploadDir = "E:/upload-file";
 
-    public Long createProduct(CreateProductRequest request){
+    public Long createProduct(CreateProductRequest request, MultipartFile file){
 //        request.validateInput();
         getExistProductCategory(request.getProductCategoryId());
         getExistColor(request.getColorId());
         getExistSize(request.getSizeId());
+        String filePath = "";
+        if(file != null)
+            filePath = saveFile(file);
 
         Product existByName = productRepository.existsByIdAndName(null, request.getName());
         if(existByName != null){
@@ -41,29 +48,41 @@ public class ProductService {
 
         Product product = ConvertUtils.convert(request, Product.class);
         product.setId(null);
+        product.setImage(filePath);
         productRepository.save(product);
         return product.getId();
     }
 
+    private String saveFile(MultipartFile file) {
+        File destinationFile = new File(uploadDir, file.getOriginalFilename());
+
+        try {
+            file.transferTo(destinationFile);
+            return destinationFile.getAbsolutePath();
+        } catch (IOException e) {
+            throw new AppException(ErrorCode.FAIL_TO_UPLOAD_FILE);
+        }
+    }
+
     private Size getExistSize(Long sizeId) {
         return sizeRepository.findById(sizeId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.SIZE_NOT_FOUND)
         );
     }
 
     private Color getExistColor(Long colorId) {
         return colorRepository.findById(colorId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.COLOR_NOT_FOUND)
         );
     }
 
     private ProductCategory getExistProductCategory(Long productCategoryId) {
         return productCategoryRepository.findById(productCategoryId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND)
         );
     }
 
-    public Long updateProduct(UpdateProductRequest request){
+    public Long updateProduct(UpdateProductRequest request, MultipartFile file){
 //        request.validateInput();
         Product existingProduct = getExistProduct(request.getId());
         ProductCategory productCategory = getExistProductCategory(request.getProductCategoryId());
@@ -75,11 +94,13 @@ public class ProductService {
             throw new AppException(ErrorCode.NAME_ALREADY_EXIST);
         }
 
+        if(file != null)
+            existingProduct.setImage(saveFile(file));
+
         existingProduct.setProductCategory(productCategory);
         existingProduct.setSize(size);
         existingProduct.setColor(color);
         existingProduct.setName(request.getName());
-        existingProduct.setImage(request.getImage());
         existingProduct.setIsActive(request.getIsActive());
         existingProduct.setQuantity(request.getQuantity());
         existingProduct.setInputPrice(request.getInputPrice());
@@ -92,13 +113,17 @@ public class ProductService {
 
     private Product getExistProduct(Long id) {
         return productRepository.findById(id).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)
         );
     }
 
     public void deleteProduct(Long id){
         Product existingProduct = getExistProduct(id);
-        productRepository.delete(existingProduct);
+        try{
+            productRepository.delete(existingProduct);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.PRODUCT_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateProductRequest> searchProduct(SearchProductRequest request){

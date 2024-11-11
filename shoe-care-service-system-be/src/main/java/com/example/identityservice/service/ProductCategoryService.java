@@ -29,7 +29,7 @@ public class ProductCategoryService {
     }
 
     public ProductCategory getProductCategoryById(Long id) {
-        return productCategoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.RECORD_NOT_FOUND));
+        return productCategoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_CATEGORY_NOT_FOUND));
     }
 
     public ProductCategoryDTO createProductCategory(ProductCategoryDTO request) {
@@ -59,6 +59,10 @@ public class ProductCategoryService {
 
     public void deleteProductCategory(Long id) {
         ProductCategory productCategory = getProductCategoryById(id);
-        productCategoryRepository.deleteById(id);
+        try{
+            productCategoryRepository.deleteById(id);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.PRODUCT_CATEGORY_IN_USE);
+        }
     }
 }

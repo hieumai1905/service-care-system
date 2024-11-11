@@ -5,6 +5,7 @@ import {Coupon} from '../../../model/Coupon';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {RouterLink} from '@angular/router';
 import {DatePipe, NgClass, NgForOf, SlicePipe} from '@angular/common';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-coupon-list',
@@ -17,13 +18,15 @@ import {DatePipe, NgClass, NgForOf, SlicePipe} from '@angular/common';
     SlicePipe,
     NgForOf,
     NgClass,
-    DatePipe
+    DatePipe,
+    FormsModule
   ]
 })
 export class CouponListComponent implements OnInit {
   coupons: Coupon[] = [];
   pageIndex: number = 0;
   pageSize: number = 5;
+  searchKey: string = '';
 
   constructor(
     private couponService: CouponService,
@@ -74,5 +77,21 @@ export class CouponListComponent implements OnInit {
           });
         }
       });
+  }
+
+  searchCoupon() {
+    if (this.searchKey.trim() === '') {
+      this.loadCoupons();
+      return;
+    }
+    this.couponService.searchCoupons(this.searchKey).subscribe({
+      next: (data) => {
+        this.coupons = data.result;
+        console.log('Searched coupons:', this.coupons);
+      },
+      error: (err) => {
+        console.error('Error when searching coupons:', err);
+      }
+    });
   }
 }

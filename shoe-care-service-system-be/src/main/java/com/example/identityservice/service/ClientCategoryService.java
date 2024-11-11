@@ -1,6 +1,8 @@
 package com.example.identityservice.service;
 
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateClientCategoryRequest;
+import com.example.identityservice.dto.request.SearchClientCategoryRequest;
+import com.example.identityservice.dto.request.UpdateClientCategoryRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.entity.ClientCategory;
 import com.example.identityservice.exception.AppException;
@@ -11,8 +13,11 @@ import com.example.identityservice.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -26,7 +31,11 @@ public class ClientCategoryService {
 //        request.validateInput();
         ClientCategory clientCategory = ConvertUtils.convert(request, ClientCategory.class);
         clientCategory.setId(null);
+        try {
         clientCategoryRepository.save(clientCategory);
+        } catch (DataIntegrityViolationException exception) {
+            throw new AppException(ErrorCode.CLIENT_CATEGORY_EXISTED);
+        }
         return clientCategory.getId();
     }
 
@@ -47,7 +56,11 @@ public class ClientCategoryService {
 
     public void deleteClientCategory(Long id){
         ClientCategory clientCategory = getExistClientCategory(id);
-        clientCategoryRepository.delete(clientCategory);
+        try{
+            clientCategoryRepository.delete(clientCategory);
+        }catch(Exception ex){
+            throw new AppException(ErrorCode.CLIENT_CATEGORY_IN_USE);
+        }
     }
 
     public SearchResponse<UpdateClientCategoryRequest> searchClientCategory(SearchClientCategoryRequest request){
@@ -71,7 +84,17 @@ public class ClientCategoryService {
 
     private ClientCategory getExistClientCategory(Long clientCategoryId) {
         return clientCategoryRepository.findById(clientCategoryId).orElseThrow(
-                () -> new AppException(ErrorCode.RECORD_NOT_FOUND)
+                () -> new AppException(ErrorCode.CLIENT_CATEGORY_NOT_FOUND)
         );
+    }
+
+    public List<UpdateClientCategoryRequest> getClientCategories() {
+        List<ClientCategory> clientCategories = clientCategoryRepository.findAll();
+        return ConvertUtils.convertList(clientCategories, UpdateClientCategoryRequest.class);
+    }
+
+    public UpdateClientCategoryRequest getClientCategoryById(Long id) {
+        ClientCategory clientCategory = getExistClientCategory(id);
+        return ConvertUtils.convert(clientCategory, UpdateClientCategoryRequest.class);
     }
 }

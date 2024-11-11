@@ -29,4 +29,8 @@ export class CouponService {
   findById(couponId: number): Observable<any> {
     return this.http.get(`${environment.apiUrl}/coupons/${couponId}`);
   }
+
+  searchCoupons(searchKey: string) {
+    return this.http.get<any>(`${environment.apiUrl}/coupons/search-coupon/${searchKey}`);
+  }
 }
