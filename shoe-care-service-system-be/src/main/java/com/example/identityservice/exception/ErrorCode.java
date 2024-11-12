@@ -89,18 +89,18 @@ public enum ErrorCode {
     CATEGORY_SERVICE_IN_USE(1076, "Không thể xóa do dịch vụ danh mục đang được sử dụng", HttpStatus.BAD_REQUEST),
     CLIENT_CATEGORY_IN_USE(1077, "Không thể xóa do danh mục khách hàng đang được sử dụng", HttpStatus.BAD_REQUEST),
     CLIENT_IN_USE(1078, "Không thể xóa do khách hàng đang được sử dụng", HttpStatus.BAD_REQUEST),
-    COLOR_IN_USE(1079, "Không thể xóa do màu sắc đang được sử dụng", HttpStatus.BAD_REQUEST),
-    COUPON_ITEM_IN_USE(1080, "Không thể xóa do mã giảm giá đang được sử dụng", HttpStatus.BAD_REQUEST),
-    COUPON_IN_USE(1081, "Không thể xóa do phiếu giảm giá đang được sử dụng", HttpStatus.BAD_REQUEST),
-    MATERIAL_IN_USE(1082, "Không thể xóa do vật liệu đang được sử dụng", HttpStatus.BAD_REQUEST),
-    ORDER_DETAIL_NOT_FOUND(1083, "Không tìm thấy chi tiết đơn hàng", HttpStatus.NOT_FOUND),
-    PRODUCT_CATEGORY_IN_USE(1084, "Không thể xóa do danh mục sản phẩm đang được sử dụng", HttpStatus.BAD_REQUEST),
-    PRODUCT_IN_USE(1085, "Không thể xóa do sản phẩm đang được sử dụng", HttpStatus.BAD_REQUEST),
-    SERVICE_IN_USE(1086, "Không thể xóa do dịch vụ đang được sử dụng", HttpStatus.BAD_REQUEST),
-    SIZE_IN_USE(1087, "Không thể xóa do kích thước đang được sử dụng", HttpStatus.BAD_REQUEST),
-    CLIENT_CATEGORY_EXISTED(1088, "Danh mục khách hàng đã tồn tại", HttpStatus.BAD_REQUEST);
-
-    int code;
-    String message;
-    HttpStatusCode statusCode;
+    CLIENT_CATEGORY_EXISTED(1079, "Phân loại khách hàng đã tồn tại!", HttpStatus.BAD_REQUEST),
+    PRODUCT_CATEGORY_IN_USE(1081, "Không thể xóa do danh mục sản phẩm đang được sử dụng", HttpStatus.BAD_REQUEST),
+    PRODUCT_IN_USE(1082, "Không thể xóa do sản phẩm đang được sử dụng", HttpStatus.BAD_REQUEST),
+    SERVICE_IN_USE(1083, "Không thể xóa do dịch vụ đang được sử dụng", HttpStatus.BAD_REQUEST),
+    SIZE_IN_USE(1084, "Không thể xóa do kích thước đang được sử dụng", HttpStatus.BAD_REQUEST),
+    COUPON_IN_USE(1080, "Chương trình giảm giá đang hoạt động!", HttpStatus.BAD_REQUEST),
+    ORDER_DETAIL_NOT_FOUND(1085, "Không tìm thấy chi tiết đơn hàng",HttpStatus.NOT_FOUND),
+    SHIPPING_PROVINCE_NOT_FOUND(1086, "Không tìm thấy chi tiết đơn hàng",HttpStatus.NOT_FOUND),
+    COLOR_IN_USE(1087, "Không thể xóa do màu đang được sử dụng", HttpStatus.BAD_REQUEST),
+    MATERIAL_IN_USE(1088, "Không thể xóa do chất liệu đang được sử dụng", HttpStatus.BAD_REQUEST),
+    FAIL_TO_UPLOAD_FILE(1089, "Xảy ra lỗi khi tải ảnh", HttpStatus.BAD_REQUEST);
+    private final int code;
+    private final String message;
+    private final HttpStatus statusCode;
 }
