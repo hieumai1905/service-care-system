@@ -1,0 +1,35 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Phí Ship Tỉnh Mới</h4>
+          <p class="card-description">Điền thông tin tỉnh và phí vận chuyển</p>
+          <form [formGroup]="shippingProvinceForm" (ngSubmit)="addProvince()">
+            <div class="form-group">
+              <label for="province">Tên Tỉnh</label>
+              <input type="text" formControlName="province" class="form-control" id="province">
+              <div *ngIf="shippingProvinceForm.get('province')?.touched && shippingProvinceForm.get('province')?.invalid" class="text-danger">
+                <small *ngIf="shippingProvinceForm.get('province')?.errors?.['required']">Tên tỉnh là bắt buộc.</small>
+                <small *ngIf="shippingProvinceForm.get('province')?.errors?.['minlength']">Tên tỉnh phải có ít nhất 3 ký tự.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="fee">Phí Vận Chuyển</label>
+              <input type="number" formControlName="fee" class="form-control" id="fee">
+              <div *ngIf="shippingProvinceForm.get('fee')?.touched && shippingProvinceForm.get('fee')?.invalid" class="text-danger">
+                <small *ngIf="shippingProvinceForm.get('fee')?.errors?.['required']">Phí vận chuyển là bắt buộc.</small>
+                <small *ngIf="shippingProvinceForm.get('fee')?.errors?.['min']">Phí vận chuyển không được nhỏ hơn 1000.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="shippingProvinceForm.invalid">Thêm Phí Ship Tỉnh</button>
+            <button class="btn btn-light" routerLink="/shipping-provinces">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
