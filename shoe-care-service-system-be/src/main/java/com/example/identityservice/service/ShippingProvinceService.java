@@ -31,7 +31,7 @@ public class ShippingProvinceService {
 
     public ShippingProvinceDTO createShippingProvince(ShippingProvinceDTO request) {
         request.setId(null);
-        ShippingProvince existByName = shipProvinceRepository.findByIdAndName(null, request.getName());
+        ShippingProvince existByName = shipProvinceRepository.findByIdAndName(null, request.getProvince());
         if(existByName != null){
             throw new AppException(ErrorCode.NAME_ALREADY_EXIST);
         }
@@ -45,11 +45,12 @@ public class ShippingProvinceService {
             throw new AppException(ErrorCode.ID_IS_REQUIRED);
         }
         ShippingProvince shippingProvince = getShippingProvinceById(request.getId());
-        ShippingProvince existByName = shipProvinceRepository.findByIdAndName(request.getId(), request.getName());
+        ShippingProvince existByName = shipProvinceRepository.findByIdAndName(request.getId(), request.getProvince());
         if(existByName != null){
             throw new AppException(ErrorCode.NAME_ALREADY_EXIST);
         }
-        shippingProvince.setProvince(request.getName());
+        shippingProvince.setProvince(request.getProvince());
+        shippingProvince.setFee(request.getFee());
         shipProvinceRepository.save(shippingProvince);
         return ConvertUtils.convert(shippingProvince, ShippingProvinceDTO.class);
     }

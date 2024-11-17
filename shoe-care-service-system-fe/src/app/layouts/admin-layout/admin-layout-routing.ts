@@ -88,14 +88,22 @@ export const AdminLayoutRoutes: Routes = [
         loadChildren: () => import('../../pages/client-category/client-category.module').then(m => m.ClientCategoryModule)
       },
     ]
-  }
-  ,
+  },
   {
     path: 'clients',
     children: [
       {
         path: '',
         loadChildren: () => import('../../pages/client/client.module').then(m => m.ClientModule)
+      },
+    ]
+  },
+  {
+    path: 'shipping-provinces',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/shipping-province/shipping-province.module').then(m => m.ShippingProvinceModule)
       },
     ]
   }

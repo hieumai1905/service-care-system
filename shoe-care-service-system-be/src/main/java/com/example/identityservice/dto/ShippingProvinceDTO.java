@@ -14,7 +14,7 @@ import lombok.experimental.FieldDefaults;
 public class ShippingProvinceDTO {
     Long id;
     @NotNull(message = "NAME_IS_REQUIRED")
-    String name;
+    String province;
     @Min(message = "FEE_MUST_BE_POSITIVE", value = 0L)
     Double fee;
 }
