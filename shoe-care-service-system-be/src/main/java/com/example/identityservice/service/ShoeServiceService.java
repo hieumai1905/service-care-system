@@ -2,24 +2,21 @@ package com.example.identityservice.service;
 
 import com.example.identityservice.dto.request.CreateShoeServiceRequest;
 import com.example.identityservice.dto.request.SearchShoeServiceRequest;
-import com.example.identityservice.dto.request.UpdateClientRequest;
 import com.example.identityservice.dto.request.UpdateShoeServiceRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.entity.Brand;
 import com.example.identityservice.entity.CategoryService;
-import com.example.identityservice.entity.Client;
+import com.example.identityservice.entity.ShoeService;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
 import com.example.identityservice.repository.BrandRepository;
 import com.example.identityservice.repository.CategoryServiceRepository;
 import com.example.identityservice.repository.ShoeServiceRepository;
-import com.example.identityservice.entity.ShoeService;
 import com.example.identityservice.utils.ConvertUtils;
 import com.example.identityservice.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.sql.Update;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +31,7 @@ public class ShoeServiceService {
     ShoeServiceRepository serviceRepository;
     BrandRepository brandRepository;
     CategoryServiceRepository categoryServiceRepository;
+    private final ShoeServiceRepository shoeServiceRepository;
 
     public SearchResponse<UpdateShoeServiceRequest> searchShoeService(SearchShoeServiceRequest request) {
         request.validateInput();
@@ -116,5 +114,17 @@ public class ShoeServiceService {
             throw new AppException(ErrorCode.SERVICE_IN_USE);
         }
     }
-}
 
+    public UpdateShoeServiceRequest getById(Long id) {
+        return ConvertUtils.convert(getServiceById(id), UpdateShoeServiceRequest.class);
+    }
+
+    public List<UpdateShoeServiceRequest> getAll() {
+        return ConvertUtils.convertList(serviceRepository.findAll(), UpdateShoeServiceRequest.class);
+    }
+
+    public List<UpdateShoeServiceRequest> searchServices(String keyword) {
+        List<ShoeService> services = shoeServiceRepository.searchServicesByKeyword(keyword);
+        return ConvertUtils.convertList(services, UpdateShoeServiceRequest.class);
+    }
+}

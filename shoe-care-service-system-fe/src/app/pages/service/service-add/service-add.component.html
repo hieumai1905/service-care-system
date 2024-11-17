@@ -1,0 +1,116 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Dịch Vụ Chăm Sóc Giày</h4>
+          <p class="card-description">Điền thông tin dịch vụ</p>
+          <form [formGroup]="serviceForm" (ngSubmit)="addService()">
+            <!-- Tên dịch vụ -->
+            <div class="form-group">
+              <label for="name">Tên Dịch Vụ</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="serviceForm.get('name')?.touched && serviceForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('name')?.errors?.['required']">Tên dịch vụ là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('name')?.errors?.['minlength']">Tên dịch vụ phải có ít nhất 3 ký tự.</small>
+                <small *ngIf="serviceForm.get('name')?.errors?.['maxlength']">Tên dịch vụ không được vượt quá 50 ký tự.</small>
+              </div>
+            </div>
+
+            <!-- Giá dịch vụ -->
+            <div class="form-group">
+              <label for="price">Giá Dịch Vụ</label>
+              <input type="number" formControlName="price" class="form-control" id="price">
+              <div *ngIf="serviceForm.get('price')?.touched && serviceForm.get('price')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('price')?.errors?.['required']">Giá dịch vụ là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('price')?.errors?.['min']">Giá dịch vụ phải lớn hơn 1,000 VNĐ.</small>
+              </div>
+            </div>
+
+            <!-- Mã dịch vụ -->
+            <div class="form-group">
+              <label for="serviceCode">Mã Dịch Vụ</label>
+              <input type="text" formControlName="serviceCode" class="form-control" id="serviceCode">
+              <div *ngIf="serviceForm.get('serviceCode')?.touched && serviceForm.get('serviceCode')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('serviceCode')?.errors?.['required']">Mã dịch vụ là bắt buộc.</small>
+              </div>
+            </div>
+
+            <!-- Giá nhập -->
+            <div class="form-group">
+              <label for="inputPrice">Giá Nhập</label>
+              <input type="number" formControlName="inputPrice" class="form-control" id="inputPrice">
+              <div *ngIf="serviceForm.get('inputPrice')?.touched && serviceForm.get('inputPrice')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('inputPrice')?.errors?.['required']">Giá nhập là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('inputPrice')?.errors?.['min']">Giá nhập phải lớn hơn 1,000 VNĐ.</small>
+              </div>
+            </div>
+
+            <!-- Giá bán -->
+            <div class="form-group">
+              <label for="sellPrice">Giá Bán</label>
+              <input type="number" formControlName="sellPrice" class="form-control" id="sellPrice">
+              <div *ngIf="serviceForm.get('sellPrice')?.touched && serviceForm.get('sellPrice')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('sellPrice')?.errors?.['required']">Giá bán là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('sellPrice')?.errors?.['min']">Giá bán phải lớn hơn 1,000 VNĐ.</small>
+              </div>
+            </div>
+
+            <!-- Thời gian tiêu hao -->
+            <div class="form-group">
+              <label for="consumingTime">Thời Gian Tiêu Hao (phút)</label>
+              <input type="number" formControlName="consumingTime" class="form-control" id="consumingTime">
+              <div *ngIf="serviceForm.get('consumingTime')?.touched && serviceForm.get('consumingTime')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('consumingTime')?.errors?.['required']">Thời gian tiêu hao là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('consumingTime')?.errors?.['min']">Thời gian phải lớn hơn 1 phút.</small>
+              </div>
+            </div>
+
+            <!-- Danh mục dịch vụ -->
+            <div class="form-group">
+              <label for="categoryServiceId">Danh Mục Dịch Vụ</label>
+              <select formControlName="categoryServiceId" class="form-control" id="categoryServiceId">
+                <option value="0">Chọn danh mục dịch vụ</option>
+                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+              </select>
+              <div *ngIf="serviceForm.get('categoryServiceId')?.touched && serviceForm.get('categoryServiceId')?.invalid" class="text-danger">
+                <small>Danh mục dịch vụ là bắt buộc.</small>
+              </div>
+            </div>
+
+            <!-- Thương hiệu -->
+            <div class="form-group">
+              <label for="brandId">Thương Hiệu</label>
+              <select formControlName="brandId" class="form-control" id="brandId">
+                <option value="0">Chọn thương hiệu</option>
+                <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+              </select>
+              <div *ngIf="serviceForm.get('brandId')?.touched && serviceForm.get('brandId')?.invalid" class="text-danger">
+                <small>Thương hiệu là bắt buộc.</small>
+              </div>
+            </div>
+
+            <!-- Ghi chú -->
+            <div class="form-group">
+              <label for="note">Ghi Chú</label>
+              <textarea formControlName="note" class="form-control" id="note"></textarea>
+            </div>
+
+            <!-- Trạng thái -->
+            <div class="form-group form-check">
+              <input type="checkbox" formControlName="isActive" class="form-check-input" id="isActive">
+              <label for="isActive" class="form-check-label">Hoạt Động</label>
+            </div>
+
+            <!-- Nút hành động -->
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="serviceForm.invalid">Thêm Dịch Vụ</button>
+            <button class="btn btn-light" routerLink="/shoe-services">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
