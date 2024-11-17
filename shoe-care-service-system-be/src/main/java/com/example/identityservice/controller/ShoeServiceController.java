@@ -1,7 +1,9 @@
 package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateShoeServiceRequest;
+import com.example.identityservice.dto.request.SearchShoeServiceRequest;
+import com.example.identityservice.dto.request.UpdateShoeServiceRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.service.ShoeServiceService;
 import jakarta.validation.Valid;
@@ -9,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -48,4 +52,24 @@ public class ShoeServiceController {
                 .build();
     }
 
+    @GetMapping("/{id}")
+    public ApiResponse<?> getById(@PathVariable Long id) {
+        return ApiResponse.<UpdateShoeServiceRequest>builder()
+                .result(shoeService.getById(id))
+                .build();
+    }
+
+    @GetMapping
+    public ApiResponse<?> getAll() {
+        return ApiResponse.<List<UpdateShoeServiceRequest>>builder()
+                .result(shoeService.getAll())
+                .build();
+    }
+
+    @GetMapping("search")
+    public ApiResponse<List<UpdateShoeServiceRequest>> searchClients(@RequestParam String q) {
+        return ApiResponse.<List<UpdateShoeServiceRequest>>builder()
+                .result(shoeService.searchServices(q))
+                .build();
+    }
 }

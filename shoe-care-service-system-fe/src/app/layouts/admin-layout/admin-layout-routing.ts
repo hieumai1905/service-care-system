@@ -106,5 +106,14 @@ export const AdminLayoutRoutes: Routes = [
         loadChildren: () => import('../../pages/shipping-province/shipping-province.module').then(m => m.ShippingProvinceModule)
       },
     ]
+  },
+  {
+    path: 'shoe-services',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/service/service.module').then(m => m.ServiceModule)
+      },
+    ]
   }
 ];

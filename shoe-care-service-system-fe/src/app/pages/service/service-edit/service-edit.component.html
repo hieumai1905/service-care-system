@@ -1,0 +1,114 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Cập Nhật Dịch Vụ</h4>
+          <p class="card-description">Điền thông tin dịch vụ</p>
+          <form [formGroup]="serviceForm" (ngSubmit)="updateService()">
+            <div class="form-group">
+              <label for="name">Tên Dịch Vụ</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="serviceForm.get('name')?.touched && serviceForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('name')?.errors?.['required']">Tên dịch vụ là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('name')?.errors?.['minlength']">Tên dịch vụ phải có ít nhất 3 ký
+                  tự.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="serviceCode">Mã Dịch Vụ</label>
+              <input type="text" formControlName="serviceCode" class="form-control" id="serviceCode">
+              <div *ngIf="serviceForm.get('serviceCode')?.touched && serviceForm.get('serviceCode')?.invalid"
+                   class="text-danger">
+                <small *ngIf="serviceForm.get('serviceCode')?.errors?.['required']">Mã dịch vụ là bắt buộc.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="price">Giá Dịch Vụ</label>
+              <input type="number" formControlName="price" class="form-control" id="price">
+              <div *ngIf="serviceForm.get('price')?.touched && serviceForm.get('price')?.invalid" class="text-danger">
+                <small *ngIf="serviceForm.get('price')?.errors?.['required']">Giá dịch vụ là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('price')?.errors?.['min']">Giá dịch vụ phải lớn hơn 1000.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputPrice">Giá Nhập</label>
+              <input type="number" formControlName="inputPrice" class="form-control" id="inputPrice">
+              <div *ngIf="serviceForm.get('inputPrice')?.touched && serviceForm.get('inputPrice')?.invalid"
+                   class="text-danger">
+                <small *ngIf="serviceForm.get('inputPrice')?.errors?.['required']">Giá nhập là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('inputPrice')?.errors?.['min']">Giá nhập phải lớn hơn 1000.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="sellPrice">Giá Bán</label>
+              <input type="number" formControlName="sellPrice" class="form-control" id="sellPrice">
+              <div *ngIf="serviceForm.get('sellPrice')?.touched && serviceForm.get('sellPrice')?.invalid"
+                   class="text-danger">
+                <small *ngIf="serviceForm.get('sellPrice')?.errors?.['required']">Giá bán là bắt buộc.</small>
+                <small *ngIf="serviceForm.get('sellPrice')?.errors?.['min']">Giá bán phải lớn hơn 1000.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="profits">Lợi Nhuận</label>
+              <input type="number" formControlName="profits" class="form-control" id="profits">
+            </div>
+
+            <div class="form-group">
+              <label for="consumingTime">Thời Gian Tiêu Tốn (phút)</label>
+              <input type="number" formControlName="consumingTime" class="form-control" id="consumingTime">
+              <div *ngIf="serviceForm.get('consumingTime')?.touched && serviceForm.get('consumingTime')?.invalid"
+                   class="text-danger">
+                <small *ngIf="serviceForm.get('consumingTime')?.errors?.['required']">Thời gian tiêu tốn là bắt
+                  buộc.</small>
+                <small *ngIf="serviceForm.get('consumingTime')?.errors?.['min']">Thời gian phải lớn hơn 0.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="note">Ghi Chú</label>
+              <textarea formControlName="note" class="form-control" id="note"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="categoryServiceId">Loại Dịch Vụ</label>
+              <select formControlName="categoryServiceId" class="form-control text-dark" id="categoryServiceId">
+                <option value="0">Chọn loại dịch vụ</option>
+                <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+              </select>
+              <div
+                *ngIf="serviceForm.get('categoryServiceId')?.touched && serviceForm.get('categoryServiceId')?.value === 0"
+                class="text-danger">
+                <small>Loại dịch vụ là bắt buộc.</small>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="brandId">Thương Hiệu</label>
+              <select formControlName="brandId" class="form-control text-dark" id="brandId">
+                <option value="0">Chọn thương hiệu</option>
+                <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+              </select>
+              <div *ngIf="serviceForm.get('brandId')?.touched && serviceForm.get('brandId')?.value === 0"
+                   class="text-danger">
+                <small>Thương hiệu là bắt buộc.</small>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="serviceForm.invalid">Cập nhật
+            </button>
+            <button class="btn btn-light" routerLink="/shoe-services">Quay lại</button>
+          </form>
+
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
