@@ -67,7 +67,7 @@ public class ShoeServiceController {
     }
 
     @GetMapping("search")
-    public ApiResponse<List<UpdateShoeServiceRequest>> searchClients(@RequestParam String q) {
+    public ApiResponse<List<UpdateShoeServiceRequest>> searchServices(@RequestParam String q) {
         return ApiResponse.<List<UpdateShoeServiceRequest>>builder()
                 .result(shoeService.searchServices(q))
                 .build();

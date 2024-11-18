@@ -23,6 +23,7 @@ app:
   userDefault:
     username: "admin"
     password: "admin"
+  upload-dir: ${UPLOAD_DIR:G:\outsource\DATN-tung\source\shoe-care-service-system-fe\src\assets\images\products}
 
 jwt:
   signerKey: "8c1Gl/AxoQidiUTcJRpTXLdGhup4KS68yoSKI2cpCZzUtfoc09n1tRoEOHZNIx7B"

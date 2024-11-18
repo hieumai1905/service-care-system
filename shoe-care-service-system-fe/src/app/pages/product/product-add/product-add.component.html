@@ -1,0 +1,113 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Sản Phẩm Mới</h4>
+          <p class="card-description">Điền thông tin sản phẩm</p>
+          <form [formGroup]="productForm" (ngSubmit)="addProduct()">
+            <div class="form-group">
+              <label for="name">Tên Sản Phẩm</label>
+              <input type="text" formControlName="name" class="form-control" id="name">
+              <div *ngIf="productForm.get('name')?.touched && productForm.get('name')?.invalid" class="text-danger">
+                <small *ngIf="productForm.get('name')?.errors?.['required']">Tên sản phẩm là bắt buộc.</small>
+                <small *ngIf="productForm.get('name')?.errors?.['minlength']">Tên sản phẩm phải có ít nhất 3 ký
+                  tự.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="image">Hình Ảnh</label>
+              <input type="file"
+                     accept="image/*"
+                     class="form-control"
+                     id="image"
+                     (change)="onFileChange($event)">
+              <div class="mt-2" *ngIf="imagePreview">
+                <img [src]="imagePreview" class="img-thumbnail" style="max-height: 200px">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="code">Mã Sản Phẩm</label>
+              <input type="text" formControlName="code" class="form-control text-uppercase" id="code">
+              <div *ngIf="productForm.get('code')?.touched && productForm.get('code')?.invalid" class="text-danger">
+                <small *ngIf="productForm.get('code')?.errors?.['required']">Mã sản phẩm là bắt buộc.</small>
+                <small *ngIf="productForm.get('code')?.errors?.['minlength']">Mã sản phẩm phải có ít nhất 6 ký
+                  tự.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="inputPrice">Giá Nhập</label>
+              <input type="number" formControlName="inputPrice" class="form-control" id="inputPrice">
+              <div *ngIf="productForm.get('inputPrice')?.touched && productForm.get('inputPrice')?.invalid"
+                   class="text-danger">
+                <small *ngIf="productForm.get('inputPrice')?.errors?.['required']">Giá nhập là bắt buộc.</small>
+                <small *ngIf="productForm.get('inputPrice')?.errors?.['min']">Giá nhập phải lớn hơn 1000.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sellPrice">Giá Bán</label>
+              <input type="number" formControlName="sellPrice" class="form-control" id="sellPrice">
+              <div *ngIf="productForm.get('sellPrice')?.touched && productForm.get('sellPrice')?.invalid"
+                   class="text-danger">
+                <small *ngIf="productForm.get('sellPrice')?.errors?.['required']">Giá bán là bắt buộc.</small>
+                <small *ngIf="productForm.get('sellPrice')?.errors?.['min']">Giá bán phải lớn hơn 1000.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="description">Mô Tả</label>
+              <textarea formControlName="description" class="form-control" id="description"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="quantity">Số Lượng</label>
+              <input type="number" formControlName="quantity" class="form-control" id="quantity">
+              <div *ngIf="productForm.get('quantity')?.touched && productForm.get('quantity')?.invalid"
+                   class="text-danger">
+                <small *ngIf="productForm.get('quantity')?.errors?.['required']">Số lượng là bắt buộc.</small>
+                <small *ngIf="productForm.get('quantity')?.errors?.['min']">Số lượng phải lớn hơn 0.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="productCategoryId">Danh Mục</label>
+              <select formControlName="productCategoryId" class="form-control" id="productCategoryId">
+                <option value="" disabled selected>Chọn danh mục</option>
+                <option *ngFor="let category of productCategories" [value]="category.id">{{ category.name }}</option>
+              </select>
+              <div
+                *ngIf="productForm.get('productCategoryId')?.touched && productForm.get('productCategoryId')?.invalid"
+                class="text-danger">
+                <small>Danh mục là bắt buộc.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="colorId">Màu Sắc</label>
+              <select formControlName="colorId" class="form-control" id="colorId">
+                <option value="" disabled selected>Chọn màu sắc</option>
+                <option *ngFor="let color of colors" [value]="color.id">{{ color.name }}</option>
+              </select>
+              <div *ngIf="productForm.get('colorId')?.touched && productForm.get('colorId')?.invalid"
+                   class="text-danger">
+                <small>Màu sắc là bắt buộc.</small>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="sizeId">Kích Thước</label>
+              <select formControlName="sizeId" class="form-control" id="sizeId">
+                <option value="" disabled selected>Chọn kích thước</option>
+                <option *ngFor="let size of sizes" [value]="size.id">{{ size.name }}</option>
+              </select>
+              <div *ngIf="productForm.get('sizeId')?.touched && productForm.get('sizeId')?.invalid" class="text-danger">
+                <small>Kích thước là bắt buộc.</small>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="productForm.invalid">Thêm Sản Phẩm
+            </button>
+            <button class="btn btn-light" routerLink="/products">Quay lại</button>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

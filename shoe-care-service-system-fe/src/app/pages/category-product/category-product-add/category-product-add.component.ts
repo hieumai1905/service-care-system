@@ -26,7 +26,7 @@ export class CategoryProductAddComponent {
     private dialogService: DialogService
   ) {
     this.categoryForm = this.formBuilder.group({
-      name: ['', [Validators.required, Validators.minLength(5)]]
+      name: ['', [Validators.required, Validators.minLength(2)]]
     });
   }
 
