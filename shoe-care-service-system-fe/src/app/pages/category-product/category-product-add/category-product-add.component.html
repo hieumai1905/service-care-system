@@ -11,7 +11,7 @@
               <input type="text" formControlName="name" class="form-control" id="name">
               <div *ngIf="categoryForm.get('name')?.touched && categoryForm.get('name')?.invalid" class="text-danger">
                 <small *ngIf="categoryForm.get('name')?.errors?.['required']">Tên danh mục sản phẩm là bắt buộc.</small>
-                <small *ngIf="categoryForm.get('name')?.errors?.['minlength']">Tên danh mục sản phẩm phải có ít nhất 5 ký
+                <small *ngIf="categoryForm.get('name')?.errors?.['minlength']">Tên danh mục sản phẩm phải có ít nhất 2 ký
                   tự.</small>
               </div>
             </div>

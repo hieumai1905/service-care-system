@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/products")
@@ -19,6 +21,20 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProductController {
 
     ProductService productService;
+
+    @GetMapping
+    public ApiResponse<?> getProducts() {
+        return ApiResponse.<List<UpdateProductRequest>>builder()
+                .result(productService.getProducts())
+                .build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<?> getProduct(@PathVariable Long id) {
+        return ApiResponse.<List<UpdateProductRequest>>builder()
+                .result(productService.findById(id))
+                .build();
+    }
 
     @PostMapping
     public ApiResponse<?> create(
@@ -52,4 +68,10 @@ public class ProductController {
                 .build();
     }
 
+    @GetMapping("search")
+    public ApiResponse<List<UpdateProductRequest>> searchProducts(@RequestParam String q) {
+        return ApiResponse.<List<UpdateProductRequest>>builder()
+                .result(productService.searchProducts(q))
+                .build();
+    }
 }
