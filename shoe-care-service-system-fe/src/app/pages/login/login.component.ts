@@ -11,8 +11,7 @@ import {Router} from "@angular/router";
   imports: [
     ReactiveFormsModule,
     NgIf
-  ],
-  styleUrls: ['./login.component.css']
+  ]
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
