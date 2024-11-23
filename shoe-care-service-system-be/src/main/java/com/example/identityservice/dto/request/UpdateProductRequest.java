@@ -16,8 +16,4 @@ public class UpdateProductRequest extends CreateProductRequest {
     @NotNull(message = "ID_IS_REQUIRED")
     Long id;
     String productCategoryName;
-    String colorName;
-    String colorHex;
-    String sizeName;
-
 }

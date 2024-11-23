@@ -4,12 +4,9 @@ import com.example.identityservice.dto.OrderDetailDTO;
 import com.example.identityservice.dto.request.CreateOrderRequest;
 import com.example.identityservice.dto.request.SearchOrderRequest;
 import com.example.identityservice.dto.request.UpdateOrderRequest;
-import com.example.identityservice.dto.request.UpdateProductRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.entity.Order;
-import com.example.identityservice.entity.OrderDetail;
 import com.example.identityservice.entity.Product;
-import com.example.identityservice.entity.Schedule;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
 import com.example.identityservice.repository.OrderDetailRepository;
@@ -24,7 +21,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -77,55 +73,55 @@ public class OrderService {
     }
 
     void updateOrderDetails(Order order, List<OrderDetailDTO> orderDetailDTOs) {
-        List<OrderDetail> oldOrderDetails = order.getOrderDetails();
-        List<OrderDetail> newOrderDetails = new ArrayList<>();
-        List<Product> products = new ArrayList<>();
-        List<Long> productIds = orderDetailDTOs.stream().map(OrderDetailDTO::getProductId).toList();
-        List<Long> deleteIds = new ArrayList<>();
+//        List<OrderDetail> oldOrderDetails = order.getOrderDetails();
+//        List<OrderDetail> newOrderDetails = new ArrayList<>();
+//        List<Product> products = new ArrayList<>();
+//        List<Long> productIds = orderDetailDTOs.stream().map(OrderDetailDTO::getProductId).toList();
+//        List<Long> deleteIds = new ArrayList<>();
+//
+//        for (OrderDetailDTO dto : orderDetailDTOs) {
+//            OrderDetail od;
+//            Product product;
+//            if (dto.getId() != null) { //update
+//                od = oldOrderDetails.stream().filter(item -> item.getId().equals(dto.getId()))
+//                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
+//                product = od.getProduct();
+//                int quantity = product.getQuantity() + od.getQuantity() - dto.getQuantity();
+//                if(quantity < 0)
+//                    throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
+//                product.setQuantity(quantity);
+//                products.add(product);
+//
+//                od.setQuantity(dto.getQuantity());
+//                newOrderDetails.add(od);
+//            }else { //add
+//                od = new OrderDetail();
+//                product = getExistProduct(dto.getProductId());
+//                od.setProduct(product);
+//                od.setOrder(order);
+//                od.setPrice(product.getSellPrice());
+//                if(product.getQuantity() < dto.getQuantity()){
+//                    throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
+//                }else{
+//                    od.setQuantity(dto.getQuantity());
+//                    product.setQuantity(product.getQuantity() - dto.getQuantity());
+//                    products.add(product);
+//                }
+//                newOrderDetails.add(od);
+//            }
+//        }
+//
+//        for (OrderDetail od : oldOrderDetails) {
+//            if(!productIds.contains(od.getProduct().getId())){
+//                deleteIds.add(od.getId());
+//                od.getProduct().setQuantity(od.getProduct().getQuantity() + od.getQuantity());
+//                products.add(od.getProduct());
+//            }
+//        }
 
-        for (OrderDetailDTO dto : orderDetailDTOs) {
-            OrderDetail od;
-            Product product;
-            if (dto.getId() != null) { //update
-                od = oldOrderDetails.stream().filter(item -> item.getId().equals(dto.getId()))
-                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
-                product = od.getProduct();
-                int quantity = product.getQuantity() + od.getQuantity() - dto.getQuantity();
-                if(quantity < 0)
-                    throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
-                product.setQuantity(quantity);
-                products.add(product);
-
-                od.setQuantity(dto.getQuantity());
-                newOrderDetails.add(od);
-            }else { //add
-                od = new OrderDetail();
-                product = getExistProduct(dto.getProductId());
-                od.setProduct(product);
-                od.setOrder(order);
-                od.setPrice(product.getSellPrice());
-                if(product.getQuantity() < dto.getQuantity()){
-                    throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
-                }else{
-                    od.setQuantity(dto.getQuantity());
-                    product.setQuantity(product.getQuantity() - dto.getQuantity());
-                    products.add(product);
-                }
-                newOrderDetails.add(od);
-            }
-        }
-
-        for (OrderDetail od : oldOrderDetails) {
-            if(!productIds.contains(od.getProduct().getId())){
-                deleteIds.add(od.getId());
-                od.getProduct().setQuantity(od.getProduct().getQuantity() + od.getQuantity());
-                products.add(od.getProduct());
-            }
-        }
-
-        productRepository.saveAll(products);
-        orderDetailRepository.deleteByIds(deleteIds);
-        order.setOrderDetails(newOrderDetails);
+//        productRepository.saveAll(products);
+//        orderDetailRepository.deleteByIds(deleteIds);
+//        order.setOrderDetails(newOrderDetails);
     }
 
     Order getExistingOrder(Long id) {
@@ -135,26 +131,26 @@ public class OrderService {
     }
 
     void addOrderDetails(Order order, List<OrderDetailDTO> orderDetailDTOs) {
-        List<OrderDetail> orderDetails = new ArrayList<>();
-        List<Product> products = new ArrayList<>();
-
-        for (OrderDetailDTO dto : orderDetailDTOs) {
-            OrderDetail orderDetail = new OrderDetail();
-            Product product = getExistProduct(dto.getProductId());
-            orderDetail.setProduct(product);
-            orderDetail.setOrder(order);
-            orderDetail.setPrice(product.getSellPrice());
-            if(product.getQuantity() < dto.getQuantity()){
-                throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
-            }else{
-                orderDetail.setQuantity(dto.getQuantity());
-                product.setQuantity(product.getQuantity() - dto.getQuantity());
-                products.add(product);
-            }
-            orderDetails.add(orderDetail);
-        }
-        order.setOrderDetails(orderDetails);
-        productRepository.saveAll(products);
+//        List<OrderDetail> orderDetails = new ArrayList<>();
+//        List<Product> products = new ArrayList<>();
+//
+//        for (OrderDetailDTO dto : orderDetailDTOs) {
+//            OrderDetail orderDetail = new OrderDetail();
+//            Product product = getExistProduct(dto.getProductId());
+//            orderDetail.setProduct(product);
+//            orderDetail.setOrder(order);
+//            orderDetail.setPrice(product.getSellPrice());
+//            if(product.getQuantity() < dto.getQuantity()){
+//                throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
+//            }else{
+//                orderDetail.setQuantity(dto.getQuantity());
+//                product.setQuantity(product.getQuantity() - dto.getQuantity());
+//                products.add(product);
+//            }
+//            orderDetails.add(orderDetail);
+//        }
+//        order.setOrderDetails(orderDetails);
+//        productRepository.saveAll(products);
     }
 
     private Product getExistProduct(Long productId) {

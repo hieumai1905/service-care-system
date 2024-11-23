@@ -51,6 +51,7 @@ public class ApplicationInitConfig {
                 User user = User.builder()
                         .username(defaultUserName)
                         .password(passwordEncoder.encode(defaultPassword))
+                        .fullName("ADMIN")
                         .role(adminRole)
                         .build();
 

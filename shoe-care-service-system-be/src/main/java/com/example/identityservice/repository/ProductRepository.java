@@ -26,14 +26,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p " +
             "JOIN p.productCategory pc " +
-            "JOIN p.color c " +
-            "JOIN p.size s " +
             "WHERE (:keyword IS NULL OR " +
             "   LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "   OR LOWER(p.code) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "   OR LOWER(pc.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "   OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
-            "   OR LOWER(s.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "   OR CAST(p.id AS string) LIKE CONCAT('%', :keyword, '%'))")
     List<Product> searchProductsByKeyword(@Param("keyword") String keyword);
 }
