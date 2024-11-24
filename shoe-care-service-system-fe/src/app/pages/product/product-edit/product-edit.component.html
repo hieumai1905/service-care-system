@@ -1,9 +1,9 @@
 <div class="content-wrapper">
   <div class="row">
-    <div class="col-md-6 grid-margin stretch-card ms-3 mt-4">
+    <div class="col-lg-5 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title text-uppercase">Cập nhật Sản Phẩm</h4>
+          <h4 class="card-title text-uppercase">Chi Tiết Sản Phẩm</h4>
           <p class="card-description">Điền thông tin sản phẩm</p>
           <form [formGroup]="productForm" (ngSubmit)="updateProduct()">
             <div class="form-group">
@@ -36,39 +36,12 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="inputPrice">Giá Nhập</label>
-              <input type="number" formControlName="inputPrice" class="form-control" id="inputPrice">
-              <div *ngIf="productForm.get('inputPrice')?.touched && productForm.get('inputPrice')?.invalid"
-                   class="text-danger">
-                <small *ngIf="productForm.get('inputPrice')?.errors?.['required']">Giá nhập là bắt buộc.</small>
-                <small *ngIf="productForm.get('inputPrice')?.errors?.['min']">Giá nhập phải lớn hơn 1000.</small>
-              </div>
-            </div>
-            <div class="form-group">
-              <label for="sellPrice">Giá Bán</label>
-              <input type="number" formControlName="sellPrice" class="form-control" id="sellPrice">
-              <div *ngIf="productForm.get('sellPrice')?.touched && productForm.get('sellPrice')?.invalid"
-                   class="text-danger">
-                <small *ngIf="productForm.get('sellPrice')?.errors?.['required']">Giá bán là bắt buộc.</small>
-                <small *ngIf="productForm.get('sellPrice')?.errors?.['min']">Giá bán phải lớn hơn 1000.</small>
-              </div>
-            </div>
-            <div class="form-group">
               <label for="description">Mô Tả</label>
               <textarea formControlName="description" class="form-control" id="description"></textarea>
             </div>
             <div class="form-group">
-              <label for="quantity">Số Lượng</label>
-              <input type="number" formControlName="quantity" class="form-control" id="quantity">
-              <div *ngIf="productForm.get('quantity')?.touched && productForm.get('quantity')?.invalid"
-                   class="text-danger">
-                <small *ngIf="productForm.get('quantity')?.errors?.['required']">Số lượng là bắt buộc.</small>
-                <small *ngIf="productForm.get('quantity')?.errors?.['min']">Số lượng phải lớn hơn 0.</small>
-              </div>
-            </div>
-            <div class="form-group">
               <label for="productCategoryId">Danh Mục</label>
-              <select formControlName="productCategoryId" class="form-control" id="productCategoryId">
+              <select formControlName="productCategoryId" class="form-control text-dark" id="productCategoryId">
                 <option value="" disabled selected>Chọn danh mục</option>
                 <option *ngFor="let category of productCategories" [value]="category.id">{{ category.name }}</option>
               </select>
@@ -79,33 +52,146 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="colorId">Màu Sắc</label>
-              <select formControlName="colorId" class="form-control" id="colorId">
-                <option value="" disabled selected>Chọn màu sắc</option>
-                <option *ngFor="let color of colors" [value]="color.id">{{ color.name }}</option>
+              <label for="description">Trạng thái</label>
+              <select formControlName="status" class="form-control text-dark" id="statusId">
+                <option value="" disabled selected>Chọn trạng thái</option>
+                <option value="ACTIVE">Kinh doanh</option>
+                <option value="DISCONTINUED">Ngừng kinh doanh</option>
               </select>
-              <div *ngIf="productForm.get('colorId')?.touched && productForm.get('colorId')?.invalid"
-                   class="text-danger">
-                <small>Màu sắc là bắt buộc.</small>
+              <div
+                *ngIf="productForm.get('productCategoryId')?.touched && productForm.get('productCategoryId')?.invalid"
+                class="text-danger">
+                <small>Trạng thái là bắt buộc.</small>
               </div>
             </div>
-            <div class="form-group">
-              <label for="sizeId">Kích Thước</label>
-              <select formControlName="sizeId" class="form-control" id="sizeId">
-                <option value="" disabled selected>Chọn kích thước</option>
-                <option *ngFor="let size of sizes" [value]="size.id">{{ size.name }}</option>
-              </select>
-              <div *ngIf="productForm.get('sizeId')?.touched && productForm.get('sizeId')?.invalid" class="text-danger">
-                <small>Kích thước là bắt buộc.</small>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="productForm.invalid">Cập nhật Sản Phẩm
+            <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="productForm.invalid">Cập nhật Sản
+              Phẩm
             </button>
             <button class="btn btn-light" routerLink="/products">Quay lại</button>
           </form>
           <div *ngIf="message" class="alert alert-warning mt-3">
             {{ message }}
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-7 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Cập Nhật Danh Sách Chi Tiết Sản Phẩm</h4>
+          <p class="card-description">Điền thông tin chi tiết sản phẩm</p>
+          <form [formGroup]="productDetailForm" (ngSubmit)="addProductDetail()">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="colorId">Màu Sắc</label>
+                  <select formControlName="colorId" class="form-control text-dark" id="colorId">
+                    <option value="" disabled selected>Chọn màu sắc</option>
+                    <option *ngFor="let color of colors" [value]="color.id">{{ color.name }}</option>
+                  </select>
+                  <div *ngIf="productDetailForm.get('colorId')?.touched && productDetailForm.get('colorId')?.invalid"
+                       class="text-danger">
+                    <small>Màu sắc là bắt buộc.</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="sizeId">Kích Thước</label>
+                  <select formControlName="sizeId" class="form-control text-dark" id="sizeId">
+                    <option value="" disabled selected>Chọn kích thước</option>
+                    <option *ngFor="let size of sizes" [value]="size.id">{{ size.name }}</option>
+                  </select>
+                  <div *ngIf="productDetailForm.get('sizeId')?.touched && productDetailForm.get('sizeId')?.invalid"
+                       class="text-danger">
+                    <small>Kích thước là bắt buộc.</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="quantity">Số Lượng</label>
+                  <input type="number" formControlName="quantity" class="form-control" id="quantity" min="1">
+                  <div *ngIf="productDetailForm.get('quantity')?.touched && productDetailForm.get('quantity')?.invalid"
+                       class="text-danger">
+                    <small *ngIf="productDetailForm.get('quantity')?.errors?.['required']">Số lượng là bắt buộc.</small>
+                    <small *ngIf="productDetailForm.get('quantity')?.errors?.['min']">Số lượng phải lớn hơn 0.</small>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="inputPrice">Giá Nhập</label>
+                  <input type="number" formControlName="inputPrice" class="form-control" id="inputPrice" min="1000">
+                  <div
+                    *ngIf="productDetailForm.get('inputPrice')?.touched && productDetailForm.get('inputPrice')?.invalid"
+                    class="text-danger">
+                    <small *ngIf="productDetailForm.get('inputPrice')?.errors?.['required']">Giá nhập là bắt
+                      buộc.</small>
+                    <small *ngIf="productDetailForm.get('inputPrice')?.errors?.['min']">Giá nhập phải lớn hơn
+                      1000.</small>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="sellPrice">Giá Bán</label>
+                  <input type="number" formControlName="sellPrice" class="form-control" id="sellPrice" min="1000">
+                  <div
+                    *ngIf="productDetailForm.get('sellPrice')?.touched && productDetailForm.get('sellPrice')?.invalid"
+                    class="text-danger">
+                    <small *ngIf="productDetailForm.get('sellPrice')?.errors?.['required']">Giá bán là bắt buộc.</small>
+                    <small *ngIf="productDetailForm.get('sellPrice')?.errors?.['min']">Giá bán phải lớn hơn
+                      1000.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button type="submit" id="btn-add-edit" class="btn btn-gradient-primary me-2"
+                    [disabled]="productDetailForm.invalid"> Thêm Chi
+              Tiết Sản Phẩm
+            </button>
+            <a class="btn btn-light" (click)="resetProductDetailForm()">Làm mới</a>
+          </form>
+          <div *ngIf="message" class="alert alert-warning mt-3">
+            {{ message }}
+          </div>
+        </div>
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh Sách Chi Tiết Sản Phẩm</h4>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>STT</th>
+                <th>MÀU SẮC</th>
+                <th>KÍCH THƯỚC</th>
+                <th>SỐ LƯỢNG</th>
+                <th>GIÁ NHẬP</th>
+                <th>GIÁ BÁN</th>
+                <th>CHỨC NĂNG</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr
+                *ngFor="let productDetail of productDetails | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize); let i = index">
+                <td>{{ (pageIndex * pageSize) + i + 1 }}</td>
+                <td>{{ productDetail.colorName.name }}</td>
+                <td>{{ productDetail.sizeName.name }}</td>
+                <td>{{ productDetail.quantity }}</td>
+                <td>{{ productDetail.inputPrice | currency : 'VND' }}</td>
+                <td>{{ productDetail.sellPrice | currency : 'VND' }}</td>
+                <td>
+                  <a class="text-center btn btn-sm" (click)="editProductDetail(i)">
+                    <i class="fa fa-edit me-2"></i>
+                  </a>
+                  <a class="text-center btn btn-sm" (click)="deleteProductDetail(i)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <mat-paginator [length]="productDetails.length"
+                         [pageSize]="pageSize"
+                         [pageSizeOptions]="[5, 10, 25, 100]"
+                         (page)="onPageChange($event)">
+          </mat-paginator>
         </div>
       </div>
     </div>

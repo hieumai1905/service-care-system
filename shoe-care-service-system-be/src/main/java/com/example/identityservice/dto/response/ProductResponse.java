@@ -1,4 +1,4 @@
-package com.example.identityservice.dto.request;
+package com.example.identityservice.dto.response;
 
 import com.example.identityservice.entity.ProductDetail;
 import com.example.identityservice.enums.ProductStatus;
@@ -16,11 +16,14 @@ import java.util.List;
 
 @Getter
 @Setter
-@SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class CreateProductRequest {
+public class ProductResponse {
+
+    @NotNull(message = "ID_IS_REQUIRED")
+    Long id;
+    String productCategoryName;
     @NotNull(message = "NAME_IS_REQUIRED")
     @NotBlank(message = "NAME_IS_REQUIRED")
     @jakarta.validation.constraints.Size(min = 1, max = 255, message = "INVALID_LENGTH_OF_NAME")
@@ -44,7 +47,5 @@ public class CreateProductRequest {
     @NotNull(message = "PRODUCT_CATEGORY_ID_IS_REQUIRED")
     Long productCategoryId;
 
-    String productDetails;
-
-    List<ProductDetail> productDetailList;
+    List<ProductDetailResponse> productDetails;
 }

@@ -1,9 +1,15 @@
 package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateProductRequest;
+import com.example.identityservice.dto.request.ProductDetailRequest;
+import com.example.identityservice.dto.request.SearchProductRequest;
+import com.example.identityservice.dto.request.UpdateProductRequest;
+import com.example.identityservice.dto.response.ProductResponse;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.service.ProductService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -31,7 +37,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ApiResponse<?> getProduct(@PathVariable Long id) {
-        return ApiResponse.<List<UpdateProductRequest>>builder()
+        return ApiResponse.<ProductResponse>builder()
                 .result(productService.findById(id))
                 .build();
     }
@@ -39,7 +45,8 @@ public class ProductController {
     @PostMapping
     public ApiResponse<?> create(
             @ModelAttribute @Valid CreateProductRequest request,
-            @RequestPart(value = "file", required = false) MultipartFile file) {
+            @RequestPart(value = "file", required = false) MultipartFile file) throws JsonProcessingException {
+
         return ApiResponse.<Long>builder()
                 .result(productService.createProduct(request, file))
                 .build();
@@ -47,7 +54,7 @@ public class ProductController {
 
     @PutMapping
     public ApiResponse<?> update(@ModelAttribute @Valid UpdateProductRequest request,
-                                 @RequestPart(value = "file", required = false) MultipartFile file) {
+                                 @RequestPart(value = "file", required = false) MultipartFile file) throws JsonProcessingException {
         return ApiResponse.<Long>builder()
                 .result(productService.updateProduct(request, file))
                 .build();

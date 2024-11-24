@@ -1,10 +1,12 @@
 package com.example.identityservice.entity;
 
+import com.example.identityservice.enums.ProductStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
@@ -21,44 +23,31 @@ public class Product {
     @Column(name = "product_id")
     Long id;
 
-    @Column(name = "name", nullable = false, length = 255)
+    @Column(name = "name", nullable = false)
     String name;
 
-    @Column(name = "image", nullable = true, length = 255)
+    @Column(name = "image")
     String image;
 
     @Column(name = "code", nullable = false)
     String code;
 
-    @Column(name = "input_price")
-    Double inputPrice;
-
-    @Column(name = "sell_price")
-    Double sellPrice;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_at")
     Date createAt;
 
-    @Column(name = "is_active", nullable = false)
-    Boolean isActive;
+    @Column(name = "status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    ProductStatus status;
 
-    @Column(name = "description", length = 255)
+    @Column(name = "description")
     String description;
-
-    @Column(name = "quantity")
-    Integer quantity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_category_id", nullable = false)
     ProductCategory productCategory;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id", nullable = false)
-    Color color;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id", nullable = false)
-    Size size;
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    List<ProductDetail> productDetails;
 }
 
