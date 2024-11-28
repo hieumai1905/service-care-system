@@ -17,3 +17,80 @@
   color: gray;
   font-weight: bold;
 }
+
+.invoice-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.invoice-header {
+  margin-bottom: 20px;
+}
+
+.invoice-details, .invoice-products, .invoice-summary {
+  margin-bottom: 20px;
+}
+
+invoice-container .table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+invoice-container .table th, invoice-container .table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+invoice-container .table thead th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+invoice-container .table-borderless th, invoice-container .table-borderless td {
+  border: none !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-danger {
+  color: red;
+}
+
+.text-success {
+  color: green;
+}
+
+.invoice-footer {
+  margin-top: 30px;
+  font-size: 16px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #invoice-print-section,
+  #invoice-print-section * {
+    visibility: visible;
+  }
+
+  #invoice-print-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+
+  button {
+    display: none;
+  }
+}

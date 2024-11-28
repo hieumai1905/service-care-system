@@ -10,7 +10,7 @@ import {DialogService} from "../../../services/dialog.service";
   styleUrls: ['./order-detail.component.css']
 })
 export class OrderDetailComponent implements OnInit {
-
+  isPrinting: boolean = false;
   orderId: number | undefined;
   orderCurrent: Order | null = null;
 
@@ -19,6 +19,10 @@ export class OrderDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private dialogService: DialogService
   ) {
+  }
+
+  togglePrint() {
+    this.isPrinting = !this.isPrinting;
   }
 
   ngOnInit() {
@@ -40,6 +44,23 @@ export class OrderDetailComponent implements OnInit {
         this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
       }
     });
+  }
+
+  printInvoice(): void {
+    const printContents = document.getElementById('invoice-print-section')?.innerHTML;
+    if (printContents) {
+      const originalContents = document.body.innerHTML;
+      document.body.innerHTML = printContents;
+      window.print();
+      document.body.innerHTML = originalContents;
+      window.location.reload();
+    } else {
+      this.dialogService.notificationOpen(
+        'Thông báo',
+        'Không tìm thấy nội dung hóa đơn để in.',
+        'OK'
+      );
+    }
   }
 
   getStatusClass(status: string): string {
