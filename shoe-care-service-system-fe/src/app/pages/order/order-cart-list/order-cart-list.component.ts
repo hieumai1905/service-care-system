@@ -41,10 +41,6 @@ export class OrderCartListComponent implements OnInit {
   ) {
   }
 
-  getDisplayName(paymentMethod: string): string {
-    return paymentMethod.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
-  }
-
   ngOnInit(): void {
     this.loadCart();
     this.loadClients();
@@ -60,6 +56,21 @@ export class OrderCartListComponent implements OnInit {
         console.error('Error when load profile:', err);
       }
     });
+  }
+
+  getPaymentMethod(paymentType: string): string {
+    switch (paymentType) {
+      case 'CASH':
+        return 'Tiền mặt';
+      case 'CREDIT_CARD':
+        return 'Thẻ tín dụng';
+      case 'BANK_TRANSFER':
+        return 'Chuyển khoản ngân hàng';
+      case 'MOBILE_WALLET':
+        return 'Ví điện tử';
+      default:
+        return 'Không xác định';
+    }
   }
 
   loadCart(): void {
@@ -135,7 +146,7 @@ export class OrderCartListComponent implements OnInit {
     });
   }
 
-  get finalPrice(): number{
+  get finalPrice(): number {
     return this.totalPrice - this.discountValue - this.disCountClient
   }
 
@@ -196,23 +207,39 @@ export class OrderCartListComponent implements OnInit {
       paymentType: this.selectedPaymentMethod,
       note: this.orderNote,
       clientId: this.clientSelected.id,
-      couponItemId: this.currentCoupon ? this.currentCoupon.coupon.id : null,
+      couponItemId: this.currentCoupon ? this.currentCoupon.id : null,
       userId: this.currentUser.id,
       orderDetails: orderDetails
     };
     console.log('Order data:', orderData);
 
-    this.orderService.addOrder(orderData).subscribe({
-      next: (response) => {
-        console.log('Hóa đơn đã được lưu thành công:', response);
-        this.dialogService.notificationOpen('Thông báo', 'Hóa đơn đã được lưu thành công!');
-        this.resetCart();
-      },
-      error: (err) => {
-        console.error('Có lỗi xảy ra khi lưu hóa đơn:', err);
-        this.dialogService.notificationOpen('Thông báo', 'Đã có lỗi xảy ra khi lưu hóa đơn!');
-      }
-    });
+    this.dialogService
+      .open(
+        'Xác nhận thông tin',
+        `Xác nhận thông tin đơn hàng:\n
+        Tổng tiền: ${this.totalPrice}\n-
+        Giảm giá: ${this.discountValue + this.disCountClient}\n-
+        Thanh toán: ${this.finalPrice}\n-
+        Phương thức thanh toán: ${this.getPaymentMethod(this.selectedPaymentMethod)}\n-
+        Ghi chú: ${this.orderNote}`,
+        'Lưu',
+        'Không lưu'
+      )
+      .subscribe(result => {
+        if (result) {
+          this.orderService.addOrder(orderData).subscribe({
+            next: (response) => {
+              console.log('Hóa đơn đã được lưu thành công:', response);
+              this.dialogService.notificationOpen('Thông báo', 'Hóa đơn đã được lưu thành công!');
+              this.resetCart();
+            },
+            error: (err) => {
+              console.error('Có lỗi xảy ra khi lưu hóa đơn:', err);
+              this.dialogService.notificationOpen('Thông báo', 'Đã có lỗi xảy ra khi lưu hóa đơn!');
+            }
+          });
+        }
+      });
   }
 
   private resetCart() {
@@ -226,5 +253,6 @@ export class OrderCartListComponent implements OnInit {
     this.phoneSearch = '';
     this.canOrder = false;
     this.orderNote = '';
+    this.messageCouponStatus = '';
   }
 }

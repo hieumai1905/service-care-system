@@ -84,7 +84,7 @@ public class OrderService {
     }
 
     @Transactional
-    public UpdateOrderRequest updateOrder(UpdateOrderRequest request){
+    public UpdateOrderRequest updateOrder(UpdateOrderRequest request) {
         Order order = getExistingOrder(request.getId());
         order.setNote(request.getNote());
         order.setDiscount(request.getDiscount());
@@ -96,7 +96,7 @@ public class OrderService {
         return ConvertUtils.convert(order, UpdateOrderRequest.class);
     }
 
-    public SearchResponse<UpdateOrderRequest> searchOrder(SearchOrderRequest request){
+    public SearchResponse<UpdateOrderRequest> searchOrder(SearchOrderRequest request) {
         request.validateInput();
 
         Page<Order> orders = orderRepository.search(
@@ -127,7 +127,7 @@ public class OrderService {
 
     public List<UpdateOrderRequest> getOrders() {
         List<Order> orders = orderRepository.findAll();
-        orders.sort(Comparator.comparing(Order::getCreatedAt));
+        orders.sort(Comparator.comparing(Order::getCreatedAt).reversed());
         return ConvertUtils.convertList(orders, UpdateOrderRequest.class);
     }
 
@@ -135,5 +135,49 @@ public class OrderService {
         List<Order> orders = orderRepository.searchOrderByKeyword(keyWord);
         orders.sort(Comparator.comparing(Order::getCreatedAt));
         return ConvertUtils.convertList(orders, UpdateOrderRequest.class);
+    }
+
+    @Transactional
+    public Long cancelOrder(Long orderId) {
+        Order order = getExistingOrder(orderId);
+
+        revertProductDetail(order.getOrderDetails());
+
+        // Có thể không cần phải reactivate coupon item
+        if (order.getCouponItem() != null) {
+            reactivateCouponItem(order.getCouponItem());
+        }
+
+        order.setStatus(OrderStatus.CANCELED);
+        orderRepository.save(order);
+
+        return order.getId();
+    }
+
+    void revertProductDetail(List<OrderDetail> orderDetails) {
+        orderDetails.forEach(item -> {
+            ProductDetail productDetail = productDetailRepository.findById(item.getProductDetail().getId()).orElseThrow(
+                    () -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND)
+            );
+
+            long revertedQuantity = productDetail.getQuantity() + item.getQuantity();
+            productDetail.setQuantity(revertedQuantity);
+            productDetailRepository.save(productDetail);
+        });
+    }
+
+    void reactivateCouponItem(CouponItem couponItem) {
+        couponItem = couponItemRepository.findById(couponItem.getId()).orElseThrow(
+                () -> new AppException(ErrorCode.COUPON_ITEM_NOT_FOUND)
+        );
+
+        couponItem.setActive(true);
+        couponItemRepository.save(couponItem);
+    }
+
+    public Long deleteById(Long id) {
+        Order order = getExistingOrder(id);
+        orderRepository.delete(order);
+        return order.getId();
     }
 }

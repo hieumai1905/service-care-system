@@ -1,4 +1,5 @@
 export interface CouponItem {
+  id: number;
   code: string;
   coupon: {
     expireAt: string;

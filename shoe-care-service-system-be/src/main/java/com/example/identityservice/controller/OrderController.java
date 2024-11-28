@@ -30,6 +30,13 @@ public class OrderController {
                 .build();
     }
 
+    @PutMapping("/cancel/{orderId}")
+    public ApiResponse<?> cancelOrder(@PathVariable Long orderId) {
+        return ApiResponse.<Long>builder()
+                .result(orderService.cancelOrder(orderId))
+                .build();
+    }
+
     @PutMapping
     public ApiResponse<?> update(@Valid @RequestBody UpdateOrderRequest request) {
         return ApiResponse.<UpdateOrderRequest>builder()
@@ -44,10 +51,18 @@ public class OrderController {
                 .result(orderService.searchOrder(request))
                 .build();
     }
+
     @GetMapping("/{id}")
     public ApiResponse<?> getById(@PathVariable Long id) {
         return ApiResponse.<UpdateOrderRequest>builder()
                 .result(orderService.getById(id))
+                .build();
+    }
+    
+    @DeleteMapping("/{id}")
+    public ApiResponse<?> deleteById(@PathVariable Long id) {
+        return ApiResponse.<Long>builder()
+                .result(orderService.deleteById(id))
                 .build();
     }
 
