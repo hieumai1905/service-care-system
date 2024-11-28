@@ -49,7 +49,7 @@ public class Order {
     @JoinColumn(name = "client_id", nullable = false)
     Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "coupon_item_id", nullable = true)
     CouponItem couponItem;
 

@@ -46,6 +46,30 @@ export class OrderDetailComponent implements OnInit {
     });
   }
 
+  cancelOrder() {
+    this.dialogService
+      .open(
+        'Xác nhận hủy đơn hàng',
+        `Bạn có chắc chắn muốn hủy đơn hàng này?`,
+        'Hủy',
+        'Không hủy'
+      )
+      .subscribe(result => {
+        if (result && this.orderCurrent) {
+          this.orderService.cancelOrder(this.orderCurrent.id).subscribe({
+            next: (data) => {
+              this.dialogService.notificationOpen('Thông báo', 'Đơn hàng đã được hủy thành công!', 'OK');
+              this.orderCurrent!.status = 'CANCELED';
+            },
+            error: (err) => {
+              this.dialogService.notificationOpen('Thông báo', err.error.message || 'Không thể hủy đơn hàng!', 'OK');
+            }
+          });
+        }
+      });
+  }
+
+
   printInvoice(): void {
     const printContents = document.getElementById('invoice-print-section')?.innerHTML;
     if (printContents) {
@@ -75,6 +99,21 @@ export class OrderDetailComponent implements OnInit {
         return 'status-deleted';
       default:
         return '';
+    }
+  }
+
+  getPaymentMethod(paymentType: string): string {
+    switch (paymentType) {
+      case 'CASH':
+        return 'Tiền mặt';
+      case 'CREDIT_CARD':
+        return 'Thẻ tín dụng';
+      case 'BANK_TRANSFER':
+        return 'Chuyển khoản ngân hàng';
+      case 'MOBILE_WALLET':
+        return 'Ví điện tử';
+      default:
+        return 'Không xác định';
     }
   }
 }

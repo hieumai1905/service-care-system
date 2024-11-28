@@ -5,15 +5,24 @@
         <div class="card-body">
           <h4 class="card-title text-uppercase">Danh sách đơn hàng</h4>
           <small class="text-gray">Thêm, sửa, xóa đơn hàng</small>
-          <div class="add-items d-flex mt-3">
-            <div class="col-3 d-flex">
+          <div class="add-items d-flex align-items-center mt-3">
+            <div class="col-md-3 d-flex">
               <input type="text" class="form-control todo-list-input" placeholder="Từ khóa?" [(ngModel)]="searchKey">
-              <button class="btn btn-gradient-primary" (click)="searchOrder()">Lọc</button>
+              <button class="btn btn-gradient-primary ms-2" (click)="searchOrder()">Lọc</button>
             </div>
-            <div class="col-9 text-end">
+            <div class="col-md-2 ms-4">
+              <select class="form-control text-dark" style="height: 44px;" [(ngModel)]="selectedStatus"
+                      (change)="filterOrder()">
+                <option value="">Tất cả trạng thái</option>
+                <option value="COMPLETED">Hoàn thành</option>
+                <option value="CANCELED">Đã hủy</option>
+              </select>
+            </div>
+            <div class="col-md-4 text-end ms-auto">
               <a class="btn btn-gradient-primary" [routerLink]="['/orders/add']">Thêm đơn hàng</a>
             </div>
           </div>
+
           <div class="table-responsive">
             <table class="table table-striped mt-5">
               <thead>
@@ -28,20 +37,23 @@
               </tr>
               </thead>
               <tbody>
-              <tr *ngFor="let order of orders | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+              <tr *ngFor="let order of orderFilers | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
                 <td class="py-1">{{ order.id }}</td>
                 <td class="py-1">{{ order.clientId }}</td>
                 <td class="py-1">{{ order.clientName }}</td>
                 <td class="py-1">{{ order.userId }}</td>
                 <td class="py-1">{{ order.userFullName }}</td>
                 <td class="py-1" [ngClass]="getStatusClass(order.status)">
-                  {{ order.status }}
+                  {{ getStatus(order.status) }}
                 </td>
                 <td class="py-1">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
-
                 <td>
                   <a class="text-center btn btn-sm" [routerLink]="['/orders/detail', order.id]">
                     <i class="fa fa-eye"></i>
+                  </a>
+                  <!-- Todo: Just admin can delete order -->
+                  <a class="text-center btn btn-sm" (click)="deleteOrder(order.id)">
+                    <i class="fa fa-trash"></i>
                   </a>
                 </td>
               </tr>
@@ -49,7 +61,7 @@
             </table>
           </div>
           <mat-paginator
-            [length]="orders.length"
+            [length]="orderFilers.length"
             [pageSize]="pageSize"
             [pageSizeOptions]="[5, 10, 25, 100]"
             (page)="onPageChange($event)">

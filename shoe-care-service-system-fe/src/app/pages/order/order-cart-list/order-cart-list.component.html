@@ -109,7 +109,7 @@
                 <h4 class="ps-1 font-weight-bold">Phương thức thanh toán:</h4>
                 <select class="form-control w-80 text-dark" [(ngModel)]="selectedPaymentMethod">
                   <option *ngFor="let method of paymentMethods" [value]="method">
-                    {{ getDisplayName(method) }}
+                    {{ getPaymentMethod(method) }}
                   </option>
                 </select>
               </div>

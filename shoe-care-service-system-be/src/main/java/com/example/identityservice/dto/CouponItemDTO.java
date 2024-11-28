@@ -11,6 +11,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CouponItemDTO {
+    Long id;
     String code;
     boolean isActive;
     UpdateCouponRequest coupon;

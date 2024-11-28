@@ -18,7 +18,6 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     RouterLink,
     SlicePipe,
     NgForOf,
-    CurrencyPipe,
     DatePipe,
     ReactiveFormsModule,
     FormsModule,
@@ -30,6 +29,8 @@ export class OrderListComponent implements OnInit {
   pageIndex: number = 0;
   pageSize: number = 5;
   searchKey: string = '';
+  selectedStatus: string = '';
+  orderFilers: Order[] = [];
 
   constructor(
     private orderService: OrderService,
@@ -41,11 +42,20 @@ export class OrderListComponent implements OnInit {
     this.loadOrders();
   }
 
+  filterOrder(){
+    if(this.selectedStatus == ''){
+      this.orderFilers = this.orders;
+    }else{
+      this.orderFilers = this.orders.filter(order => order.status == this.selectedStatus);
+    }
+  }
+
   loadOrders() {
     this.orderService.getOrders().subscribe({
       next: (data) => {
         this.orders = data.result;
         console.log('Loaded orders:', data);
+        this.filterOrder();
       },
       error: (err) => {
         console.error('Error when loading orders:', err);
@@ -68,6 +78,21 @@ export class OrderListComponent implements OnInit {
         return 'status-refunded';
       case 'DELETED':
         return 'status-deleted';
+      default:
+        return '';
+    }
+  }
+
+  getStatus(status: string){
+    switch (status) {
+      case 'COMPLETED':
+        return 'Đã hoàn thành';
+      case 'CANCELED':
+        return 'Đã hủy';
+      case 'REFUNDED':
+        return 'Đã hoàn tiền';
+      case 'DELETED':
+        return 'Đã xóa';
       default:
         return '';
     }
@@ -106,6 +131,7 @@ export class OrderListComponent implements OnInit {
       next: (data) => {
         this.orders = data.result;
         console.log('Loaded order search:', this.orders);
+        this.filterOrder();
       },
       error: (err) => {
         console.error('Error searching orders:', err);

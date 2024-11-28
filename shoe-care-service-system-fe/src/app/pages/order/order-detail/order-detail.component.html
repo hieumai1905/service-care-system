@@ -24,7 +24,7 @@
           <td><strong>Tên nhân viên:</strong> {{ orderCurrent.userFullName }}</td>
         </tr>
         <tr>
-          <td><strong>Hình thức thanh toán:</strong> {{ orderCurrent.paymentType }}</td>
+          <td><strong>Hình thức thanh toán:</strong> {{ getPaymentMethod(orderCurrent.paymentType) }}</td>
         </tr>
       </table>
     </div>
@@ -107,7 +107,7 @@
               </tr>
               <tr>
                 <td class="font-weight-bold">Hình thức thanh toán:</td>
-                <td>{{ orderCurrent.paymentType }}</td>
+                <td>{{ getPaymentMethod(orderCurrent.paymentType) }}</td>
                 <td class="font-weight-bold">Thời gian thanh toán:</td>
                 <td>{{ orderCurrent.createdAt | date: 'mm:hh - dd/MM/yyyy' }}</td>
               </tr>
@@ -126,9 +126,8 @@
             </table>
           </div>
           <div class="mt-3">
-            <button (click)="printInvoice()" class="btn btn-gradient-success me-2">In hoá đơn</button>
-            <button type="submit" class="btn btn-danger me-2">Huỷ hoá đơn</button>
-            <button type="submit" class="btn btn-gradient-dark me-2">Hoàn tiền</button>
+            <button *ngIf="orderCurrent?.status === 'COMPLETED'" (click)="printInvoice()" class="btn btn-gradient-success me-2">In hoá đơn</button>
+            <button *ngIf="orderCurrent?.status === 'COMPLETED'" (click)="cancelOrder()" class="btn btn-danger me-2">Huỷ hoá đơn</button>
             <button class="btn btn-light" routerLink="/orders">Quay lại</button>
           </div>
         </div>
