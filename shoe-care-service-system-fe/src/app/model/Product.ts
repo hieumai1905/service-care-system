@@ -1,4 +1,5 @@
 export interface Product {
+  productDetailId: number;
   id: number;
   name: string;
   image: string;
@@ -8,4 +9,6 @@ export interface Product {
   productCategoryId: number;
   productCategoryName: string;
   status: string;
+  rangePrice: number;
+  quantity: number;
 }

@@ -27,8 +27,8 @@ export class ClientCategoryAddComponent implements OnInit {
   ) {
     this.clientCategoryForm = this.formBuilder.group({
       typeName: ['', [Validators.required, Validators.minLength(2)]],
-      discount: [0, [Validators.required, Validators.min(1000)]],
-      totalRequire: [0, [Validators.required, Validators.min(1000)]],
+      discount: [0, [Validators.required, Validators.min(0)]],
+      totalRequire: [0, [Validators.required, Validators.min(0)]],
       note: [''],
       isPercent: [false],
       isActive: [true]
@@ -44,9 +44,9 @@ export class ClientCategoryAddComponent implements OnInit {
   onPercentChange(isPercent: boolean) {
     const discountControl = this.clientCategoryForm.get('discount');
     if (isPercent) {
-      discountControl?.setValidators([Validators.required, Validators.min(1), Validators.max(100)]);
+      discountControl?.setValidators([Validators.required, Validators.min(0), Validators.max(100)]);
     } else {
-      discountControl?.setValidators([Validators.required, Validators.min(1000)]);
+      discountControl?.setValidators([Validators.required, Validators.min(0)]);
     }
     discountControl?.updateValueAndValidity();
   }

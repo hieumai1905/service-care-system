@@ -6,9 +6,7 @@ import com.example.identityservice.service.ProductDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,11 +24,12 @@ public class ProductDetailController {
                 .result(productDetailService.getAllByProductId(productId))
                 .build();
     }
-//
-//    @PostMapping
-//    public ApiResponse<ProductDetailResponse> createProductDetail(@RequestBody ProductDetailRequest productDetailRequest) {
-//        return ApiResponse.<ProductDetailResponse>builder()
-//                .result(productDetailService.createProductDetail(productDetailRequest))
-//                .build();
-//    }
+
+    @GetMapping
+    public ApiResponse<ProductDetailResponse> getProductDetailByProductIdAndColorIdAndSizeId(
+            @RequestParam("productId") Long productId, @RequestParam("sizeId") Long sizeId, @RequestParam("colorId") Long colorId) {
+        return ApiResponse.<ProductDetailResponse>builder()
+                .result(productDetailService.getProductDetailByProductIdAndColorIdAndSizeId(productId, sizeId, colorId))
+                .build();
+    }
 }

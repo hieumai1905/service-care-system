@@ -34,4 +34,8 @@ export class ProductService {
   searchProduct(searchKey: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/products/search?q=${searchKey}`);
   }
+
+  getQuantityAndPriceByColorAndSize(colorId: string, sizeId: number, productId: number): Observable<any> {
+    return this.http.get<any>(`${environment.apiUrl}/products/${productId}/sizes/${sizeId}/colors/${colorId}`);
+  }
 }

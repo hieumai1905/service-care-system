@@ -1,0 +1,89 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chi Tiết Hoá Đơn</h4>
+          <small class="text-gray">Thông tin chi tiết hoá đơn</small>
+          <div *ngIf="orderCurrent">
+            <table class="table mt-3">
+              <tr>
+                <td class="font-weight-bold">Mã hoá đơn:</td>
+                <td>{{ orderCurrent.id }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold"> Mã khách hàng:</td>
+                <td>{{ orderCurrent.clientId }}</td>
+                <td class="font-weight-bold"> Tên khách hàng:</td>
+                <td>{{ orderCurrent.clientId }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold"> Mã nhân viên:</td>
+                <td>{{ orderCurrent.userId }}</td>
+                <td class="font-weight-bold"> Tên nhân viên:</td>
+                <td>{{ orderCurrent.userFullName }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Hình thức thanh toán:</td>
+                <td>{{ orderCurrent.paymentType }}</td>
+                <td class="font-weight-bold">Thời gian thanh toán:</td>
+                <td>{{ orderCurrent.createdAt | date: 'mm:hh - dd/MM/yyyy' }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Tổng tiền:</td>
+                <td class="text-danger font-weight-bold">{{ orderCurrent.total | number: '1.0-0' }} VND</td>
+                <td class="font-weight-bold">Số tiền được giảm:</td>
+                <td class="text-danger font-weight-bold">- {{ orderCurrent.discount | number: '1.0-0' }} VND</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Ghi chú:</td>
+                <td>{{ orderCurrent.note }}</td>
+                <td class="font-weight-bold">Trạng thái hoá đơn:</td>
+                <td [ngClass]="getStatusClass(orderCurrent.status)">{{ orderCurrent.status }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="mt-3">
+            <button type="submit" class="btn btn-gradient-success me-2">In hoá đơn</button>
+            <button type="submit" class="btn btn-danger me-2">Huỷ hoá đơn</button>
+            <button type="submit" class="btn btn-gradient-dark me-2">Hoàn tiền</button>
+            <button class="btn btn-light" routerLink="/orders">Quay lại</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh Sách Sản Phẩm</h4>
+          <small class="text-gray">Danh sách sản phẩm trong hoá đơn</small>
+          <div *ngIf="orderCurrent">
+            <div class="table-responsive">
+
+              <table class="table mt-3">
+                <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Tên sản phẩm</th>
+                  <th>Giá</th>
+                  <th>Số lượng</th>
+                  <th>Thành tiền</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of orderCurrent.orderDetails; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.productName }}</td>
+                  <td>{{ item.price | number: '1.0-0' }} VND</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.quantity * item.price| number: '1.0-0' }} VND</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

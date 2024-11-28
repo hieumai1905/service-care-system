@@ -31,4 +31,13 @@ public class ProductDetailService {
     public void deleteAllByProductId(Long productId) {
         productDetailRepository.deleteAllByProductId(productId);
     }
+
+    public ProductDetailResponse getProductDetailByProductIdAndColorIdAndSizeId(Long productId, Long sizeId, Long colorId) {
+        ProductDetail productDetail = productDetailRepository.findByProductAndSizeAndColor(productId, sizeId, colorId).orElse(null);
+        if(productDetail == null) {
+            return null;
+        }else{
+            return ConvertUtils.convert(productDetail, ProductDetailResponse.class);
+        }   
+    }
 }

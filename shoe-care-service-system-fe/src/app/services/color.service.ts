@@ -29,4 +29,8 @@ export class ColorService {
   findById(colorId: number): Observable<any> {
     return this.http.get(`${environment.apiUrl}/colors/${colorId}`);
   }
+
+  findAllByProductId(productId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/colors/products/${productId}`);
+  }
 }

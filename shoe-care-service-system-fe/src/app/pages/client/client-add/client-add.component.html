@@ -19,6 +19,9 @@
             <div class="form-group">
               <label for="tel">Số Điện Thoại</label>
               <input type="text" formControlName="tel" class="form-control" id="tel">
+              <div *ngIf="clientForm.get('tel')?.touched && clientForm.get('tel')?.invalid" class="text-danger">
+                <small *ngIf="clientForm.get('tel')?.errors?.['required']">Số Điện Thoại là bắt buộc.</small>
+              </div>
             </div>
 
             <div class="form-group">

@@ -38,6 +38,13 @@ public class CouponController {
                 .build();
     }
 
+    @GetMapping("/get-coupon-item/{code}")
+    public ApiResponse<?> getByCodeCouponItem(@PathVariable("code") String code) {
+        return ApiResponse.<CouponItemDTO>builder()
+                .result(couponService.getByCodeCouponItem(code))
+                .build();
+    }
+
     @GetMapping("/search-coupon/{q}")
     public ApiResponse<?> searchCoupon(@PathVariable("q") String q) {
         return ApiResponse.<List<UpdateCouponRequest>>builder()

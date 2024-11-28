@@ -125,4 +125,14 @@ export const AdminLayoutRoutes: Routes = [
       },
     ]
   }
+  ,
+  {
+    path: 'orders',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/order/order.module').then(m => m.OrderModule)
+      },
+    ]
+  }
 ];

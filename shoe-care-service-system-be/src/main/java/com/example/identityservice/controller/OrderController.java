@@ -1,15 +1,18 @@
 package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
-import com.example.identityservice.dto.request.*;
+import com.example.identityservice.dto.request.CreateOrderRequest;
+import com.example.identityservice.dto.request.SearchOrderRequest;
+import com.example.identityservice.dto.request.UpdateOrderRequest;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.service.OrderService;
-import com.example.identityservice.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -22,7 +25,7 @@ public class OrderController {
 
     @PostMapping
     public ApiResponse<?> create(@Valid @RequestBody CreateOrderRequest request) {
-        return ApiResponse.<UpdateOrderRequest>builder()
+        return ApiResponse.<Long>builder()
                 .result(orderService.createOrder(request))
                 .build();
     }
@@ -45,6 +48,20 @@ public class OrderController {
     public ApiResponse<?> getById(@PathVariable Long id) {
         return ApiResponse.<UpdateOrderRequest>builder()
                 .result(orderService.getById(id))
+                .build();
+    }
+
+    @GetMapping
+    public ApiResponse<?> getOrders() {
+        return ApiResponse.<List<UpdateOrderRequest>>builder()
+                .result(orderService.getOrders())
+                .build();
+    }
+
+    @GetMapping("search")
+    public ApiResponse<List<UpdateOrderRequest>> searchOrders(@RequestParam String q) {
+        return ApiResponse.<List<UpdateOrderRequest>>builder()
+                .result(orderService.searchOrders(q))
                 .build();
     }
 }

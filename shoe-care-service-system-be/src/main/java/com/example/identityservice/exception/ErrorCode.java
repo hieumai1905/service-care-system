@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 
 @Getter
 @AllArgsConstructor
@@ -99,7 +98,10 @@ public enum ErrorCode {
     SHIPPING_PROVINCE_NOT_FOUND(1086, "Không tìm thấy chi tiết đơn hàng",HttpStatus.NOT_FOUND),
     COLOR_IN_USE(1087, "Không thể xóa do màu đang được sử dụng", HttpStatus.BAD_REQUEST),
     MATERIAL_IN_USE(1088, "Không thể xóa do chất liệu đang được sử dụng", HttpStatus.BAD_REQUEST),
-    FAIL_TO_UPLOAD_FILE(1089, "Xảy ra lỗi khi tải ảnh", HttpStatus.BAD_REQUEST);
+    FAIL_TO_UPLOAD_FILE(1089, "Xảy ra lỗi khi tải ảnh", HttpStatus.BAD_REQUEST), 
+    COUPON_ITEM_NOT_FOUND(1090, "Không tìm thấy mã giảm giá", HttpStatus.NOT_FOUND),
+    PRODUCT_DETAIL_NOT_FOUND(1091, "Không tìm thấy chi tiết sản phẩm", HttpStatus.NOT_FOUND),
+    PRODUCT_DETAIL_NOT_ENOUGH(1092, "Số lượng sản phẩm không đủ", HttpStatus.BAD_REQUEST);
     private final int code;
     private final String message;
     private final HttpStatus statusCode;

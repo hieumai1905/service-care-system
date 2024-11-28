@@ -32,4 +32,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "   OR LOWER(pc.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
             "   OR CAST(p.id AS string) LIKE CONCAT('%', :keyword, '%'))")
     List<Product> searchProductsByKeyword(@Param("keyword") String keyword);
+
+    @Query("SELECT pd.product.id AS productId, " +
+            "MIN(pd.sellPrice) AS minPrice, MAX(pd.sellPrice) AS maxPrice " +
+            "FROM ProductDetail pd " +
+            "GROUP BY pd.product.id")
+    List<Object[]> findMinMaxSellPriceForProducts();
+
+    @Query("SELECT pd.product.id AS productId, SUM(pd.quantity) AS totalQuantity " +
+            "FROM ProductDetail pd " +
+            "GROUP BY pd.product.id")
+    List<Object[]> findTotalQuantityForProducts();
+
 }

@@ -106,11 +106,6 @@ public class CouponService {
         return response;
     }
 
-    public List<CouponItemDTO> getCouponItems(Long couponId) {
-        List<CouponItem> couponItems = couponItemRepository.findAllByCouponId(couponId);
-        return ConvertUtils.convertList(couponItems, CouponItemDTO.class);
-    }
-
     public void deleteCouponItems(List<Long> ids) {
         couponItemRepository.deleteByIds(ids);
     }
@@ -147,5 +142,10 @@ public class CouponService {
     public List<UpdateCouponRequest> searchCoupon(String q) {
         List<Coupon> coupons = couponRepository.searchCoupon(q.toLowerCase());
         return ConvertUtils.convertList(coupons, UpdateCouponRequest.class);
+    }
+
+    public CouponItemDTO getByCodeCouponItem(String code) {
+        CouponItem couponItem = couponItemRepository.searchByCode(code.toUpperCase());
+        return ConvertUtils.convert(couponItem, CouponItemDTO.class);
     }
 }

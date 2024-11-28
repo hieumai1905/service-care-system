@@ -54,7 +54,7 @@
             <a class="nav-link" href="pages/ui-features/dropdowns.html">Thời gian ship</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/shipping-provinces']">Phí ship theo tỉnh thành</a>
+            <a class="nav-link" [routerLink]="['/shipping-provinces']">Phí ship theo tỉnh</a>
           </li>
         </ul>
       </div>
@@ -83,10 +83,10 @@
       <div class="collapse" id="iconsn">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="pages/icons/font-awesome.html">Tất cả đơn bán</a>
+            <a class="nav-link" [routerLink]="['/orders']">Tất cả đơn bán</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/icons/font-awesome.html">Thêm đơn bán</a>
+            <a class="nav-link" [routerLink]="['/orders/add']">Thêm đơn bán</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/products']">Sản phẩm</a>
@@ -130,6 +130,9 @@
             <a class="nav-link" [routerLink]="['/clients']">Danh sách khách hàng</a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/clients/add']">Thêm khách hàng</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" [routerLink]="['/client-categories']">Phân loại khách hàng</a>
           </li>
         </ul>
@@ -143,10 +146,10 @@
       <div class="collapse" id="tables">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="pages/tables/basic-table.html">Báo cáo Top khách hàng</a>
+            <a class="nav-link" href="pages/tables/basic-table.html">Báo cáo khách hàng</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/tables/basic-table.html">Báo cáo Top doanh thu</a>
+            <a class="nav-link" href="pages/tables/basic-table.html">Báo cáo danh thu</a>
           </li>
         </ul>
       </div>

@@ -1,8 +1,7 @@
 package com.example.identityservice.dto.request;
 
 import com.example.identityservice.dto.OrderDetailDTO;
-import com.example.identityservice.entity.Client;
-import com.example.identityservice.entity.CouponItem;
+import com.example.identityservice.enums.PaymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +22,7 @@ public class CreateOrderRequest {
     Date createdAt = new Date();
     Double total;
     Double discount;
-    String paymentType;
+    PaymentMethod paymentType;
     String note;
     Long clientId;
     Long couponItemId;
