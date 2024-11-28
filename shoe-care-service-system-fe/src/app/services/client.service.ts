@@ -34,4 +34,8 @@ export class ClientService {
   searchClients(searchKey: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/clients/search?q=${searchKey}`);
   }
+
+  findByPhone(phoneSearch: string) {
+    return this.http.get<any>(`${environment.apiUrl}/clients/phone?tel=${phoneSearch}`);
+  }
 }

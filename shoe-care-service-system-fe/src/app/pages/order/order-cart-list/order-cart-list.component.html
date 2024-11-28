@@ -1,0 +1,161 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-lg-7 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chi Tiết Hoá Đơn</h4>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th>STT</th>
+                <th>MÃ</th>
+                <th>ẢNH</th>
+                <th>TÊN</th>
+                <th>MÀU SẮC</th>
+                <th>KÍCH THƯỚC</th>
+                <th>SỐ LƯỢNG</th>
+                <th>GIÁ</th>
+                <th>TỔNG TIỀN</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr
+                *ngFor="let orderItem of carts | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize); let i = index">
+                <td>{{ (pageIndex * pageSize) + i + 1 }}</td>
+                <td>{{ orderItem.productDetailId }}</td>
+                <td>
+                  <img [src]="'assets/images/products/' + orderItem.productImage" alt="{{ orderItem.productName }}"
+                       class="product-item"/>
+                </td>
+                <td>{{ orderItem.productName }}</td>
+                <td>{{ orderItem.colorName }}</td>
+                <td>{{ orderItem.sizeName }}</td>
+                <td>{{ orderItem.quantity }}</td>
+                <td>{{ orderItem.price | currency : 'VND' }}</td>
+                <td>{{ orderItem.totalPrice | currency : 'VND' }}</td>
+                <td>
+                  <a class="text-center btn btn-sm" (click)="deleteItem(i)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <mat-paginator [length]="carts.length"
+                         [pageSize]="pageSize"
+                         [pageSizeOptions]="[5, 10, 25, 100]"
+                         (page)="onPageChange($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thông tin khách hàng</h4>
+
+          <!-- Ô tìm kiếm khách hàng -->
+          <div class="add-items d-flex mt-3">
+            <div class="col-5 d-flex">
+              <input type="text" class="form-control todo-list-input" placeholder="Số điện thoại?"
+                     [(ngModel)]="phoneSearch">
+            </div>
+            <button class="btn btn-gradient-primary" (click)="getClient()">Tìm kiếm</button>
+            <button class="btn btn-google" [routerLink]="['/clients/add']">Thêm KH</button>
+          </div>
+          <!-- Thông tin khách hàng -->
+          <div *ngIf="clientSelected">
+            <table class="table table-striped mt-3">
+              <tr>
+                <td class="font-weight-bold">Mã khách hàng:</td>
+                <td>{{ clientSelected.id }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Tên khách hàng:</td>
+                <td>{{ clientSelected.name }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Số điện thoại:</td>
+                <td>{{ clientSelected.tel }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Địa chỉ:</td>
+                <td>{{ clientSelected.address }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Email:</td>
+                <td>{{ clientSelected.email }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Ngày sinh:</td>
+                <td>{{ clientSelected.birthday | date:'dd/MM/yyyy' }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Loại khách hàng:</td>
+                <td>{{ clientSelected.clientCategoryTypeName }}</td>
+              </tr>
+            </table>
+          </div>
+          <hr>
+        </div>
+        <div class="card-body custom-style-card-body">
+          <h4 class="card-title text-uppercase">Thông tin hoá đơn</h4>
+          <div class="row">
+            <div class="col-5">
+              <div class="justify-content-between align-items-center mt-1">
+                <h4 class="ps-1 font-weight-bold">Phương thức thanh toán:</h4>
+                <select class="form-control w-80 text-dark" [(ngModel)]="selectedPaymentMethod">
+                  <option *ngFor="let method of paymentMethods" [value]="method">
+                    {{ getDisplayName(method) }}
+                  </option>
+                </select>
+              </div>
+              <div class="justify-content-between align-items-center mt-3">
+                <h4 class="ps-1">Ghi chú:</h4>
+                <textarea type="text" class="form-control" cols="10" rows="7" placeholder="Nhập ghi chú" [(ngModel)]="orderNote"></textarea>
+              </div>
+            </div>
+            <div class="col-7">
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h3 class="ps-1">Tổng tiền:</h3>
+                <p>{{ totalPrice | currency: 'VND' }}</p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h3 class="ps-1">Chiết khấu khách hàng:</h3>
+                <p class="text-danger">- {{ disCountClient| currency: 'VND' }}</p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h3 class="ps-1">Số tiền được giảm:</h3>
+                <p class="text-danger">- {{ discountValue| currency: 'VND' }}</p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h2 class="ps-1 font-weight-bold">Thành tiền:</h2>
+                <p
+                  class="font-weight-bold">{{ finalPrice | currency: 'VND' }}</p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <div class="col-7">
+                  <input type="text" class="form-control" placeholder="Nhập mã giảm giá" [(ngModel)]="couponCode">
+                </div>
+                <button class="btn btn-gradient-primary" (click)="applyCoupon()">Áp dụng</button>
+              </div>
+              <div *ngIf="messageCouponStatus" class="alert alert-warning mt-3">{{ messageCouponStatus }}</div>
+
+              <div class="d-flex justify-content-end mt-4">
+                <button class="btn btn-gradient-success" (click)="saveOrder()" [disabled]="!canOrder">Lưu hoá đơn
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

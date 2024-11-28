@@ -1,5 +1,6 @@
 package com.example.identityservice.dto.request;
 
+import com.example.identityservice.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,6 @@ public class UpdateOrderRequest extends CreateOrderRequest{
     String userFullName;
     String couponCode;
     String clientName;
+    OrderStatus status;
+    Boolean couponIsPercent;
 }

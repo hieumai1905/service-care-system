@@ -15,5 +15,7 @@ public class UpdateClientRequest extends CreateClientRequest{
     @NotNull(message = "ID_IS_REQUIRED")
     Long id;
     String clientCategoryTypeName;
-
+    Double clientCategoryDiscount;
+    String clientCategoryDiscountType;
+    Double clientCategoryTotalRequire;
 }

@@ -1,5 +1,6 @@
 package com.example.identityservice.service;
 
+import com.example.identityservice.dto.ColorDTO;
 import com.example.identityservice.dto.SizeDTO;
 import com.example.identityservice.entity.Size;
 import com.example.identityservice.exception.AppException;
@@ -61,5 +62,9 @@ public class SizeService {
         }catch(Exception ex){
             throw new AppException(ErrorCode.SIZE_IN_USE);
         }
+    }
+
+    public List<SizeDTO> getAllByProductId(Long productId) {
+        return ConvertUtils.convertList(sizeRepository.findAllByProductId(productId), SizeDTO.class);
     }
 }

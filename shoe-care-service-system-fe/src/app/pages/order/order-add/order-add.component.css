@@ -1,0 +1,22 @@
+.product-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.product-card:hover {
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-card img {
+  margin: 4px auto;
+  height: 135px;
+  width: 135px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.product-card .card-body {
+  text-align: center;
+}

@@ -24,4 +24,3 @@ public class Color {
     @Column(name = "name", nullable = false)
     String name;
 }
-

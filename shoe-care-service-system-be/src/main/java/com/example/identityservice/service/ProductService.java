@@ -30,10 +30,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -181,10 +179,34 @@ public class ProductService {
     }
 
     public List<UpdateProductRequest> getProducts() {
+        List<Object[]> priceRanges = productRepository.findMinMaxSellPriceForProducts();
+        Map<Long, String> productPriceRangeMap = priceRanges.stream()
+                .collect(Collectors.toMap(
+                        obj -> (Long) obj[0],
+                        obj -> {
+                            Double minPrice = (Double) obj[1];
+                            Double maxPrice = (Double) obj[2];
+                            return minPrice.equals(maxPrice) ? String.valueOf(minPrice) : minPrice + "-" + maxPrice;
+                        }
+                ));
+
+        List<Object[]> totalQuantities = productRepository.findTotalQuantityForProducts();
+        Map<Long, String> productQuantityMap = totalQuantities.stream()
+                .collect(Collectors.toMap(
+                        obj -> (Long) obj[0],
+                        obj -> String.valueOf(obj[1])
+                ));
+
         return productRepository.findAll().stream()
-                .map(product -> ConvertUtils.convert(product, UpdateProductRequest.class))
+                .map(product -> {
+                    UpdateProductRequest dto = ConvertUtils.convert(product, UpdateProductRequest.class);
+                    dto.setRangePrice(productPriceRangeMap.get(product.getId()));
+                    dto.setQuantity(productQuantityMap.getOrDefault(product.getId(), "0"));
+                    return dto;
+                })
                 .toList();
     }
+
 
     public List<UpdateProductRequest> searchProducts(String keyword) {
         List<Product> services = productRepository.searchProductsByKeyword(keyword);

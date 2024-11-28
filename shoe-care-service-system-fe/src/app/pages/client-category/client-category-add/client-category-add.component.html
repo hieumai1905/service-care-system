@@ -27,10 +27,10 @@
                 <small *ngIf="clientCategoryForm.get('discount')?.errors?.['required']">Giảm giá là bắt buộc.</small>
                 <small
                   *ngIf="clientCategoryForm.get('discount')?.errors?.['min'] && !clientCategoryForm.get('isPercent')?.value">Giảm
-                  giá phải lớn hơn 1000.</small>
+                  giá phải lớn hơn hoặc bằng 0.</small>
                 <small
                   *ngIf="(clientCategoryForm.get('discount')?.errors?.['min'] || clientCategoryForm.get('discount')?.errors?.['max']) && clientCategoryForm.get('isPercent')?.value">Phần
-                  trăm giảm giá phải từ 1-100.</small>
+                  trăm giảm giá phải từ 0-100.</small>
               </div>
             </div>
 
@@ -43,7 +43,7 @@
                 <small *ngIf="clientCategoryForm.get('totalRequire')?.errors?.['required']">Số tiền tiêu dùng yêu cầu là
                   bắt buộc.</small>
                 <small *ngIf="clientCategoryForm.get('totalRequire')?.errors?.['min']">Số tiền tiêu dùng yêu cầu phải
-                  lớn hơn 1000.</small>
+                  lớn hơn hoặc bằng 0.</small>
               </div>
             </div>
 

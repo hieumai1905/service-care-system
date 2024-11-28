@@ -10,12 +10,14 @@ export class CouponItemService {
 
   constructor(private readonly http: HttpClient) {
   }
-
   getCouponItems(): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/coupons/coupon-items`);
   }
-
   searchCouponItems(searchKey: string) {
     return this.http.get<any>(`${environment.apiUrl}/coupons/search-coupon-items/${searchKey}`);
+  }
+
+  validateCouponItem(code: string){
+    return this.http.get<any>(`${environment.apiUrl}/coupons/get-coupon-item/${code}`);
   }
 }

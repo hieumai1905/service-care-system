@@ -1,0 +1,14 @@
+.product-item{
+  max-width: 50px;
+  max-height: 50px;
+  width: 50px;
+  height: 50px;
+}
+
+.product-image-column{
+  width: 100px;
+}
+
+.custom-style-card-body{
+  margin-top: -50px;
+}

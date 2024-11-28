@@ -3,6 +3,7 @@ package com.example.identityservice.controller;
 import com.example.identityservice.dto.ApiResponse;
 import com.example.identityservice.dto.BrandDTO;
 import com.example.identityservice.dto.ColorDTO;
+import com.example.identityservice.dto.SizeDTO;
 import com.example.identityservice.entity.Brand;
 import com.example.identityservice.entity.Color;
 import com.example.identityservice.service.BrandService;
@@ -58,6 +59,13 @@ public class ColorController {
         colorService.deleteColor(id);
         return ApiResponse.<String>builder()
                 .result("Delete color successfully!")
+                .build();
+    }
+
+    @GetMapping("/products/{productId}")
+    public ApiResponse<List<ColorDTO>> getAllOfProduct(@PathVariable Long productId) {
+        return ApiResponse.<List<ColorDTO>>builder()
+                .result(colorService.getAllByProductId(productId))
                 .build();
     }
 }

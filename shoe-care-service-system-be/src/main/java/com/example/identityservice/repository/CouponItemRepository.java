@@ -16,4 +16,7 @@ public interface CouponItemRepository extends JpaRepository<CouponItem, Long> {
 
     @Query("select c from CouponItem c where lower(c.code) like %:q% or lower(c.coupon.title) like %:q%")
     List<CouponItem> searchCouponItem(String q);
+
+    @Query("select c from CouponItem c where lower(c.code) =:code")
+    CouponItem searchByCode(String code);
 }

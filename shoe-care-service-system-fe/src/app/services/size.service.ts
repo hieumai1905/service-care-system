@@ -29,4 +29,8 @@ export class SizeService {
   findById(sizeId: number): Observable<any> {
     return this.http.get(`${environment.apiUrl}/sizes/${sizeId}`);
   }
+
+  findAllByProductId(productId: number): Observable<any> {
+    return this.http.get(`${environment.apiUrl}/sizes/products/${productId}`);
+  }
 }

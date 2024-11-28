@@ -32,7 +32,7 @@ public class ColorService {
     public ColorDTO createColor(ColorDTO request) {
         request.setId(null);
         Color existByName = colorRepository.findByIdAndName(null, request.getName());
-        if(existByName != null){
+        if (existByName != null) {
             throw new AppException(ErrorCode.NAME_ALREADY_EXIST);
         }
         Color color = ConvertUtils.convert(request, Color.class);
@@ -41,12 +41,12 @@ public class ColorService {
     }
 
     public ColorDTO updateColor(ColorDTO request) {
-        if(request.getId() == null){
+        if (request.getId() == null) {
             throw new AppException(ErrorCode.ID_IS_REQUIRED);
         }
         Color color = getColorById(request.getId());
         Color existByName = colorRepository.findByIdAndName(request.getId(), request.getName());
-        if(existByName != null){
+        if (existByName != null) {
             throw new AppException(ErrorCode.NAME_ALREADY_EXIST);
         }
         color.setName(request.getName());
@@ -57,10 +57,14 @@ public class ColorService {
 
     public void deleteColor(Long id) {
         Color color = getColorById(id);
-        try{
+        try {
             colorRepository.deleteById(id);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw new AppException(ErrorCode.COLOR_IN_USE);
         }
+    }
+
+    public List<ColorDTO> getAllByProductId(Long productId) {
+        return ConvertUtils.convertList(colorRepository.findAllByProductId(productId), ColorDTO.class);
     }
 }

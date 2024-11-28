@@ -1,17 +1,20 @@
 package com.example.identityservice.service;
 
-import com.example.identityservice.dto.OrderDetailDTO;
 import com.example.identityservice.dto.request.CreateOrderRequest;
 import com.example.identityservice.dto.request.SearchOrderRequest;
 import com.example.identityservice.dto.request.UpdateOrderRequest;
 import com.example.identityservice.dto.response.SearchResponse;
+import com.example.identityservice.entity.CouponItem;
 import com.example.identityservice.entity.Order;
-import com.example.identityservice.entity.Product;
+import com.example.identityservice.entity.OrderDetail;
+import com.example.identityservice.entity.ProductDetail;
+import com.example.identityservice.enums.OrderStatus;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
-import com.example.identityservice.repository.OrderDetailRepository;
+import com.example.identityservice.repository.ClientRepository;
+import com.example.identityservice.repository.CouponItemRepository;
 import com.example.identityservice.repository.OrderRepository;
-import com.example.identityservice.repository.ProductRepository;
+import com.example.identityservice.repository.ProductDetailRepository;
 import com.example.identityservice.utils.ConvertUtils;
 import com.example.identityservice.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Slf4j
@@ -29,16 +33,54 @@ import java.util.List;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class OrderService {
     OrderRepository orderRepository;
-    OrderDetailRepository orderDetailRepository;
-    ProductRepository productRepository;
+    ProductDetailRepository productDetailRepository;
+    ClientRepository clientRepository;
+    CouponItemRepository couponItemRepository;
 
     @Transactional
-    public UpdateOrderRequest createOrder(CreateOrderRequest request){
+    public Long createOrder(CreateOrderRequest request) {
+        if (!clientRepository.existsById(request.getClientId())) {
+            throw new AppException(ErrorCode.CLIENT_NOT_FOUND);
+        }
+
         Order order = ConvertUtils.convert(request, Order.class);
+        order.setStatus(OrderStatus.COMPLETED);
         order.setId(null);
-        addOrderDetails(order, request.getOrderDetails());
+
+        List<OrderDetail> orderDetails = ConvertUtils.convertList(request.getOrderDetails(), OrderDetail.class);
+        orderDetails.forEach(orderDetail -> orderDetail.setOrder(order));
+
+        order.setOrderDetails(orderDetails);
+        updateProductDetail(orderDetails);
+        if (request.getCouponItemId() != null) {
+            updateCouponItem(order.getCouponItem());
+        }
+
         orderRepository.save(order);
-        return ConvertUtils.convert(order, UpdateOrderRequest.class);
+
+        return order.getId();
+    }
+
+    void updateProductDetail(List<OrderDetail> orderDetails) {
+        orderDetails.forEach(item -> {
+            ProductDetail productDetail = productDetailRepository.findById(item.getProductDetail().getId()).orElseThrow(
+                    () -> new AppException(ErrorCode.PRODUCT_DETAIL_NOT_FOUND)
+            );
+            long newQuantity = productDetail.getQuantity() - item.getQuantity();
+            if (newQuantity < 0) {
+                throw new AppException(ErrorCode.PRODUCT_DETAIL_NOT_ENOUGH);
+            }
+            productDetail.setQuantity(newQuantity);
+            productDetailRepository.save(productDetail);
+        });
+    }
+
+    void updateCouponItem(CouponItem couponItem) {
+        couponItem = couponItemRepository.findById(couponItem.getId()).orElseThrow(
+                () -> new AppException(ErrorCode.COUPON_ITEM_NOT_FOUND)
+        );
+        couponItem.setActive(false);
+        couponItemRepository.save(couponItem);
     }
 
     @Transactional
@@ -48,8 +90,8 @@ public class OrderService {
         order.setDiscount(request.getDiscount());
         order.setTotal(request.getTotal());
         order.setPaymentType(request.getPaymentType());
+        order.setStatus(request.getStatus());
 
-        updateOrderDetails(order, request.getOrderDetails());
         orderRepository.save(order);
         return ConvertUtils.convert(order, UpdateOrderRequest.class);
     }
@@ -72,95 +114,26 @@ public class OrderService {
         return response;
     }
 
-    void updateOrderDetails(Order order, List<OrderDetailDTO> orderDetailDTOs) {
-//        List<OrderDetail> oldOrderDetails = order.getOrderDetails();
-//        List<OrderDetail> newOrderDetails = new ArrayList<>();
-//        List<Product> products = new ArrayList<>();
-//        List<Long> productIds = orderDetailDTOs.stream().map(OrderDetailDTO::getProductId).toList();
-//        List<Long> deleteIds = new ArrayList<>();
-//
-//        for (OrderDetailDTO dto : orderDetailDTOs) {
-//            OrderDetail od;
-//            Product product;
-//            if (dto.getId() != null) { //update
-//                od = oldOrderDetails.stream().filter(item -> item.getId().equals(dto.getId()))
-//                        .findFirst().orElseThrow(() -> new AppException(ErrorCode.ORDER_DETAIL_NOT_FOUND));
-//                product = od.getProduct();
-//                int quantity = product.getQuantity() + od.getQuantity() - dto.getQuantity();
-//                if(quantity < 0)
-//                    throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
-//                product.setQuantity(quantity);
-//                products.add(product);
-//
-//                od.setQuantity(dto.getQuantity());
-//                newOrderDetails.add(od);
-//            }else { //add
-//                od = new OrderDetail();
-//                product = getExistProduct(dto.getProductId());
-//                od.setProduct(product);
-//                od.setOrder(order);
-//                od.setPrice(product.getSellPrice());
-//                if(product.getQuantity() < dto.getQuantity()){
-//                    throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
-//                }else{
-//                    od.setQuantity(dto.getQuantity());
-//                    product.setQuantity(product.getQuantity() - dto.getQuantity());
-//                    products.add(product);
-//                }
-//                newOrderDetails.add(od);
-//            }
-//        }
-//
-//        for (OrderDetail od : oldOrderDetails) {
-//            if(!productIds.contains(od.getProduct().getId())){
-//                deleteIds.add(od.getId());
-//                od.getProduct().setQuantity(od.getProduct().getQuantity() + od.getQuantity());
-//                products.add(od.getProduct());
-//            }
-//        }
-
-//        productRepository.saveAll(products);
-//        orderDetailRepository.deleteByIds(deleteIds);
-//        order.setOrderDetails(newOrderDetails);
-    }
-
     Order getExistingOrder(Long id) {
         return orderRepository.findById(id).orElseThrow(
                 () -> new AppException(ErrorCode.ORDER_NOT_FOUND)
         );
     }
 
-    void addOrderDetails(Order order, List<OrderDetailDTO> orderDetailDTOs) {
-//        List<OrderDetail> orderDetails = new ArrayList<>();
-//        List<Product> products = new ArrayList<>();
-//
-//        for (OrderDetailDTO dto : orderDetailDTOs) {
-//            OrderDetail orderDetail = new OrderDetail();
-//            Product product = getExistProduct(dto.getProductId());
-//            orderDetail.setProduct(product);
-//            orderDetail.setOrder(order);
-//            orderDetail.setPrice(product.getSellPrice());
-//            if(product.getQuantity() < dto.getQuantity()){
-//                throw new AppException(ErrorCode.QUANTITY_IS_NOT_ENOUGH);
-//            }else{
-//                orderDetail.setQuantity(dto.getQuantity());
-//                product.setQuantity(product.getQuantity() - dto.getQuantity());
-//                products.add(product);
-//            }
-//            orderDetails.add(orderDetail);
-//        }
-//        order.setOrderDetails(orderDetails);
-//        productRepository.saveAll(products);
-    }
-
-    private Product getExistProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(
-                () -> new AppException(ErrorCode.PRODUCT_NOT_FOUND)
-        );
-    }
-
     public UpdateOrderRequest getById(Long id) {
         Order order = getExistingOrder(id);
         return ConvertUtils.convert(order, UpdateOrderRequest.class);
+    }
+
+    public List<UpdateOrderRequest> getOrders() {
+        List<Order> orders = orderRepository.findAll();
+        orders.sort(Comparator.comparing(Order::getCreatedAt));
+        return ConvertUtils.convertList(orders, UpdateOrderRequest.class);
+    }
+
+    public List<UpdateOrderRequest> searchOrders(String keyWord) {
+        List<Order> orders = orderRepository.searchOrderByKeyword(keyWord);
+        orders.sort(Comparator.comparing(Order::getCreatedAt));
+        return ConvertUtils.convertList(orders, UpdateOrderRequest.class);
     }
 }

@@ -12,7 +12,10 @@
               <input type="text" formControlName="typeName" class="form-control" id="typeName"/>
               <div *ngIf="clientCategoryForm.get('typeName')?.touched && clientCategoryForm.get('typeName')?.invalid"
                    class="text-danger">
-                <small *ngIf="clientCategoryForm.get('typeName')?.errors?.['required']">Tên nhóm là bắt buộc.</small>
+                <small *ngIf="clientCategoryForm.get('typeName')?.errors?.['required']">Tên loại khách hàng là bắt
+                  buộc.</small>
+                <small *ngIf="clientCategoryForm.get('typeName')?.errors?.['minlength']">Tên loại khách hàng phải có ít
+                  nhất 2 ký tự.</small>
               </div>
             </div>
 
@@ -24,10 +27,10 @@
                 <small *ngIf="clientCategoryForm.get('discount')?.errors?.['required']">Giảm giá là bắt buộc.</small>
                 <small
                   *ngIf="clientCategoryForm.get('discount')?.errors?.['min'] && !clientCategoryForm.get('isPercent')?.value">Giảm
-                  giá phải lớn hơn 1000.</small>
+                  giá phải lớn hơn hoặc bằng 0.</small>
                 <small
                   *ngIf="(clientCategoryForm.get('discount')?.errors?.['min'] || clientCategoryForm.get('discount')?.errors?.['max']) && clientCategoryForm.get('isPercent')?.value">Phần
-                  trăm giảm giá phải từ 1-100.</small>
+                  trăm giảm giá phải từ 0-100.</small>
               </div>
             </div>
 

@@ -57,4 +57,11 @@ public class SizeController {
                 .result("Delete size successfully!")
                 .build();
     }
+
+    @GetMapping("/products/{productId}")
+    public ApiResponse<List<SizeDTO>> getAllOfProduct(@PathVariable Long productId) {
+        return ApiResponse.<List<SizeDTO>>builder()
+                .result(sizeService.getAllByProductId(productId))
+                .build();
+    }
 }

@@ -11,10 +11,9 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class OrderDetailDTO {
     Long id;
-    Long productId;
+    Long productDetailId;
     String productName;
     String image;
     Double price;
     Integer quantity;
-
 }

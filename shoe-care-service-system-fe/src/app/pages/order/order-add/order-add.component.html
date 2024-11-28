@@ -1,0 +1,99 @@
+<div class="content-wrapper">
+  <div class="row mt-3">
+    <!-- Danh sách sản phẩm -->
+    <div class="col-lg-8 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh sách sản phẩm</h4>
+          <div class="add-items d-flex mt-3">
+            <div class="col-5 d-flex">
+              <input type="text" class="form-control todo-list-input" placeholder="Từ khóa?" [(ngModel)]="searchKey">
+              <button class="btn btn-gradient-primary" (click)="searchProduct()">Lọc</button>
+            </div>
+          </div>
+          <div class="row mt-4">
+            <div class="col-3 mb-3"
+                 *ngFor="let product of products | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+              <div class="card product-card h-100">
+                <img [src]="'assets/images/products/' + product.image" class="card-img-top custom-product-item mb-1"
+                     alt="{{ product.name }}">
+                <div class="card-body p-1 text-center">
+                  <h4 class="text-truncate mb-0" title="{{ product.name }}">{{ product.name }}</h4>
+                  <p class="mb-1 text-primary font-weight-bold">
+                    {{ product.rangePrice != null ? product.rangePrice + 'đ' : '0đ' }}
+                  </p>
+                  <button class="btn btn-sm btn-outline-primary w-100" (click)="viewProductDetails(product)">
+                    Chọn
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <mat-paginator [length]="products.length"
+                         [pageSize]="pageSize"
+                         [pageSizeOptions]="[12, 18, 24, 30, 36, 9999]"
+                         (page)="onPageChange($event)">
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+    <!-- Chi tiết sản phẩm -->
+    <div class="col-lg-4 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chi tiết sản phẩm</h4>
+          <hr>
+          <div *ngIf="selectedProduct">
+            <img [src]="'assets/images/products/' + selectedProduct.image" class="img-fluid mb-3"
+                 alt="{{ selectedProduct.name }}">
+            <h3>{{ selectedProduct.name }}</h3>
+            <p>Giá: <input class="form-control" [(ngModel)]="currentPrice" type="text" readonly/></p>
+            <div class="form-group">
+              <label for="color">Màu:</label>
+              <select class="form-control text-dark" id="color" [(ngModel)]="selectedColor"
+                      (change)="onColorOrSizeChange()">
+                <option value="" disabled selected>Chọn màu</option>
+                <option *ngFor="let color of colorsProduct" [value]="color.id">{{ color.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="size">Size:</label>
+              <select class="form-control text-dark" id="size" [(ngModel)]="selectedSize"
+                      (change)="onColorOrSizeChange()">
+                <option value="" disabled selected>Chọn kích cỡ</option>
+                <option *ngFor="let size of sizesProduct" [value]="size.id">{{ size.name }}</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="quantity">Nhập số lượng:</label>
+              <input
+                type="number"
+                id="quantity"
+                class="form-control text-dark"
+                [(ngModel)]="selectedQuantity"
+                (input)="validateQuantity()"
+                (change)="checkCanOrder()"
+                placeholder="Nhập số lượng"
+              />
+              <small *ngIf="selectedQuantityInvalid" class="text-danger">
+                Số lượng phải lớn hơn 0 và nhỏ hơn hoặc bằng {{ availableQuantity }}.
+              </small>
+            </div>
+            <p>Số lượng còn lại:
+              <span
+                class="text-danger font-weight-bold">{{ availableQuantity === 0 ? "Hết hàng" : availableQuantity }}</span>
+            </p>
+            <button class="btn btn-gradient-success btn-block" [disabled]="!canAddToOrder"
+                    (click)="addToOrder(selectedProduct)">
+              Thêm vào hóa đơn
+            </button>
+          </div>
+          <div *ngIf="!selectedProduct" class="text-center text-muted">
+            Vui lòng chọn sản phẩm để xem chi tiết.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

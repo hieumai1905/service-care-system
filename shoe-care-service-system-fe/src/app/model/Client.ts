@@ -9,4 +9,7 @@ export interface Client {
   birthday: string;
   clientCategoryId: number;
   clientCategoryTypeName: string;
+  clientCategoryDiscountType: string;
+  clientCategoryDiscount: number;
+  clientCategoryTotalRequire: number;
 }

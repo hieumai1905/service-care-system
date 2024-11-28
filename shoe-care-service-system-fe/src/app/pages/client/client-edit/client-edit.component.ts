@@ -34,7 +34,7 @@ export class ClientEditComponent implements OnInit {
   ) {
     this.clientForm = this.formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
-      tel: [''],
+      tel: ['', [Validators.required]],
       createAt: [new Date()],
       email: [''],
       address: ['', [Validators.required]],
