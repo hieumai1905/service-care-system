@@ -15,35 +15,37 @@
               <a class="btn btn-gradient-primary" [routerLink]="['/coupons/add']">Thêm chương trình giảm giá</a>
             </div>
           </div>
-          <table class="table table-striped mt-5">
-            <thead>
-            <tr>
-              <th>TÊN CHƯƠNG TRÌNH</th>
-              <th>NGÀY HẾT HẠN</th>
-              <th>TRẠNG THÁI</th>
-              <th>CHỨC NĂNG</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let coupon of coupons | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
-              <td class="py-1">{{ coupon.title }}</td>
-              <td>{{ coupon.expireAt | date: 'dd/MM/yyyy' }}</td>
-              <td>
+          <div class="table-responsive">
+            <table class="table table-striped mt-5">
+              <thead>
+              <tr>
+                <th>TÊN CHƯƠNG TRÌNH</th>
+                <th>NGÀY HẾT HẠN</th>
+                <th>TRẠNG THÁI</th>
+                <th>CHỨC NĂNG</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let coupon of coupons | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+                <td class="py-1">{{ coupon.title }}</td>
+                <td>{{ coupon.expireAt | date: 'dd/MM/yyyy' }}</td>
+                <td>
                 <span class="badge" [ngClass]="{'badge-success': coupon.isActive, 'badge-danger': !coupon.isActive}">
                   {{ coupon.isActive ? 'Hoạt động' : 'Ngừng hoạt động' }}
                 </span>
-              </td>
-              <td>
-                <a class="text-center btn btn-sm" [routerLink]="['/coupons/edit', coupon.id]">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a class="text-center btn btn-sm" (click)="deleteCoupon(coupon.id)">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+                </td>
+                <td>
+                  <a class="text-center btn btn-sm" [routerLink]="['/coupons/edit', coupon.id]">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a class="text-center btn btn-sm" (click)="deleteCoupon(coupon.id)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
           <mat-paginator
             [length]="coupons.length"
             [pageSize]="pageSize"

@@ -14,37 +14,39 @@
               <a class="btn btn-gradient-primary" [routerLink]="['/clients/add']">Thêm khách hàng</a>
             </div>
           </div>
-          <table class="table table-striped mt-5">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>TÊN KHÁCH HÀNG</th>
-              <th>EMAIL</th>
-              <th>SỐ ĐIỆN THOẠI</th>
-              <th>ĐỊA CHỈ</th>
-              <th>LOẠI KHÁCH HÀNG</th>
-              <th>CHỨC NĂNG</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let client of clients | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
-              <td>{{ client.id }}</td>
-              <td class="py-1">{{ client.name }}</td>
-              <td>{{ client.email }}</td>
-              <td>{{ client.tel }}</td>
-              <td>{{ client.address }}</td>
-              <td>{{ client.clientCategoryTypeName }}</td>
-              <td>
-                <a class="text-center btn btn-sm" [routerLink]="['/clients/edit', client.id]">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a class="text-center btn btn-sm" (click)="deleteClient(client.id)">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-striped mt-5">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>TÊN KHÁCH HÀNG</th>
+                <th>EMAIL</th>
+                <th>SỐ ĐIỆN THOẠI</th>
+                <th>ĐỊA CHỈ</th>
+                <th>LOẠI KHÁCH HÀNG</th>
+                <th>CHỨC NĂNG</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let client of clients | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+                <td>{{ client.id }}</td>
+                <td class="py-1">{{ client.name }}</td>
+                <td>{{ client.email }}</td>
+                <td>{{ client.tel }}</td>
+                <td>{{ client.address }}</td>
+                <td>{{ client.clientCategoryTypeName }}</td>
+                <td>
+                  <a class="text-center btn btn-sm" [routerLink]="['/clients/edit', client.id]">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a class="text-center btn btn-sm" (click)="deleteClient(client.id)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
           <mat-paginator
             [length]="clients.length"
             [pageSize]="pageSize"

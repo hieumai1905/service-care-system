@@ -1,9 +1,6 @@
 package com.example.identityservice.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -23,6 +20,6 @@ public class Role {
 
     String description;
 
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role")
     Set<Permission> permissions;
 }

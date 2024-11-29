@@ -12,37 +12,39 @@
                 hàng</a>
             </div>
           </div>
-          <table class="table table-striped mt-5">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>PHÂN LOẠI</th>
-              <th>TRẠNG THÁI</th>
-              <th>CHỨC NĂNG</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr
-              *ngFor="let category of clientCategories | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
-              <td>{{ category.id }}</td>
-              <td>{{ category.typeName }}</td>
-              <td>
+          <div class="table-responsive">
+            <table class="table table-striped mt-5">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>PHÂN LOẠI</th>
+                <th>TRẠNG THÁI</th>
+                <th>CHỨC NĂNG</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr
+                *ngFor="let category of clientCategories | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+                <td>{{ category.id }}</td>
+                <td>{{ category.typeName }}</td>
+                <td>
                 <span class="badge"
                       [ngClass]="{'badge-success': category.isActive, 'badge-danger': !category.isActive}">
                   {{ category.isActive ? 'Đang hoạt động' : 'Không hoạt động' }}
                 </span>
-              </td>
-              <td>
-                <a class="text-center btn btn-sm" [routerLink]="['/client-categories/edit', category.id]">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a class="text-center btn btn-sm" (click)="deleteClientCategory(category.id)">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+                </td>
+                <td>
+                  <a class="text-center btn btn-sm" [routerLink]="['/client-categories/edit', category.id]">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a class="text-center btn btn-sm" (click)="deleteClientCategory(category.id)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
           <mat-paginator
             [length]="clientCategories.length"
             [pageSize]="pageSize"

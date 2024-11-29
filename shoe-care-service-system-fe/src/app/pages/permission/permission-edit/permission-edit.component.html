@@ -21,6 +21,17 @@
                 <small *ngIf="permissionForm.get('description')?.errors?.['required']">Mô tả là bắt buộc.</small>
               </div>
             </div>
+            <div class="form-group">
+              <label for="role">Vai trò</label>
+              <select class="form-control text-dark" id="role" formControlName="role">
+                <option value="">Chọn vai trò</option>
+                <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+              </select>
+              <div *ngIf="permissionForm.get('role')?.touched && permissionForm.get('role')?.invalid"
+                   class="text-danger">
+                <small *ngIf="permissionForm.get('role')?.errors?.['required']">Vai trò là bắt buộc.</small>
+              </div>
+            </div>
             <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="permissionForm.invalid">Cập Nhật Quyền Hạn</button>
             <button class="btn btn-light" routerLink="/permissions">Quay lại</button>
           </form>

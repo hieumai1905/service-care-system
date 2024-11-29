@@ -11,26 +11,28 @@
               <button class="btn btn-gradient-primary" (click)="searchCouponItem()">Lọc</button>
             </div>
           </div>
-          <table class="table table-striped mt-5">
-            <thead>
-            <tr>
-              <th>MÃ GIẢM GIÁ</th>
-              <th>TÊN CHƯƠNG TRÌNH</th>
-              <th>TRẠNG THÁI</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let item of couponItems | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
-              <td class="py-1">{{ item.code }}</td>
-              <td>{{ item.coupon.title }}</td>
-              <td>
+          <div class="table-responsive">
+            <table class="table table-striped mt-5">
+              <thead>
+              <tr>
+                <th>MÃ GIẢM GIÁ</th>
+                <th>TÊN CHƯƠNG TRÌNH</th>
+                <th>TRẠNG THÁI</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let item of couponItems | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+                <td class="py-1">{{ item.code }}</td>
+                <td>{{ item.coupon.title }}</td>
+                <td>
                   <span class="badge" [ngClass]="{'badge-danger': !item.active, 'badge-success': item.active}">
                     {{ item.active ? 'Đã sử dụng' : 'Chưa sử dụng' }}
                   </span>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
           <mat-paginator
             [length]="couponItems.length"
             [pageSize]="pageSize"

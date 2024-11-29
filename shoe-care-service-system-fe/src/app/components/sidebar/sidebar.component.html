@@ -15,7 +15,7 @@
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" *ngIf="currentUser.role.name == 'ADMIN'">
       <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <span class="menu-title">Cấu hình</span>
         <i class="menu-arrow"></i>
@@ -48,33 +48,27 @@
             <a class="nav-link" [routerLink]="['/coupons/items']">Tất cả mã Voucher</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="pages/ui-features/buttons.html">Cấu hình chung</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/ui-features/dropdowns.html">Thời gian ship</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" [routerLink]="['/shipping-provinces']">Phí ship theo tỉnh</a>
           </li>
         </ul>
       </div>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
-        <span class="menu-title">Quản lý đơn hàng</span>
-        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-      </a>
-      <div class="collapse" id="icons">
-        <ul class="nav flex-column sub-menu">
-          <li class="nav-item">
-            <a class="nav-link" href="pages/icons/font-awesome.html">Tất cả đơn hàng</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="pages/icons/fonst-awesome.html">Thêm đơn hàng</a>
-          </li>
-        </ul>
-      </div>
-    </li>
+<!--    <li class="nav-item">-->
+<!--      <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">-->
+<!--        <span class="menu-title">Quản lý đơn hàng</span>-->
+<!--        <i class="mdi mdi-format-list-bulleted menu-icon"></i>-->
+<!--      </a>-->
+<!--      <div class="collapse" id="icons">-->
+<!--        <ul class="nav flex-column sub-menu">-->
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="pages/icons/font-awesome.html">Tất cả đơn hàng</a>-->
+<!--          </li>-->
+<!--          <li class="nav-item">-->
+<!--            <a class="nav-link" href="pages/icons/fonst-awesome.html">Thêm đơn hàng</a>-->
+<!--          </li>-->
+<!--        </ul>-->
+<!--      </div>-->
+<!--    </li>-->
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#iconsn" aria-expanded="false" aria-controls="icons">
         <span class="menu-title">Quản lý mua hàng</span>
@@ -97,7 +91,7 @@
         </ul>
       </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" *ngIf="currentUser.role.name == 'ADMIN'">
       <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
         <span class="menu-title">Quản lý người dùng</span>
         <i class="mdi mdi-contacts menu-icon"></i>
@@ -138,7 +132,7 @@
         </ul>
       </div>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" *ngIf="currentUser.role.name == 'ADMIN'">
       <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
         <span class="menu-title">Báo cáo</span>
         <i class="mdi mdi-table-large menu-icon"></i>
