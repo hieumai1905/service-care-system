@@ -35,4 +35,26 @@ export class OrderService {
   searchOrder(searchKey: string) {
     return this.http.get<any>(`${this.apiUrl}/search?q=${searchKey}`);
   }
+
+  revenueByDay(date: Date): Observable<any> {
+    const formattedDate = this.formatDateToISO(date);
+    return this.http.get<any>(`${this.apiUrl}/revenue?date=${formattedDate}`);
+  }
+
+  revenueByWeek(date: Date): Observable<any> {
+    const formattedDate = this.formatDateToISO(date);
+    return this.http.get<any>(`${this.apiUrl}/revenue/week?date=${formattedDate}`);
+  }
+
+  completeRadio(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/completion-ratio`);
+  }
+
+  private formatDateToISO(date: Date): string {
+    return date.toLocaleDateString('sv-SE');
+  }
+
+  getLatestOrders() {
+    return this.http.get<any>(`${this.apiUrl}/latest`);
+  }
 }

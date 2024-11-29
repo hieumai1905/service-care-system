@@ -1,0 +1,23 @@
+.status-completed {
+  color: green;
+  font-weight: bold;
+}
+
+.status-canceled {
+  color: red;
+  font-weight: bold;
+}
+
+.status-refunded {
+  color: orange;
+  font-weight: bold;
+}
+
+.status-deleted {
+  color: gray;
+  font-weight: bold;
+}
+
+.table-responsive{
+  margin-top: -40px;
+}

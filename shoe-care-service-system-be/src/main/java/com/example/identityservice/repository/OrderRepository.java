@@ -1,6 +1,7 @@
 package com.example.identityservice.repository;
 
 import com.example.identityservice.entity.Order;
+import com.example.identityservice.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,10 +14,10 @@ import java.util.List;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-   @Query("select o from Order o where (:keyWord is null or lower(o.client.name) like %:keyWord% " +
-           "    or lower(o.user.fullName) like %:keyWord% ) " +
-           "and (:orderDate is null or o.createdAt >= :orderDate)")
-   Page<Order> search(String keyWord, Date orderDate, Pageable pageable);
+    @Query("select o from Order o where (:keyWord is null or lower(o.client.name) like %:keyWord% " +
+            "    or lower(o.user.fullName) like %:keyWord% ) " +
+            "and (:orderDate is null or o.createdAt >= :orderDate)")
+    Page<Order> search(String keyWord, Date orderDate, Pageable pageable);
 
     @Query("SELECT o FROM Order o " +
             "WHERE (:keyWord IS NULL OR " +
@@ -26,4 +27,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "   OR CAST(o.client.id AS string) LIKE CONCAT('%', :keyWord, '%') " +
             "   OR CAST(o.user.id AS string) LIKE CONCAT('%', :keyWord, '%'))")
     List<Order> searchOrderByKeyword(@Param("keyWord") String keyWord);
+
+    List<Order> findAllByCreatedAtBetweenAndStatus(Date from, Date from1, OrderStatus orderStatus);
+
+    double countByStatus(OrderStatus orderStatus);
 }

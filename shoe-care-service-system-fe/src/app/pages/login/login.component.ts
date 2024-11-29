@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {AuthService} from "../../services/auth.service";
 import {NgIf} from "@angular/common";
 import {Router} from "@angular/router";
+import {DialogService} from "../../services/dialog.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,12 @@ import {Router} from "@angular/router";
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router,
+    private dialogService: DialogService
+  ) {
   }
 
   ngOnInit(): void {
@@ -35,9 +41,14 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         },
         (error: any) => {
-          console.error('Login failed:', error);
+          if (error.error.code == 1005) {
+            this.dialogService.notificationOpen('Thông báo', 'Tài khoản hoặc mật khẩu không chính xác');
+          } else {
+            this.dialogService.notificationOpen('Thông báo', 'Đã có lỗi xảy ra, vui lòng thử lại sau');
+          }
         }
-      );
+      )
+      ;
     }
   }
 }

@@ -24,7 +24,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -179,5 +183,45 @@ public class OrderService {
         Order order = getExistingOrder(id);
         orderRepository.delete(order);
         return order.getId();
+    }
+
+    @Transactional(readOnly = true)
+    public double calculateDailyRevenue(Date date) {
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        Instant startOfDay = localDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
+        Instant endOfDay = localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
+
+        List<Order> orders = orderRepository.findAllByCreatedAtBetweenAndStatus(
+                Date.from(startOfDay), Date.from(endOfDay), OrderStatus.COMPLETED
+        );
+
+        return orders.stream()
+                .mapToDouble(order -> order.getTotal() - (order.getDiscount() != null ? order.getDiscount() : 0))
+                .sum();
+    }
+
+    public double calculateWeeklyRevenue(Date startOfWeek, Date endOfWeek) {
+        List<Order> orders = orderRepository.findAllByCreatedAtBetweenAndStatus(
+                startOfWeek, endOfWeek, OrderStatus.COMPLETED
+        );
+
+        return orders.stream()
+                .mapToDouble(order -> order.getTotal() - (order.getDiscount() != null ? order.getDiscount() : 0))
+                .sum();
+    }
+
+    public double getTotalOrders() {
+        return orderRepository.count();
+    }
+
+    public double getCompletedOrders() {
+        return orderRepository.countByStatus((OrderStatus.COMPLETED));
+    }
+
+    public List<UpdateOrderRequest> getLatestOrders() {
+        List<Order> orders = orderRepository.findAll();
+        orders.sort(Comparator.comparing(Order::getCreatedAt).reversed());
+        return ConvertUtils.convertList(orders.subList(0, Math.min(orders.size(), 5)), UpdateOrderRequest.class);
     }
 }
