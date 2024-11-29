@@ -9,7 +9,7 @@
         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
       </a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item" *ngIf="currentUser.role.name == 'ADMIN'">
       <a class="nav-link" href="index.html">
         <span class="menu-title">Dashboard</span>
         <i class="mdi mdi-home menu-icon"></i>
