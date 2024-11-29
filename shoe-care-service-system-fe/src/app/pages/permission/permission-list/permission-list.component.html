@@ -15,19 +15,24 @@
             <thead>
             <tr>
               <th> TÊN QUYỀN</th>
+              <th> VAI TRÒ</th>
               <th> MÔ TẢ</th>
-              <th> CHỨC NĂNG</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let permission of permissions | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
               <td class="py-1">{{ permission.name }}</td>
+              <td class="py-1">{{ permission.roleName }}</td>
               <td>{{ permission.description }}</td>
               <td>
-                <a class="text-center btn btn-sm" [routerLink]="['/permissions/edit', permission.name]">
+                <a class="text-center btn btn-sm" [routerLink]="['/permissions/edit', permission.name]"
+                   *ngIf="permission.name !== 'CONFIGURATION' && permission.name !== 'USER MANAGEMENT' && permission.name !== 'REPORT'"
+                >
                   <i class="fa fa-edit"></i>
                 </a>
-                <a class="text-center btn btn-sm" (click)="deletePermission(permission.name)">
+                <a class="text-center btn btn-sm" (click)="deletePermission(permission.name)"
+                   *ngIf="permission.name !== 'CONFIGURATION' && permission.name !== 'USER MANAGEMENT' && permission.name !== 'REPORT'"
+                >
                   <i class="fa fa-trash"></i>
                 </a>
               </td>

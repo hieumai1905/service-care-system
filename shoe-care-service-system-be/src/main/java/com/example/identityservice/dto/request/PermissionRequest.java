@@ -13,5 +13,6 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class PermissionRequest {
     String name;
+    String roleName;
     String description;
 }

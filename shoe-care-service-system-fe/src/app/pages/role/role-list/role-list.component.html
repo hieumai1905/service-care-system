@@ -16,7 +16,6 @@
             <tr>
               <th> TÊN VAI TRÒ</th>
               <th> MÔ TẢ</th>
-              <th> CHỨC NĂNG</th>
             </tr>
             </thead>
             <tbody>
@@ -24,11 +23,12 @@
               <td class="py-1">{{ role.name }}</td>
               <td>{{ role.description }}</td>
               <td>
-                <a class="text-center btn btn-sm"
+                <a class="text-center btn btn-sm" *ngIf="role.name !== 'ADMIN' && role.name !== 'USER'"
                    [routerLink]="['/roles/edit', role.name]">
                   <i class="fa fa-edit"></i>
                 </a>
-                <a class="text-center btn btn-sm" (click)="deleteRole(role.name)">
+                <a class="text-center btn btn-sm" *ngIf="role.name !== 'ADMIN' && role.name !== 'USER'"
+                   (click)="deleteRole(role.name)">
                   <i class="fa fa-trash"></i>
                 </a>
               </td>

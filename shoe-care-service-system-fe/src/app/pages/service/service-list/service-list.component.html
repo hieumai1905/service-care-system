@@ -14,44 +14,46 @@
               <a class="btn btn-gradient-primary" [routerLink]="['/shoe-services/add']">Thêm dịch vụ</a>
             </div>
           </div>
-          <table class="table table-striped mt-5">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>TÊN DỊCH VỤ</th>
-              <th>MÃ DỊCH VỤ</th>
-              <th>GIÁ DỊCH VỤ</th>
-              <th>THƯƠNG HIỆU</th>
-              <th>TRẠNG THÁI</th>
-              <th>LOẠI DỊCH VỤ</th>
-              <th>CHỨC NĂNG</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr *ngFor="let service of services | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
-              <td>{{ service.id }}</td>
-              <td>{{ service.name }}</td>
-              <td>{{ service.serviceCode }}</td>
-              <td>{{ service.price | currency: "VND" }}</td>
-              <td>{{ service.brandName }}</td>
-              <td>
+          <div class="table-responsive">
+            <table class="table table-striped mt-5">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>TÊN DỊCH VỤ</th>
+                <th>MÃ DỊCH VỤ</th>
+                <th>GIÁ DỊCH VỤ</th>
+                <th>THƯƠNG HIỆU</th>
+                <th>TRẠNG THÁI</th>
+                <th>LOẠI DỊCH VỤ</th>
+                <th>CHỨC NĂNG</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let service of services | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+                <td>{{ service.id }}</td>
+                <td>{{ service.name }}</td>
+                <td>{{ service.serviceCode }}</td>
+                <td>{{ service.price | currency: "VND" }}</td>
+                <td>{{ service.brandName }}</td>
+                <td>
                   <span class="badge"
                         [ngClass]="{'badge-danger': !service.isActive, 'badge-success': service.isActive}">
                     {{ service.isActive ? 'Đang hoat động' : 'Dừng phục vụ' }}
                   </span>
-              </td>
-              <td>{{ service.categoryServiceName }}</td>
-              <td>
-                <a class="text-center btn btn-sm" [routerLink]="['/shoe-services/edit', service.id]">
-                  <i class="fa fa-edit"></i>
-                </a>
-                <a class="text-center btn btn-sm" (click)="deleteService(service.id)">
-                  <i class="fa fa-trash"></i>
-                </a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
+                </td>
+                <td>{{ service.categoryServiceName }}</td>
+                <td>
+                  <a class="text-center btn btn-sm" [routerLink]="['/shoe-services/edit', service.id]">
+                    <i class="fa fa-edit"></i>
+                  </a>
+                  <a class="text-center btn btn-sm" (click)="deleteService(service.id)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
           <mat-paginator
             [length]="services.length"
             [pageSize]="pageSize"

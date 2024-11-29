@@ -22,6 +22,8 @@ export class UserEditComponent implements OnInit {
   userForm: FormGroup;
   message: string = '';
   userId: string = '';
+  username: string = '';
+  userEdit: any;
   roles: Array<{ name: string, description: string }> = [];
 
   constructor(
@@ -41,7 +43,6 @@ export class UserEditComponent implements OnInit {
       ],
       password: [
         '', [
-          Validators.required,
           Validators.minLength(8),
           Validators.pattern(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/)]
       ],
@@ -85,6 +86,15 @@ export class UserEditComponent implements OnInit {
         this.loadUser(this.userId);
       }
     });
+
+    this.userService.getProfile().subscribe({
+      next: (data) => {
+        this.username = data.result.username;
+      },
+      error: (err) => {
+        console.error('Error when load profile:', err);
+      }
+    });
   }
 
   loadRoles() {
@@ -103,6 +113,7 @@ export class UserEditComponent implements OnInit {
     this.userService.findById(id).subscribe({
       next: (data) => {
         const user = data.result;
+        this.userEdit = user;
         this.userForm.patchValue({
           username: user.username,
           password: '',
@@ -123,6 +134,10 @@ export class UserEditComponent implements OnInit {
   onSubmit() {
     if (this.userForm.valid) {
       const updatedUser = this.userForm.getRawValue();
+      if (this.username === this.userEdit.username) {
+        updatedUser.isActive = this.userEdit.isActive;
+        updatedUser.role = this.userEdit.role.name;
+      }
       this.userService.updateUser(this.userId, updatedUser).subscribe({
         next: () => {
           this.dialogService.notificationOpen('Thông báo', 'Cập nhật người dùng thành công!', 'OK');

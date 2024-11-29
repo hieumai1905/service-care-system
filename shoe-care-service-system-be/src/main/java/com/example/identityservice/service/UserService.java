@@ -21,6 +21,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -81,8 +82,13 @@ public class UserService {
 
     public UserResponse updateUser(String id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        String oldPassword = user.getPassword();
         userMapper.userUpdateRequestToUser(request, user);
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        if(!Objects.equals(request.getPassword(), "")) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }else{
+            user.setPassword(oldPassword);
+        }
 
         if (request.getRole() != null) {
             Role role = roleRepository

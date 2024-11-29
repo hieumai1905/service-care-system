@@ -51,23 +51,25 @@
                 <small *ngIf="userForm.get('phone')?.errors?.['pattern']">Số điện thoại không hợp lệ.</small>
               </div>
             </div>
-            <div class="form-group">
-              <label for="isActive">Active</label>
-              <select class="form-control text-dark" id="isActive" formControlName="isActive">
-                <option [value]="true">Hoạt động</option>
-                <option [value]="false">Không hoạt động</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="role">Vai trò</label>
-              <select class="form-control text-dark" id="role" formControlName="role">
-                <option value="">Chọn vai trò</option>
-                <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
-              </select>
-              <div *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid" class="text-danger">
-                <small *ngIf="userForm.get('role')?.errors?.['required']">Vai trò là bắt buộc.</small>
+            <ng-container *ngIf="username !== userEdit.username">
+              <div class="form-group">
+                <label for="isActive">Active</label>
+                <select class="form-control text-dark" id="isActive" formControlName="isActive">
+                  <option [value]="true">Hoạt động</option>
+                  <option [value]="false">Không hoạt động</option>
+                </select>
               </div>
-            </div>
+              <div class="form-group">
+                <label for="role">Vai trò</label>
+                <select class="form-control text-dark" id="role" formControlName="role">
+                  <option value="">Chọn vai trò</option>
+                  <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+                </select>
+                <div *ngIf="userForm.get('role')?.touched && userForm.get('role')?.invalid" class="text-danger">
+                  <small *ngIf="userForm.get('role')?.errors?.['required']">Vai trò là bắt buộc.</small>
+                </div>
+              </div>
+            </ng-container>
             <button type="submit" class="btn btn-gradient-primary me-2" [disabled]="userForm.invalid">Cập nhật</button>
             <button class="btn btn-light" routerLink="/users">Quay lại</button>
           </form>

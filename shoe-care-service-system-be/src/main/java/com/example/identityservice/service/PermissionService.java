@@ -7,6 +7,8 @@ import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
 import com.example.identityservice.mapper.PermissionMapper;
 import com.example.identityservice.repository.PermissionRepository;
+import com.example.identityservice.repository.RoleRepository;
+import com.example.identityservice.utils.ConvertUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,8 @@ public class PermissionService {
 
     PermissionMapper permissionMapper;
 
+    RoleRepository roleRepository;
+
     public PermissionResponse create(PermissionRequest request) {
         Optional<Permission> permissionExits = permissionRepository.findByName(request.getName());
         if (permissionExits.isPresent()) {
@@ -30,6 +34,9 @@ public class PermissionService {
 
         Permission permission = permissionMapper.toEntity(request);
         permission.setName(request.getName().toUpperCase());
+
+        permission.setRole(roleRepository.findById(request.getRoleName()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)));
+
         permission = permissionRepository.save(permission);
 
         return permissionMapper.toPermissionResponse(permission);
@@ -38,7 +45,7 @@ public class PermissionService {
     public List<PermissionResponse> getAll() {
         List<Permission> permissions = permissionRepository.findAll();
 
-        return permissions.stream().map(permissionMapper::toPermissionResponse).toList();
+        return ConvertUtils.convertList(permissions, PermissionResponse.class);
     }
 
     public void delete(String name) {
@@ -54,6 +61,7 @@ public class PermissionService {
                 .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
 
         permission.setDescription(request.getDescription());
+        permission.setRole(roleRepository.findById(request.getRoleName()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_EXISTED)));
         permission = permissionRepository.save(permission);
 
         return permissionMapper.toPermissionResponse(permission);
@@ -63,6 +71,6 @@ public class PermissionService {
         Permission permission = permissionRepository.findById(name)
                 .orElseThrow(() -> new AppException(ErrorCode.PERMISSION_NOT_EXISTED));
 
-        return permissionMapper.toPermissionResponse(permission);
+        return ConvertUtils.convert(permission, PermissionResponse.class);
     }
 }
