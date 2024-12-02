@@ -1,0 +1,30 @@
+.container {
+  margin: 20px;
+}
+
+h2 {
+  color: #007bff;
+}
+
+.client-info, .report-summary, .report-chart {
+  background-color: #f9f9f9;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+table th {
+  background-color: #f1f1f1;
+}

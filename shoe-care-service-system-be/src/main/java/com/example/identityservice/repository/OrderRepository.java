@@ -31,4 +31,24 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<Order> findAllByCreatedAtBetweenAndStatus(Date from, Date from1, OrderStatus orderStatus);
 
     double countByStatus(OrderStatus orderStatus);
+
+    @Query("SELECT DATE(o.createdAt) AS date, SUM(o.total - o.discount) AS totalRevenue " +
+            "FROM Order o " +
+            "WHERE o.createdAt BETWEEN :startDate AND :endDate AND o.status = 'COMPLETED' " +
+            "GROUP BY DATE(o.createdAt) " +
+            "ORDER BY DATE(o.createdAt)")
+    List<Object[]> getRevenueByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+
+    @Query("SELECT DATE(o.createdAt) AS date, SUM(o.total - o.discount) AS totalRevenue " +
+            "FROM Order o " +
+            "WHERE o.createdAt >= :startDate AND o.createdAt < :endDate AND o.status = 'COMPLETED' " +
+            "GROUP BY DATE(o.createdAt) " +
+            "ORDER BY DATE(o.createdAt)")
+    List<Object[]> getLastSevenDaysRevenue(@Param("startDate") Date startDate, @Param("endDate") Date endDate);
+
+    @Query("SELECT o FROM Order o WHERE o.client.id = :clientId")
+    List<Order> findOrdersByClientId(Long clientId);
+
+    List<Order> findAllByClientId(Long clientId);
 }
