@@ -3,13 +3,16 @@ package com.example.identityservice.service;
 import com.example.identityservice.dto.request.CreateClientRequest;
 import com.example.identityservice.dto.request.SearchClientRequest;
 import com.example.identityservice.dto.request.UpdateClientRequest;
+import com.example.identityservice.dto.response.ReportClientResponse;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.entity.Client;
 import com.example.identityservice.entity.ClientCategory;
+import com.example.identityservice.entity.Order;
 import com.example.identityservice.exception.AppException;
 import com.example.identityservice.exception.ErrorCode;
 import com.example.identityservice.repository.ClientCategoryRepository;
 import com.example.identityservice.repository.ClientRepository;
+import com.example.identityservice.repository.OrderRepository;
 import com.example.identityservice.utils.ConvertUtils;
 import com.example.identityservice.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +30,9 @@ import java.util.List;
 public class ClientService {
     private ClientRepository clientRepository;
     private ClientCategoryRepository clientCategoryRepository;
+    OrderRepository orderRepository;
 
-    public UpdateClientRequest createClient(CreateClientRequest request){
+    public UpdateClientRequest createClient(CreateClientRequest request) {
 //        request.validateInput();
         ClientCategory clientCategory = getExistClientCategory(request.getClientCategoryId());
         Client client = ConvertUtils.convert(request, Client.class);
@@ -38,7 +42,7 @@ public class ClientService {
         return ConvertUtils.convert(client, UpdateClientRequest.class);
     }
 
-    public Long updateClient(UpdateClientRequest request){
+    public Long updateClient(UpdateClientRequest request) {
 //        request.validateInput();
         Client existingClient = getExistClient(request.getId());
         ClientCategory clientCategory = getExistClientCategory(request.getClientCategoryId());
@@ -55,22 +59,22 @@ public class ClientService {
         return existingClient.getId();
     }
 
-    public void deleteClient(Long id){
+    public void deleteClient(Long id) {
         Client existingClient = getExistClient(id);
-        try{
+        try {
             clientRepository.delete(existingClient);
-        }catch(Exception ex){
+        } catch (Exception ex) {
             throw new AppException(ErrorCode.CLIENT_IN_USE);
         }
     }
 
-    public SearchResponse<UpdateClientRequest> searchClient(SearchClientRequest request){
+    public SearchResponse<UpdateClientRequest> searchClient(SearchClientRequest request) {
         request.validateInput();
 
         Page<Client> clients = clientRepository.search(
-            request.getKeyWord(),
-            request.getClientCategoryId(),
-            PaginationUtils.getPageable(request.getPageIndex(), request.getPageSize())
+                request.getKeyWord(),
+                request.getClientCategoryId(),
+                PaginationUtils.getPageable(request.getPageIndex(), request.getPageSize())
         );
 
         SearchResponse<UpdateClientRequest> response = new SearchResponse<>();
@@ -106,5 +110,40 @@ public class ClientService {
 
     public UpdateClientRequest findById(Long id) {
         return ConvertUtils.convert(getExistClient(id), UpdateClientRequest.class);
+    }
+
+    public ReportClientResponse getReport(Long clientId) {
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(() -> new RuntimeException("Client not found"));
+
+        List<Order> orders = orderRepository.findOrdersByClientId(clientId);
+
+            Double totalPaid = 0.0;
+        Long countOrder = (long) orders.size();
+        Double minPaid = Double.MAX_VALUE;
+        Double maxPaid = Double.MIN_VALUE;
+
+        for (Order order : orders) {
+            Double orderTotal = order.getTotal();
+            totalPaid += orderTotal;
+
+            if (orderTotal < minPaid) {
+                minPaid = orderTotal;
+            }
+            if (orderTotal > maxPaid) {
+                maxPaid = orderTotal;
+            }
+        }
+
+        if (minPaid == Double.MAX_VALUE) {
+            minPaid = 0.0;
+        }
+
+        return ReportClientResponse.builder()
+                .totalPaid(totalPaid)
+                .countOrder(countOrder)
+                .minPaid(minPaid)
+                .maxPaid(maxPaid)
+                .build();
     }
 }

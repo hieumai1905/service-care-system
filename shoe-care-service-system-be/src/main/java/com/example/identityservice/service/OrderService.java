@@ -20,16 +20,17 @@ import com.example.identityservice.utils.PaginationUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -223,5 +224,44 @@ public class OrderService {
         List<Order> orders = orderRepository.findAll();
         orders.sort(Comparator.comparing(Order::getCreatedAt).reversed());
         return ConvertUtils.convertList(orders.subList(0, Math.min(orders.size(), 5)), UpdateOrderRequest.class);
+    }
+
+    public List<Map<String, Double>> getLastSevenDaysRevenue() {
+        Calendar calendar = Calendar.getInstance();
+        Date endDate = calendar.getTime();
+        calendar.add(Calendar.DAY_OF_MONTH, -7);
+        Date startDate = calendar.getTime();
+
+        List<Object[]> results = orderRepository.getLastSevenDaysRevenue(startDate, endDate);
+        return getMaps(results);
+    }
+
+
+    public List<Map<String, Double>> getRevenueByCustomDateRange(Date startDate, Date endDate) {
+        List<Object[]> results = orderRepository.getRevenueByDateRange(startDate, endDate);
+        return getMaps(results);
+    }
+
+    @NotNull
+    private List<Map<String, Double>> getMaps(List<Object[]> results) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        List<Map<String, Double>> revenueList = new ArrayList<>();
+
+        for (Object[] result : results) {
+            Map<String, Double> revenueMap = new HashMap<>();
+            String date = sdf.format((Date) result[0]);
+            Double revenue = (Double) result[1];
+            revenueMap.put(date, revenue);
+            revenueList.add(revenueMap);
+        }
+
+        return revenueList;
+    }
+
+    public List<UpdateOrderRequest> getOrdersByClientId(Long clientId) {
+        List<Order> orders = orderRepository.findAllByClientId(clientId);
+         orders.sort(Comparator.comparing(Order::getCreatedAt).reversed());
+        return ConvertUtils.convertList(orders, UpdateOrderRequest.class);
     }
 }

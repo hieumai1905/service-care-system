@@ -1,0 +1,64 @@
+<div class="content-wrapper">
+    <div class="row mt-3">
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body" *ngIf="client && report">
+                    <h2>Báo cáo khách hàng: {{ client.name }}</h2>
+
+                    <!-- Thông tin khách hàng -->
+                    <div class="client-info">
+                        <p><strong>Mã KH:</strong> {{ client.id }}</p>
+                        <p><strong>Tên:</strong> {{ client.name }}</p>
+                        <p><strong>Số điện thoại:</strong> {{ client.tel }}</p>
+                        <p><strong>Email:</strong> {{ client.email }}</p>
+                        <p><strong>Ngày sinh:</strong> {{ client.birthday | date: 'dd/MM/yyyy' }}</p>
+                        <p><strong>Địa chỉ:</strong> {{ client.address }}</p>
+                        <p><strong>Phân loại khách hàng:</strong> {{ client.clientCategoryTypeName }}</p>
+                    </div>
+
+                    <h3>Thống kê chi tiêu</h3>
+                    <div class="report-summary">
+                        <p><strong>Tổng chi tiêu:</strong> {{ report.totalPaid | number: '1.0-0' }} VND</p>
+                        <p><strong>Chi tiêu cao nhất:</strong> {{ report.maxPaid | number: '1.0-0' }} VND</p>
+                        <p><strong>Chi tiêu thấp nhất:</strong> {{ report.minPaid | number: '1.0-0' }} VND</p>
+                        <p><strong>Số lần giao dịch:</strong> {{ report?.countOrder }}</p>
+                    </div>
+
+                    <div class="table-responsive">
+                        <h3>Lịch sử giao dịch</h3>
+                        <table class="table table-bordered table-hover">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th>Thời gian</th>
+                                <th>Giá trị đơn hàng</th>
+                                <th>Mã nhân viên</th>
+                                <th>Tên nhân viên</th>
+                                <th>Trạng thái</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let order of orderHistory | slice:(pageIndex * pageSize):(pageIndex * pageSize + pageSize)">
+                                <td class="py-1">{{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                                <td class="py-1">{{ order.total | number: '1.0-0' }} VND</td>
+                                <td class="py-1">{{ order.userId }}</td>
+                                <td class="py-1">{{ order.userFullName }}</td>
+                                <td class="py-1" [ngClass]="getStatusClass(order.status)">
+                                    {{ getStatus(order.status) }}
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Paginator -->
+                    <mat-paginator
+                            [length]="orderHistory.length"
+                            [pageSize]="pageSize"
+                            [pageSizeOptions]="[5, 10, 25, 100]"
+                            (page)="onPageChange($event)">
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -4,6 +4,7 @@ import com.example.identityservice.dto.ApiResponse;
 import com.example.identityservice.dto.request.CreateClientRequest;
 import com.example.identityservice.dto.request.SearchClientRequest;
 import com.example.identityservice.dto.request.UpdateClientRequest;
+import com.example.identityservice.dto.response.ReportClientResponse;
 import com.example.identityservice.dto.response.SearchResponse;
 import com.example.identityservice.service.ClientService;
 import jakarta.validation.Valid;
@@ -70,6 +71,13 @@ public class ClientController {
     public ApiResponse<List<UpdateClientRequest>> searchClients(@RequestParam String q) {
         return ApiResponse.<List<UpdateClientRequest>>builder()
                 .result(clientService.searchClients(q))
+                .build();
+    }
+
+    @GetMapping("report/{clientId}")
+    public ApiResponse<ReportClientResponse> searchClients(@PathVariable Long clientId) {
+        return ApiResponse.<ReportClientResponse>builder()
+                .result(clientService.getReport(clientId))
                 .build();
     }
 }

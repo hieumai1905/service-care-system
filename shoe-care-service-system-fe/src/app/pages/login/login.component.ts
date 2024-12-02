@@ -41,7 +41,8 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         },
         (error: any) => {
-          if (error.error.code == 1005) {
+          console.log(error);
+          if (error.error.code == 1005 || error.error.code == 1006) {
             this.dialogService.notificationOpen('Thông báo', 'Tài khoản hoặc mật khẩu không chính xác');
           } else {
             this.dialogService.notificationOpen('Thông báo', 'Đã có lỗi xảy ra, vui lòng thử lại sau');

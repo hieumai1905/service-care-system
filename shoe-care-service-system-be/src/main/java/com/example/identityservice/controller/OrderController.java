@@ -165,4 +165,11 @@ public class OrderController {
                 .result(orderService.searchOrders(q))
                 .build();
     }
+    
+    @GetMapping("client/{clientId}")
+    public ApiResponse<List<UpdateOrderRequest>> getOrdersByClientId(@PathVariable Long clientId) {
+        return ApiResponse.<List<UpdateOrderRequest>>builder()
+                .result(orderService.getOrdersByClientId(clientId))
+                .build();
+    }
 }

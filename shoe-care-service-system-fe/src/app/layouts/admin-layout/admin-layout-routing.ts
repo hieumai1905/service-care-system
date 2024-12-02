@@ -124,14 +124,22 @@ export const AdminLayoutRoutes: Routes = [
         loadChildren: () => import('../../pages/product/product.module').then(m => m.ProductModule)
       },
     ]
-  }
-  ,
+  },
   {
     path: 'orders',
     children: [
       {
         path: '',
         loadChildren: () => import('../../pages/order/order.module').then(m => m.OrderModule)
+      },
+    ]
+  },
+  {
+    path: 'reports',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/report/report.module').then(m => m.ReportModule)
       },
     ]
   }

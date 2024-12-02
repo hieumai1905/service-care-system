@@ -57,4 +57,8 @@ export class OrderService {
   getLatestOrders() {
     return this.http.get<any>(`${this.apiUrl}/latest`);
   }
+
+  getOrdersByClientId(clientId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/client/${clientId}`);
+  }
 }

@@ -27,7 +27,6 @@ import {RouterLink} from "@angular/router";
 export class DashboardComponent implements OnInit {
   revenueToday: number = 0;
   revenueWeek: number = 0;
-  clientNews: Client[] = [];
   orderLatest: Order[] = [];
   revenueTodayGrowthRate: number = 0;
   revenueWeekGrowthRate: number = 0;
@@ -36,7 +35,6 @@ export class DashboardComponent implements OnInit {
   completedOrders: number = 0;
 
   constructor(
-    private clientService: ClientService,
     private orderService: OrderService
   ) {
   }
