@@ -38,7 +38,7 @@ export class OrderDetailComponent implements OnInit {
     this.orderService.findById(this.orderId).subscribe({
       next: (data) => {
         this.orderCurrent = data.result;
-        console.log('Current order:', this.orderCurrent);
+        console.log('Current order:', data.result);
       },
       error: (err) => {
         this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
