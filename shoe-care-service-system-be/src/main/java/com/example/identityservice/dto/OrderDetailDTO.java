@@ -16,4 +16,6 @@ public class OrderDetailDTO {
     String image;
     Double price;
     Integer quantity;
+    String productDetailColorName;
+    String productDetailSizeName;
 }

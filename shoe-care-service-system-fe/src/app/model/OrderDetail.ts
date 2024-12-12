@@ -5,4 +5,6 @@ export interface OrderDetail {
   image: string | null;
   price: number;
   quantity: number;
+  productDetailColorName: string;
+  productDetailSizeName: string;
 }
