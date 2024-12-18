@@ -24,7 +24,7 @@ import {DialogService} from "../../../services/dialog.service";
 export class PermissionListComponent implements OnInit {
   permissions: Array<Permission> = [];
   pageIndex: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 10;
   currentUser: string | null = null;
 
   constructor(

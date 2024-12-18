@@ -54,10 +54,10 @@
     </div>
   </div>
   <div class="row">
-    <div class="col-md-7 grid-margin stretch-card">
+    <div class="col-md-6 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title text-uppercase">đơn hàng gần đây</h4>
+          <h4 class="card-title text-uppercase">Mua hàng gần đây</h4>
           <div class="table-responsive">
             <table class="table table-striped mt-5">
               <thead>
@@ -80,6 +80,42 @@
                 <td class="py-1">{{ order.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
                 <td>
                   <a class="text-center btn btn-sm" [routerLink]="['/orders/detail', order.id]">
+                    <i class="fa fa-eye"></i>
+                  </a>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Đơn hàng gần đây</h4>
+          <div class="table-responsive">
+            <table class="table table-striped mt-5">
+              <thead>
+              <tr>
+                <th>MÃ ĐƠN HÀNG</th>
+                <th>TÊN KHÁCH HÀNG</th>
+                <th>TÊN NHÂN VIÊN</th>
+                <th>TRẠNG THÁI</th>
+                <th>THỜI GIAN TẠO</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let schedule of scheduleLatest">
+                <td class="py-1">{{ schedule.id }}</td>
+                <td class="py-1">{{ schedule.clientName }}</td>
+                <td class="py-1">{{ schedule.userName }}</td>
+                <td class="py-1" [ngClass]="getStatusClassA(schedule.status)">
+                  {{ getStatusA(schedule.status) }}
+                </td>
+                <td class="py-1">{{ schedule.createdAt | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>
+                  <a class="text-center btn btn-sm" [routerLink]="['/schedules/detail', schedule.id]">
                     <i class="fa fa-eye"></i>
                   </a>
                 </td>

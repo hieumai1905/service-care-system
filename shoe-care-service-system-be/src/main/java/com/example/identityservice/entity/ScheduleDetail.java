@@ -4,6 +4,11 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @Entity
 @Table(name = "schedule_details")
@@ -19,30 +24,30 @@ public class ScheduleDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "schedule_detail_id")
     Long id;
-
-//    @Column(name = "size")
-//    String size;
-
-    @Column(name = "description", columnDefinition = "TEXT")
-    String description;
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    
     @JoinColumn(name = "schedule_id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
     Schedule schedule;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "material_id", nullable = false)
-    Material material;
+    @Column(name = "shoe_service")
+    private String shoeServiceAsString;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_id", nullable = false)
-    ShoeService shoeService;
+    public Set<Integer> getShoeService() {
+        if (shoeServiceAsString == null || shoeServiceAsString.isEmpty()) {
+            return new HashSet<>();
+        }
+        return Arrays.stream(shoeServiceAsString.split(","))
+                .map(Integer::parseInt)
+                .collect(Collectors.toSet());
+    }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color_id", nullable = false)
-    Color color;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "size_id", nullable = false)
-    Size _size;
+    public void setShoeService(Set<Integer> shoeService) {
+        if (shoeService == null || shoeService.isEmpty()) {
+            this.shoeServiceAsString = "";
+        } else {
+            this.shoeServiceAsString = shoeService.stream()
+                    .map(String::valueOf)
+                    .collect(Collectors.joining(","));
+        }
+    }
 }

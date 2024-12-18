@@ -4,7 +4,7 @@ import {RouterLink} from '@angular/router';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {DialogService} from '../../../services/dialog.service';
 import {Size} from "../../../model/Size";
-import {NgForOf, SlicePipe} from "@angular/common";
+import {NgForOf, NgIf, SlicePipe} from "@angular/common";
 
 @Component({
   selector: 'app-size-list',
@@ -15,13 +15,14 @@ import {NgForOf, SlicePipe} from "@angular/common";
     MatPaginatorModule,
     RouterLink,
     SlicePipe,
-    NgForOf
+    NgForOf,
+    NgIf
   ]
 })
 export class SizeListComponent implements OnInit {
   sizes: Size[] = [];
   pageIndex: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 10;
 
   constructor(
     private sizeService: SizeService,
@@ -48,6 +49,10 @@ export class SizeListComponent implements OnInit {
   onPageChange(event: PageEvent) {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
+  }
+
+  hasChangeSize(sizeName: string) {
+    return sizeName != 'NO_SIZE';
   }
 
   deleteSize(id: number) {

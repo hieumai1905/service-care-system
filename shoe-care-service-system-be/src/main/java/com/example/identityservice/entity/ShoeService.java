@@ -30,15 +30,6 @@ public class ShoeService {
     @Column(name = "service_code", nullable = false, length = 255)
     String serviceCode;
 
-    @Column(name = "input_price")
-    Double inputPrice;
-
-    @Column(name = "sell_price")
-    Double sellPrice;
-
-    @Column(name = "profits")
-    Double profits;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "create_at")
     Date createAt;

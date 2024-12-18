@@ -1,11 +1,12 @@
 package com.example.identityservice.entity;
 
+import com.example.identityservice.enums.PaymentMethod;
+import com.example.identityservice.enums.ScheduleStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.util.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "schedules")
@@ -22,36 +23,30 @@ public class Schedule {
     @Column(name = "schedule_id")
     Long id;
 
-    @Column(name = "schedule_at")
-    Date scheduleAt;
+    @Column(name = "created_at")
+    Date createdAt;
 
     @Column(name = "return_at")
     Date returnAt;
 
-    @Column(name = "phone_number", length = 20)
-    String phoneNumber;
-
     @Column(name = "status")
-    String status;
+    ScheduleStatus status;
 
     @Column(name = "paid")
-    Boolean paid;
+    Double paid;
+
+    @Column(name = "payment_type")
+    @Enumerated(EnumType.STRING)
+    PaymentMethod paymentType;
+
+    @Column(name = "discount")
+    Double discount;
 
     @Column(name = "cost")
     Double cost;
 
-    @Column(name = "get_location")
-    String getLocation;
-
     @Column(name = "note", columnDefinition = "TEXT")
     String note;
-
-    @Column(name = "is_home_return")
-    Boolean isHomeReturn;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "branch_id", nullable = false)
-    Branch branch;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id", nullable = false)
@@ -61,6 +56,28 @@ public class Schedule {
     @JoinColumn(name = "user_id", nullable = false)
     User user;
 
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<ScheduleDetail> scheduleDetails;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "material_id", nullable = false)
+    Material material;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brand_id", nullable = false)
+    Brand brand;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "color_id", nullable = false)
+    Color color;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "size_id", nullable = false)
+    Size size;
+    
+    @OneToOne(mappedBy = "schedule", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ScheduleDetail scheduleDetail;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = new Date();
+        status = ScheduleStatus.CREATED;
+    }
 }

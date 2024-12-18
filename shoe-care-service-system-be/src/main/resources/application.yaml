@@ -18,6 +18,17 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
       file-size-threshold: 2MB  # Các tệp lớn hơn sẽ được ghi vào đĩa thay vì bộ nhớ
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hieumai1905it@gmail.com
+    password: jwrl kkhm zahm nplc
+    properties: 
+      mail:
+        smtp:
+          auth: true
+          starttls: 
+            enable: true
 
 app:
   userDefault:
@@ -27,5 +38,5 @@ app:
 
 jwt:
   signerKey: "8c1Gl/AxoQidiUTcJRpTXLdGhup4KS68yoSKI2cpCZzUtfoc09n1tRoEOHZNIx7B"
-  valid-duration: 36000 #in seconds
+  valid-duration: 360000 #in seconds
   refreshable-duration: 360000 #in seconds

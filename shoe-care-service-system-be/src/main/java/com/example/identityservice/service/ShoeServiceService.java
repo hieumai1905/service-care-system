@@ -81,9 +81,6 @@ public class ShoeServiceService {
         service.setName(serviceDetails.getName());
         service.setPrice(serviceDetails.getPrice());
         service.setServiceCode(serviceDetails.getServiceCode());
-        service.setInputPrice(serviceDetails.getInputPrice());
-        service.setSellPrice(serviceDetails.getSellPrice());
-        service.setProfits(serviceDetails.getProfits());
         service.setCreateAt(serviceDetails.getCreateAt());
         service.setIsActive(serviceDetails.getIsActive());
         service.setNote(serviceDetails.getNote());

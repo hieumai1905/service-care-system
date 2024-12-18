@@ -1,0 +1,199 @@
+<div class="content-wrapper">
+  <div class="row">
+    <div class="col-lg-7 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thêm Đơn Hàng</h4>
+          <p class="card-description">Điền thông tin đơn hàng</p>
+
+          <form [formGroup]="scheduleForm" (ngSubmit)="addSchedule()">
+            <div class="row">
+              <!-- Chất Liệu -->
+              <div class="col-md-6 form-group">
+                <label for="materialId">Chất Liệu</label>
+                <select id="materialId" class="form-control text-dark" formControlName="materialId">
+                  <option value="" disabled selected>Chọn chất liệu</option>
+                  <option *ngFor="let material of materials" [value]="material.id">{{ material.name }}</option>
+                </select>
+                <div *ngIf="scheduleForm.get('materialId')?.touched && scheduleForm.get('materialId')?.invalid"
+                     class="text-danger">
+                  <small>Chất liệu là bắt buộc.</small>
+                </div>
+              </div>
+
+              <!-- Thương Hiệu -->
+              <div class="col-md-6 form-group">
+                <label for="brandId">Hãng giày</label>
+                <select id="brandId" class="form-control text-dark" formControlName="brandId">
+                  <option value="" disabled selected>Chọn hãng giày</option>
+                  <option *ngFor="let brand of brands" [value]="brand.id">{{ brand.name }}</option>
+                </select>
+                <div *ngIf="scheduleForm.get('brandId')?.touched && scheduleForm.get('brandId')?.invalid"
+                     class="text-danger">
+                  <small>Hãng giày là bắt buộc.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Màu Sắc -->
+              <div class="col-md-6 form-group">
+                <label for="colorId">Màu Sắc</label>
+                <select id="colorId" class="form-control text-dark" formControlName="colorId">
+                  <option value="" disabled selected>Chọn màu sắc</option>
+                  <option *ngFor="let color of colors" [value]="color.id">{{ color.name }}</option>
+                </select>
+                <div *ngIf="scheduleForm.get('colorId')?.touched && scheduleForm.get('colorId')?.invalid"
+                     class="text-danger">
+                  <small>Màu sắc là bắt buộc.</small>
+                </div>
+              </div>
+
+              <!-- Kích Cỡ -->
+              <div class="col-md-6 form-group">
+                <label for="sizeId">Kích Cỡ</label>
+                <select id="sizeId" class="form-control text-dark" formControlName="sizeId">
+                  <option value="" disabled selected>Chọn kích cỡ</option>
+                  <option *ngFor="let size of sizes" [value]="size.id">{{ size.name }}</option>
+                </select>
+                <div *ngIf="scheduleForm.get('sizeId')?.touched && scheduleForm.get('sizeId')?.invalid"
+                     class="text-danger">
+                  <small>Kích cỡ là bắt buộc.</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <!-- Tiền Đã Thanh Toán -->
+              <div class="col-md-6 form-group">
+                <label for="paid">Số Tiền Đã Thanh Toán</label>
+                <input type="number" id="paid" class="form-control" formControlName="paid" min="0">
+                <div *ngIf="scheduleForm.get('paid')?.touched && scheduleForm.get('paid')?.invalid" class="text-danger">
+                  <small>Số tiền đã thanh toán phải là lớn hơn hoặc bằng 0.</small>
+                </div>
+              </div>
+
+              <div class="col-md-6 form-group">
+                <label>Dịch Vụ</label>
+                <mat-form-field appearance="outline" class="w-100 custom-select" style="height: 60px;">
+                  <mat-label>Chọn Dịch Vụ</mat-label>
+                  <mat-select formControlName="shoeServiceInput" multiple>
+                    <mat-option *ngFor="let service of services" [value]="service.id">
+                      {{ service.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div
+                  *ngIf="scheduleForm.get('shoeServiceInput')?.touched && scheduleForm.get('shoeServiceInput')?.invalid"
+                  class="text-danger">
+                  <small>Vui lòng chọn ít nhất một dịch vụ.</small>
+                </div>
+              </div>
+            </div>
+            <!-- Ghi Chú -->
+            <div class="form-group">
+              <label for="note">Tình trạng giày</label>
+              <textarea id="note" class="form-control" formControlName="note" rows="4"></textarea>
+              <div
+                *ngIf="scheduleForm.get('note')?.touched && scheduleForm.get('note')?.invalid"
+                class="text-danger">
+                <small>Tình trạng giày là bắt buộc.</small>
+              </div>
+            </div>
+
+            <div class="d-flex">
+              <button type="submit" class="btn btn-gradient-primary" [disabled]="scheduleForm.invalid || !canAdd">Thêm
+                Đơn Hàng
+              </button>
+              <button class="ms-2 btn btn-light" routerLink="/schedules">Quay lại</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Thông tin khách hàng</h4>
+
+          <!-- Ô tìm kiếm khách hàng -->
+          <div class="add-items d-flex mt-3">
+            <div class="col-5 d-flex">
+              <input type="text" class="form-control todo-list-input" placeholder="Số điện thoại?"
+                     [(ngModel)]="phoneSearch">
+            </div>
+            <button class="btn btn-gradient-primary" (click)="getClient()">Tìm kiếm</button>
+            <button class="btn btn-google" [routerLink]="['/clients/add']">Thêm KH</button>
+          </div>
+          <!-- Thông tin khách hàng -->
+          <div *ngIf="clientSelected">
+            <table class="table table-striped mt-3">
+              <tr>
+                <td class="font-weight-bold">Mã khách hàng:</td>
+                <td>{{ clientSelected.id }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Tên khách hàng:</td>
+                <td>{{ clientSelected.name }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Số điện thoại:</td>
+                <td>{{ clientSelected.tel }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Địa chỉ:</td>
+                <td>{{ clientSelected.address }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Email:</td>
+                <td>{{ clientSelected.email }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Ngày sinh:</td>
+                <td>{{ clientSelected.birthday | date:'dd/MM/yyyy' }}</td>
+              </tr>
+              <tr>
+                <td class="font-weight-bold">Loại khách hàng:</td>
+                <td>{{ clientSelected.clientCategoryTypeName }}</td>
+              </tr>
+            </table>
+          </div>
+          <hr>
+        </div>
+        <div class="card-body custom-style-card-body">
+          <h4 class="card-title text-uppercase">Thông tin hoá đơn</h4>
+          <div class="row">
+            <div class="col-5">
+              <div class="justify-content-between align-items-center mt-1">
+                <h4 class="ps-1 font-weight-bold">Phương thức thanh toán:</h4>
+                <select class="form-control w-80 text-dark" [(ngModel)]="selectedPaymentMethod">
+                  <option *ngFor="let method of paymentMethods" [value]="method">
+                    {{ getPaymentMethod(method) }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div class="col-7">
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h3 class="ps-1">Tổng tiền:</h3>
+                <p>{{ totalPrice | currency: 'VND' }} VND</p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h3 class="ps-1">Chiết khấu khách hàng:</h3>
+                <p class="text-danger">- {{ disCountClient| currency: 'VND' }} VND</p>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mt-1">
+                <h2 class="ps-1 font-weight-bold">Thành tiền:</h2>
+                <p
+                  class="font-weight-bold">{{ finalPrice | currency: 'VND' }} VND</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

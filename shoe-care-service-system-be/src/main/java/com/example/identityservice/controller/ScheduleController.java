@@ -1,15 +1,15 @@
 package com.example.identityservice.controller;
 
 import com.example.identityservice.dto.ApiResponse;
-import com.example.identityservice.dto.request.*;
-import com.example.identityservice.dto.response.SearchResponse;
-import com.example.identityservice.service.OrderService;
+import com.example.identityservice.dto.request.ScheduleCreationRequest;
+import com.example.identityservice.dto.response.ScheduleResponseDTO;
 import com.example.identityservice.service.ScheduleService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -21,31 +21,43 @@ public class ScheduleController {
     ScheduleService scheduleService;
 
     @PostMapping
-    public ApiResponse<?> create(@Valid @RequestBody CreateScheduleRequest request) {
-        return ApiResponse.<UpdateScheduleRequest>builder()
+    public ApiResponse<ScheduleResponseDTO> createSchedule(@RequestBody ScheduleCreationRequest request) {
+        return ApiResponse.<ScheduleResponseDTO>builder()
                 .result(scheduleService.createSchedule(request))
                 .build();
     }
 
-    @PutMapping
-    public ApiResponse<?> update(@Valid @RequestBody UpdateScheduleRequest request) {
-        return ApiResponse.<UpdateScheduleRequest>builder()
-                .result(scheduleService.updateSchedule(request))
-                .build();
-    }
-
-
-    @PostMapping("/search")
-    public ApiResponse<?> search(@RequestBody SearchScheduleRequest request) {
-        return ApiResponse.<SearchResponse<UpdateScheduleRequest>>builder()
-                .result(scheduleService.searchSchedule(request))
+    @GetMapping
+    public ApiResponse<List<ScheduleResponseDTO>> getAll() {
+        return ApiResponse.<List<ScheduleResponseDTO>>builder()
+                .result(scheduleService.getAll())
                 .build();
     }
 
     @GetMapping("/{id}")
-    public ApiResponse<?> getById(@PathVariable Long id) {
-        return ApiResponse.<UpdateScheduleRequest>builder()
+    public ApiResponse<ScheduleResponseDTO> getById(@PathVariable Long id) {
+        return ApiResponse.<ScheduleResponseDTO>builder()
                 .result(scheduleService.getById(id))
+                .build();
+    }
+
+    @PutMapping("/status/{id}")
+    public ApiResponse<ScheduleResponseDTO> updateStatus(@PathVariable Long id, @RequestParam("status") String status) {
+        return ApiResponse.<ScheduleResponseDTO>builder()
+                .result(scheduleService.updateStatus(id, status))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> delete(@PathVariable Long id) throws Exception {
+        scheduleService.delete(id);
+        return ApiResponse.<Void>builder().build();
+    }
+
+    @GetMapping("/search")
+    public ApiResponse<List<ScheduleResponseDTO>> search(@RequestParam String q) {
+        return ApiResponse.<List<ScheduleResponseDTO>>builder()
+                .result(scheduleService.searchSchedules(q))
                 .build();
     }
 }

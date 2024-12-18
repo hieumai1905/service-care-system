@@ -142,5 +142,14 @@ export const AdminLayoutRoutes: Routes = [
         loadChildren: () => import('../../pages/report/report.module').then(m => m.ReportModule)
       },
     ]
+  },
+  {
+    path: 'schedules',
+    children: [
+      {
+        path: '',
+        loadChildren: () => import('../../pages/schedule/schedule.module').then(m => m.ScheduleModule)
+      },
+    ]
   }
 ];

@@ -7,6 +7,8 @@ import {CurrencyPipe, DatePipe, DecimalPipe, NgClass, NgForOf, NgIf, SlicePipe} 
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {ReactiveFormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
+import {ScheduleService} from "../../services/schedule.service";
+import {Schedule} from "../../model/Schedule";
 
 @Component({
   selector: 'app-dashboard',
@@ -33,9 +35,11 @@ export class DashboardComponent implements OnInit {
   completionRatio: number = 0;
   totalOrders: number = 0;
   completedOrders: number = 0;
+  scheduleLatest: Schedule[] = [];
 
   constructor(
-    private orderService: OrderService
+    private orderService: OrderService,
+    private scheduleService: ScheduleService
   ) {
   }
 
@@ -43,8 +47,20 @@ export class DashboardComponent implements OnInit {
     this.loadRevenueToday();
     this.loadRevenueWeek();
     this.loadOrderLatest();
-    this.loadClientNew();
     this.loadCompletionRatio();
+    this.loadScheduleLatest();
+  }
+
+  private loadScheduleLatest() {
+    this.scheduleService.getSchedules().subscribe({
+      next: (data) => {
+        this.scheduleLatest = data.result;
+        this.scheduleLatest = this.scheduleLatest.slice(0, 5);
+      },
+      error: (err) => {
+        console.error('Error when loading latest schedules:', err);
+      }
+    });
   }
 
   private loadRevenueToday(): void {
@@ -102,8 +118,34 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  private loadClientNew() {
+  getStatusClassA(status: string): string {
+    switch (status) {
+      case 'CREATED':
+        return 'status-created';
+      case 'IN_PROGRESS':
+        return 'status-in-progress';
+      case 'COMPLETED':
+        return 'status-completed';
+      case 'RETURNED':
+        return 'status-returned';
+      default:
+        return '';
+    }
+  }
 
+  getStatusA(status: string): string {
+    switch (status) {
+      case 'CREATED':
+        return 'Đã tạo';
+      case 'IN_PROGRESS':
+        return 'Đang xử lý';
+      case 'COMPLETED':
+        return 'Đã hoàn thành';
+      case 'RETURNED':
+        return 'Đã trả khách';
+      default:
+        return 'Không xác định';
+    }
   }
 
   private loadRevenueWeek(): void {

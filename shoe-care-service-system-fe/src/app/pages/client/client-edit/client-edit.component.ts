@@ -36,12 +36,17 @@ export class ClientEditComponent implements OnInit {
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(50)]],
       tel: ['', [Validators.required]],
       createAt: [new Date()],
-      email: [''],
+      email: ['', [Validators.required, Validators.email]],
       address: ['', [Validators.required]],
       note: [''],
-      birthday: ['', [Validators.required]],
+      birthday: ['', [Validators.required, this.dateOfBirthValidator]],
       clientCategoryId: [0, [Validators.required]]
     });
+  }
+
+  isEmailInvalid(): boolean {
+    const emailControl = this.clientForm.get('email');
+    return emailControl?.touched && emailControl?.invalid || false;
   }
 
   ngOnInit() {
@@ -52,6 +57,22 @@ export class ClientEditComponent implements OnInit {
         this.loadClient(Number(this.clientId));
       }
     });
+  }
+
+  dateOfBirthValidator(control: any) {
+    const currentDate = new Date();
+    const dateOfBirth = new Date(control.value);
+    console.log('Date of birth:', dateOfBirth);
+    console.log('Current date:', currentDate);
+    if (dateOfBirth >= currentDate) {
+      console.log('Invalid date of birth');
+      return {
+        dateOfBirthValidator: {
+          valid: false
+        }
+      };
+    }
+    return null;
   }
 
   loadClientCategories() {

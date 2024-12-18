@@ -23,12 +23,6 @@ public class CreateShoeServiceRequest {
     Double price;
     @NotNull(message = "SERVICE_CODE_IS_REQUIRED")
     String serviceCode;
-    @NotNull(message = "INPUT_PRICE_IS_REQUIRED")
-    Double inputPrice;
-    @NotNull(message = "SELL_PRICE_IS_REQUIRED")
-    Double sellPrice;
-    @NotNull(message = "PROFITS_IS_REQUIRED")
-    Double profits;
     Date createAt = new Date();
 //    @NotNull(message = "IS_ACTIVE_IS_REQUIRED")
     Boolean isActive = true;

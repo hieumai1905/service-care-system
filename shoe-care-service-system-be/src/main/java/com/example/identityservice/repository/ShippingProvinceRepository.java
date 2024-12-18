@@ -1,6 +1,5 @@
 package com.example.identityservice.repository;
 
-import com.example.identityservice.entity.Branch;
 import com.example.identityservice.entity.ShippingProvince;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

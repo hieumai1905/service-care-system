@@ -30,4 +30,34 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
+
+  hasConfigurationPermission(): boolean {
+    const permissions = this.currentUser.role.permissions;
+    for (const permision in permissions) {
+      if (permissions[permision].name === 'CONFIGURATION') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  hasUserManagementPermission(): boolean {
+    const permissions = this.currentUser.role.permissions;
+    for (const permision in permissions) {
+      if (permissions[permision].name === 'USER_MANAGEMENT') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  hasClientCategoryPermission(): boolean {
+    const permissions = this.currentUser.role.permissions;
+    for (const permision in permissions) {
+      if (permissions[permision].name === 'CLENT_CATEGORY_MANAGEMENT') {
+        return true;
+      }
+    }
+    return false;
+  }
 }

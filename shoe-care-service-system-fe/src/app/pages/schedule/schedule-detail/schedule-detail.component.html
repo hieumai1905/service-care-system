@@ -1,0 +1,257 @@
+<div class="content-wrapper">
+  <div id="invoice-print-section" class="invoice-container d-none" *ngIf="scheduleCurrent">
+    <!-- Header -->
+    <div class="invoice-header text-center mb-3">
+      <h2 class="text-uppercase">Hóa Đơn Thanh Toán</h2>
+      <p><strong>Cửa hàng dịch vụ chăm sóc giày tiết kiệm</strong></p>
+      <p>Địa chỉ: Số 123, Đường ABC, Quận X, TP.HN</p>
+      <p>Điện thoại: 0123 456 789</p>
+    </div>
+
+    <!-- Thông tin hóa đơn -->
+    <div class="invoice-details mb-3">
+      <table class="table table-borderless">
+        <tr>
+          <td><strong>Mã hóa đơn:</strong> {{ scheduleCurrent.id }}</td>
+          <td><strong>Ngày lập:</strong> {{ scheduleCurrent.createdAt | date: 'HH:mm - dd/MM/yyyy' }}</td>
+        </tr>
+        <tr>
+          <td><strong>Mã khách hàng:</strong> {{ scheduleCurrent.clientId }}</td>
+          <td><strong>Tên khách hàng:</strong> {{ scheduleCurrent.clientName }}</td>
+        </tr>
+        <tr>
+          <td><strong>Số điện thoại:</strong> {{ scheduleCurrent.clientTel }}</td>
+          <td><strong>Hình thức thanh toán:</strong> {{ getPaymentMethod(scheduleCurrent.paymentType) }}</td>
+        </tr>
+        <tr>
+          <td><strong>Chất liệu:</strong> {{ scheduleCurrent.materialName }}</td>
+          <td><strong>Màu sắc:</strong> {{ scheduleCurrent.colorName }}</td>
+        </tr>
+        <tr>
+          <td><strong>Kích cỡ:</strong> {{ scheduleCurrent.sizeName }}</td>
+          <td><strong>Thương hiệu :</strong> {{ scheduleCurrent.brandName }}</td>
+        </tr>
+        <tr>
+          <td><strong>Tình trạng:</strong> {{scheduleCurrent.note}}</td>
+          <td><strong>Ngày trả hàng:</strong> {{scheduleCurrent.returnAt | date: 'HH:mm - dd/MM/yyyy'}}</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Danh sách dịch vụ -->
+    <div class="invoice-products mb-3">
+      <h4 class="text-uppercase">Danh Sách Dịch Vụ</h4>
+      <table class="table table-bordered text-center">
+        <thead>
+        <tr>
+          <th>STT</th>
+          <th>Tên dịch vụ</th>
+          <th>Code dịch vụ</th>
+          <th>Giá dịch vụ (VND)</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of serviceSchedule; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ item.name }}</td>
+          <td>{{ item.serviceCode }}</td>
+          <td>{{ item.price | number: '1.0-0' }} VND</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tổng tiền -->
+    <div class="invoice-summary">
+      <table class="table table-borderless text-right">
+        <tr>
+          <td><strong>Tổng tiền:</strong></td>
+          <td class="text-danger">{{ scheduleCurrent.cost | number: '1.0-0' }} VND</td>
+        </tr>
+        <tr>
+          <td><strong>Chiết khấu khách hàng:</strong></td>
+          <td class="text-warning">- {{ scheduleCurrent.discount ?? 0 | number: '1.0-0' }} VND</td>
+        </tr>
+        <tr>
+          <td><strong>Số tiền đã thanh toán:</strong></td>
+          <td class="text-danger">{{ scheduleCurrent.paid | number: '1.0-0' }} VND</td>
+        </tr>
+        <tr>
+          <td><strong>Còn lại thanh toán:</strong></td>
+          <td class="text-success">
+            {{
+              (scheduleCurrent.cost - scheduleCurrent.paid - (scheduleCurrent.discount ?? 0)) | number: '1.0-0'
+            }} VND
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Lời cảm ơn -->
+    <div class="invoice-footer text-center mt-3">
+      <p><strong>Cảm ơn quý khách đã sử dụng dịch vụ của chúng tôi!</strong></p>
+      <p>Hẹn gặp lại quý khách trong những lần tiếp theo.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Chi Tiết Đơn Hàng</h4>
+          <small class="text-gray">Thông tin chi tiết đơn hàng</small>
+          <div *ngIf="scheduleCurrent" class="container mt-3">
+            <div class="card shadow-sm border-0">
+              <div class="card-body">
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Mã đơn hàng:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.id }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Mã khách hàng:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.clientId }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Tên khách hàng:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.clientName }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Số điện thoại khách hàng:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.clientTel }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Mã nhân viên:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.userId }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Tên nhân viên:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.userName }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Chất liệu:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.materialName }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Màu:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.colorName }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Kích cỡ:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.sizeName }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Thương hiệu:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.brandName }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Hình thức thanh toán:</div>
+                  <div class="col-12 col-md-8">{{ getPaymentMethod(scheduleCurrent.paymentType) }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Thời gian đặt lịch:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.createdAt | date: 'HH:mm - dd/MM/yyyy' }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Thời gian trả hàng:</div>
+                  <div class="col-12 col-md-8">
+                    {{ scheduleCurrent.returnAt ? (scheduleCurrent.returnAt | date: 'HH:mm - dd/MM/yyyy') : 'Chưa trả hàng' }}
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Tổng tiền:</div>
+                  <div
+                    class="col-12 col-md-8 text-danger font-weight-bold">{{ scheduleCurrent.cost | number: '1.0-0' }}
+                    VND
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Đã thành toán:</div>
+                  <div
+                    class="col-12 col-md-8 text-danger font-weight-bold">{{ scheduleCurrent.paid | number: '1.0-0' }}
+                    VND
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Số tiền được giảm:</div>
+                  <div class="col-12 col-md-8 text-warning font-weight-bold">
+                    - {{ scheduleCurrent.discount ?? 0 | number: '1.0-0' }} VND
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Số tiền phải thanh toán:</div>
+                  <div
+                    class="col-12 col-md-8 text-success font-weight-bold">{{
+                      scheduleCurrent.cost - scheduleCurrent.paid
+                      - (scheduleCurrent.discount ?? 0) | number: '1.0-0'
+                    }}
+                    VND
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Tình trạng giày:</div>
+                  <div class="col-12 col-md-8">{{ scheduleCurrent.note }}</div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-md-4 font-weight-bold">Trạng thái đơn hàng:</div>
+                  <div class="col-12 col-md-8"
+                       [ngClass]="getStatusClass(scheduleCurrent.status)">{{ getStatus(scheduleCurrent.status) }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-3">
+            <button *ngIf="scheduleCurrent?.status === 'RETURNED'"
+                    (click)="printInvoice()"
+                    class="btn btn-gradient-success me-2">In hoá đơn
+            </button>
+            <button *ngIf="scheduleCurrent?.status === 'CREATED'" (click)="updateScheduleStatus('IN_PROGRESS')"
+                    class="btn btn-gradient-success me-2">Thực hiện
+            </button>
+            <button *ngIf="scheduleCurrent?.status === 'IN_PROGRESS'" (click)="updateScheduleStatus('COMPLETED')"
+                    class="btn btn-gradient-success me-2">Hoàn thành
+            </button>
+            <button *ngIf="scheduleCurrent?.status === 'COMPLETED'"
+                    (click)="updateScheduleStatus('RETURNED')" class="btn btn-danger me-2">
+              Trả hàng
+            </button>
+            <button class="btn btn-light" routerLink="/schedules">Quay lại</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title text-uppercase">Danh Sách Dịch Vụ</h4>
+          <small class="text-gray">Danh sách dịch vụ trong đơn hàng</small>
+          <div *ngIf="serviceSchedule">
+            <div class="table-responsive">
+
+              <table class="table mt-3">
+                <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã dịch vụ</th>
+                  <th>Tên dịch vụ</th>
+                  <th>Code dịch vụ</th>
+                  <th>Giá dịch vụ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let item of serviceSchedule; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ item.id }}</td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.serviceCode }}</td>
+                  <td>{{ item.price | number: '1.0-0' }} VND</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

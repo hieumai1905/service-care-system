@@ -1,0 +1,56 @@
+/* Trạng thái CREATED - màu vàng */
+.status-created {
+  color: #FFC107; /* Vàng */
+  font-weight: bold;
+}
+
+/* Trạng thái IN_PROGRESS - màu xanh dương */
+.status-in-progress {
+  color: #007BFF; /* Xanh dương */
+  font-weight: bold;
+}
+
+/* Trạng thái COMPLETED - màu xanh lá cây */
+.status-completed {
+  color: #28A745; /* Xanh lá cây */
+  font-weight: bold;
+}
+
+/* Trạng thái RETURNED - màu xám */
+.status-returned {
+  color: #6C757D; /* Xám */
+  font-weight: bold;
+}
+
+.invoice-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.invoice-header h2 {
+  margin-bottom: 5px;
+  color: #4CAF50;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+}
+
+.invoice-summary td {
+  font-size: 1rem;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}
+
+.text-success {
+  color: #28a745 !important;
+}
+
+.text-warning {
+  color: #ffc107 !important;
+}
