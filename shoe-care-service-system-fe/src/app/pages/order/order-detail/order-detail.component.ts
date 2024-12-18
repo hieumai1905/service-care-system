@@ -3,6 +3,7 @@ import {OrderService} from "../../../services/order.service";
 import {ActivatedRoute} from "@angular/router";
 import {Order} from "../../../model/Order";
 import {DialogService} from "../../../services/dialog.service";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-order-detail',
@@ -13,12 +14,23 @@ export class OrderDetailComponent implements OnInit {
   isPrinting: boolean = false;
   orderId: number | undefined;
   orderCurrent: Order | null = null;
+  currentUser: any = null;
 
   constructor(
     private orderService: OrderService,
     private route: ActivatedRoute,
+    private userService: UserService,
     private dialogService: DialogService
   ) {
+    this.userService.getProfile().subscribe({
+      next: (data) => {
+        this.currentUser = data.result;
+        console.log('Current user:', this.currentUser);
+      },
+      error: (err) => {
+        console.error('Error when load profile:', err);
+      }
+    });
   }
 
   togglePrint() {
@@ -44,6 +56,16 @@ export class OrderDetailComponent implements OnInit {
         this.dialogService.notificationOpen('Thông báo', err.error.message || 'Đã có lỗi xảy ra!', 'OK');
       }
     });
+  }
+
+  hasCanCelOrderPermission(): boolean {
+    const permissions = this.currentUser.role.permissions;
+    for (const permision in permissions) {
+      if (permissions[permision].name === 'CANCEL_ORDER') {
+        return true;
+      }
+    }
+    return false;
   }
 
   cancelOrder() {

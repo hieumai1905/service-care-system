@@ -1,20 +1,24 @@
 package com.example.identityservice.repository;
 
-import com.example.identityservice.entity.Branch;
+import com.example.identityservice.entity.Client;
 import com.example.identityservice.entity.Schedule;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.util.List;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query("select s from Schedule s where (:keyWord is null or lower(s.branch.name) like %:keyWord% " +
-            "   or lower(s.client.name) like %:keyWord%) " +
-            "and (:status is null or lower(s.status) like %:status%) " +
-            "and (:scheduleAt is null or s.scheduleAt >= :scheduleAt) ")
-    Page<Schedule> search(String keyWord, String status, Date scheduleAt, Pageable pageable);
+    @Query("SELECT s FROM Schedule s " +
+            "JOIN s.client c " +
+            "JOIN s.user u " +
+            "WHERE LOWER(u.fullName) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.tel) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.email) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR LOWER(c.address) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "OR s.id = :id")
+    List<Schedule> searchSchedulesByKeyword(@Param("keyword") String keyword, @Param("id") Long id);
 }

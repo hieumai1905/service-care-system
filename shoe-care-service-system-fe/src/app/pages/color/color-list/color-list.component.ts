@@ -22,7 +22,7 @@ import {NgForOf, NgStyle, SlicePipe} from '@angular/common';
 export class ColorListComponent implements OnInit {
   colors: Color[] = [];
   pageIndex: number = 0;
-  pageSize: number = 5;
+  pageSize: number = 10;
 
   constructor(
     private colorService: ColorService,

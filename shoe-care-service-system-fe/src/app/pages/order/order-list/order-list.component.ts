@@ -4,9 +4,10 @@ import {OrderService} from '../../../services/order.service';
 import {RouterLink} from '@angular/router';
 import {MatPaginatorModule, PageEvent} from '@angular/material/paginator';
 import {DialogService} from '../../../services/dialog.service';
-import {CurrencyPipe, DatePipe, NgClass, NgForOf, SlicePipe} from '@angular/common';
+import {CurrencyPipe, DatePipe, NgClass, NgForOf, NgIf, SlicePipe} from '@angular/common';
 import {Order} from "../../../model/Order";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-order-list',
@@ -21,7 +22,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
     DatePipe,
     ReactiveFormsModule,
     FormsModule,
-    NgClass
+    NgClass,
+    NgIf
   ]
 })
 export class OrderListComponent implements OnInit {
@@ -31,21 +33,32 @@ export class OrderListComponent implements OnInit {
   searchKey: string = '';
   selectedStatus: string = '';
   orderFilers: Order[] = [];
+  currentUser: any = null;
 
   constructor(
     private orderService: OrderService,
+    private userService: UserService,
     private dialogService: DialogService
   ) {
   }
 
   ngOnInit() {
+    this.userService.getProfile().subscribe({
+      next: (data) => {
+        this.currentUser = data.result;
+        console.log('Current user:', this.currentUser);
+      },
+      error: (err) => {
+        console.error('Error when load profile:', err);
+      }
+    });
     this.loadOrders();
   }
 
-  filterOrder(){
-    if(this.selectedStatus == ''){
+  filterOrder() {
+    if (this.selectedStatus == '') {
       this.orderFilers = this.orders;
-    }else{
+    } else {
       this.orderFilers = this.orders.filter(order => order.status == this.selectedStatus);
     }
   }
@@ -83,7 +96,7 @@ export class OrderListComponent implements OnInit {
     }
   }
 
-  getStatus(status: string){
+  getStatus(status: string) {
     switch (status) {
       case 'COMPLETED':
         return 'Đã hoàn thành';
@@ -137,5 +150,15 @@ export class OrderListComponent implements OnInit {
         console.error('Error searching orders:', err);
       }
     });
+  }
+
+  hasDeleteOrderPermission(): boolean {
+    const permissions = this.currentUser.role.permissions;
+    for (const permision in permissions) {
+      if (permissions[permision].name === 'DELETE_ORDER') {
+        return true;
+      }
+    }
+    return false;
   }
 }

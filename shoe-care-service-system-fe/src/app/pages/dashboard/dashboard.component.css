@@ -21,3 +21,27 @@
 .table-responsive{
   margin-top: -40px;
 }
+
+/* Trạng thái CREATED - màu vàng */
+.status-created {
+  color: #FFC107; /* Vàng */
+  font-weight: bold;
+}
+
+/* Trạng thái IN_PROGRESS - màu xanh dương */
+.status-in-progress {
+  color: #007BFF; /* Xanh dương */
+  font-weight: bold;
+}
+
+/* Trạng thái COMPLETED - màu xanh lá cây */
+.status-completed {
+  color: #28A745; /* Xanh lá cây */
+  font-weight: bold;
+}
+
+/* Trạng thái RETURNED - màu xám */
+.status-returned {
+  color: #6C757D; /* Xám */
+  font-weight: bold;
+}

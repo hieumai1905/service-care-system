@@ -3,7 +3,7 @@
     <li class="nav-item nav-profile">
       <a href="#" class="nav-link">
         <div class="nav-profile-image">
-          <img src="assets/images/faces/face1.jpg" alt="profile" />
+          <img src="assets/images/faces/face1.jpg" alt="profile"/>
           <span class="login-status online"></span>
         </div>
         <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
@@ -15,7 +15,7 @@
         <i class="mdi mdi-home menu-icon"></i>
       </a>
     </li>
-    <li class="nav-item" *ngIf="currentUser.role.name == 'ADMIN'">
+    <li class="nav-item" *ngIf="hasConfigurationPermission()">
       <a class="nav-link" data-bs-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
         <span class="menu-title">Cấu hình</span>
         <i class="menu-arrow"></i>
@@ -53,22 +53,22 @@
         </ul>
       </div>
     </li>
-<!--    <li class="nav-item">-->
-<!--      <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">-->
-<!--        <span class="menu-title">Quản lý đơn hàng</span>-->
-<!--        <i class="mdi mdi-format-list-bulleted menu-icon"></i>-->
-<!--      </a>-->
-<!--      <div class="collapse" id="icons">-->
-<!--        <ul class="nav flex-column sub-menu">-->
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="pages/icons/font-awesome.html">Tất cả đơn hàng</a>-->
-<!--          </li>-->
-<!--          <li class="nav-item">-->
-<!--            <a class="nav-link" href="pages/icons/fonst-awesome.html">Thêm đơn hàng</a>-->
-<!--          </li>-->
-<!--        </ul>-->
-<!--      </div>-->
-<!--    </li>-->
+    <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#icons" aria-expanded="false" aria-controls="icons">
+        <span class="menu-title">Quản lý đơn hàng</span>
+        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+      </a>
+      <div class="collapse" id="icons">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/schedules']">Tất cả đơn hàng</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="['/schedules/add']">Thêm đơn hàng</a>
+          </li>
+        </ul>
+      </div>
+    </li>
     <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#iconsn" aria-expanded="false" aria-controls="icons">
         <span class="menu-title">Quản lý mua hàng</span>
@@ -83,15 +83,15 @@
             <a class="nav-link" [routerLink]="['/orders/add']">Thêm đơn bán</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/products']">Sản phẩm</a>
+            <a class="nav-link" *ngIf="currentUser.role.name == 'ADMIN'" [routerLink]="['/products']">Sản phẩm</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/category-products']">Phân loại sản phẩm</a>
+            <a class="nav-link" *ngIf="currentUser.role.name == 'ADMIN'" [routerLink]="['/category-products']">Phân loại sản phẩm</a>
           </li>
         </ul>
       </div>
     </li>
-    <li class="nav-item" *ngIf="currentUser.role.name == 'ADMIN'">
+    <li class="nav-item" *ngIf="hasUserManagementPermission()">
       <a class="nav-link" data-bs-toggle="collapse" href="#forms" aria-expanded="false" aria-controls="forms">
         <span class="menu-title">Quản lý người dùng</span>
         <i class="mdi mdi-contacts menu-icon"></i>
@@ -126,7 +126,7 @@
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/clients/add']">Thêm KH</a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" *ngIf="hasClientCategoryPermission()">
             <a class="nav-link" [routerLink]="['/client-categories']">Phân loại KH</a>
           </li>
         </ul>
@@ -139,9 +139,6 @@
       </a>
       <div class="collapse" id="tables">
         <ul class="nav flex-column sub-menu">
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/reports/client']">Báo cáo KH</a>
-          </li>
           <li class="nav-item">
             <a class="nav-link" [routerLink]="['/reports/revenue']">Báo cáo danh thu</a>
           </li>

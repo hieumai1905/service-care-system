@@ -51,8 +51,7 @@
                   <a class="text-center btn btn-sm" [routerLink]="['/orders/detail', order.id]">
                     <i class="fa fa-eye"></i>
                   </a>
-                  <!-- Todo: Just admin can delete order -->
-                  <a class="text-center btn btn-sm" (click)="deleteOrder(order.id)">
+                  <a class="text-center btn btn-sm" *ngIf="hasDeleteOrderPermission()" (click)="deleteOrder(order.id)">
                     <i class="fa fa-trash"></i>
                   </a>
                 </td>

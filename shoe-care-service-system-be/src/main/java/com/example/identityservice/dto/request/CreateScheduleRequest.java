@@ -18,16 +18,13 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class CreateScheduleRequest {
-    Date scheduleAt;
+    Date createdAt;
     Date returnAt;
     String phoneNumber;
     String status;
-    Boolean paid;
+    Double paid;
     Double cost;
-    String getLocation;
     String note;
-    Boolean isHomeReturn;
-    Long branchId;
     Long clientId;
     String userId;
     List<ScheduleDetailDTO> scheduleDetails;

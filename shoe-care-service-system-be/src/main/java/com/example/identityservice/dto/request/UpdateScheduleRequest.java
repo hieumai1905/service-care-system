@@ -17,5 +17,4 @@ public class UpdateScheduleRequest extends CreateScheduleRequest {
     Long id;
     String userFullName;
     String clientName;
-    String branchName;
 }

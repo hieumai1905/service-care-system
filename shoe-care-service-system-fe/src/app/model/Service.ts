@@ -3,9 +3,6 @@ export interface Service {
   name: string;
   price: number;
   serviceCode: string;
-  inputPrice: number;
-  sellPrice: number;
-  profits: number;
   createAt: string;
   isActive: boolean;
   note: string;

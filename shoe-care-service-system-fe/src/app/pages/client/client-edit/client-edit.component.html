@@ -34,18 +34,25 @@
 
             <div class="form-group">
               <label for="email">Email</label>
-              <input type="email" formControlName="email" class="form-control" id="email">
-              <div *ngIf="clientForm.get('email')?.touched && clientForm.get('email')?.invalid" class="text-danger">
-                <small *ngIf="clientForm.get('email')?.errors?.['email']">Vui lòng nhập một email hợp lệ.</small>
+              <input type="email" formControlName="email" class="form-control" id="email" placeholder="Nhập địa chỉ email">
+              <div *ngIf="isEmailInvalid()" class="text-danger">
+                <small *ngIf="clientForm.get('email')?.errors?.['required']">Địa chỉ email là bắt buộc.</small>
+                <small *ngIf="clientForm.get('email')?.errors?.['email']">Địa chỉ email không hợp lệ.</small>
               </div>
             </div>
 
             <div class="form-group">
               <label for="birthday">Ngày Sinh</label>
-              <input type="date" formControlName="birthday" class="form-control" id="birthday">
+              <input
+                type="date"
+                formControlName="birthday"
+                class="form-control"
+                id="birthday">
               <div *ngIf="clientForm.get('birthday')?.touched && clientForm.get('birthday')?.invalid"
                    class="text-danger">
                 <small *ngIf="clientForm.get('birthday')?.errors?.['required']">Ngày sinh là bắt buộc.</small>
+                <small *ngIf="clientForm.get('birthday')?.errors?.['dateOfBirthValidator']">Ngày sinh phải nhỏ hơn ngày hiện
+                  tại.</small>
               </div>
             </div>
 

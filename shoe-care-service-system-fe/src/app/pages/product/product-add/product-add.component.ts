@@ -20,7 +20,6 @@ import {MatPaginatorModule, PageEvent} from "@angular/material/paginator";
         NgForOf,
         NgIf,
         RouterLink,
-        DatePipe,
         SlicePipe,
         MatPaginatorModule,
         CurrencyPipe
